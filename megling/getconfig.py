@@ -12,3 +12,9 @@ def getPrefix():
 
 def getVersion():
     return os.getenv("BOT_VERSION")
+
+def getOwnerId():
+    return int(os.getenv("OWNER_ID"))
+
+def getOwnerIdtwo():
+    return int(os.getenv("OWNER_ID2"))

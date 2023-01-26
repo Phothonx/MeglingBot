@@ -1,3 +1,7 @@
 BOT_TOKEN=
-BOT_PREFIX=["/megling", "/mg"]
+BOT_PREFIX=$
 BOT_VERSION=0.1
+OWNER_ID=
+OWNER_ID2=
+#["/megling", "/mg"]
+# [ /!\ ] DON'T FORGET TO RENAME THE FILE "config" ! [ /!\ ]
