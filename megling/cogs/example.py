@@ -8,10 +8,12 @@ class example(commands.Cog):
     
     @commands.command(
         name="test",
+        asliases=["t"],
         description="Fait un test"
     )
     async def test(self, ctx):
-        await ctx.send("**:ok_hand:  This test is successfull**")
+        await ctx.send("**:ok_hand:  This $test is successfull**")
+    
 
 async def setup(bot):
     await bot.add_cog(example(bot))
