@@ -16,5 +16,5 @@ def getVersion():
 def getOwnerId():
     return int(os.getenv("OWNER_ID"))
 
-def getOwnerIdtwo():
-    return int(os.getenv("OWNER_ID2"))
+def getTestServerId():
+    return int(os.getenv("TESTSERVER_ID"))

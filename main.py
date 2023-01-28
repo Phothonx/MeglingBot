@@ -22,7 +22,7 @@ print("""
 Launching MeglingBot...
 ----------------------------------------------------""")
 
-# INTENTS
+# INTENTS & COMMAND PREFIX
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=megling.getconfig.getPrefix(), intents=intents, help_command=None)
 
@@ -30,23 +30,29 @@ bot = commands.Bot(command_prefix=megling.getconfig.getPrefix(), intents=intents
 # ON READY & COGS
 @bot.event
 async def on_ready():
-    print("----------------------------------------------------\nMeglingBot successfully connected !\nLoading cogs...")
+    print("----------------------------------------------------\nMeglingBot successfully connected !\n")
+    
+    print("Loading extentions...")
     path = os.getcwd()
+    loadNb = 0
     for files in os.listdir(f"{path}\\megling\\cogs"):
         if files.endswith(".py"):   
             try:
                await bot.load_extension(f"megling.cogs.{files[:-3]}")
+               loadNb += 1
             except:
                 print(f"Failed to load {files[:-3]} !")
-    print("All cogs loadded !")
+    print(f"Loaded {loadNb} extentions !\n")
+
     await bot.change_presence(status=discord.Status.online, activity=discord.Game(name="/megling"))
 
+    print("Syncing Slash commands...")
+    synced = await bot.tree.sync()
+    print(f"Synced {str(len(synced))} commands !\n")
 
-# COGS RELOADER (TESTS)
-def isOwner(ctx):
-    return ctx.author.id == getconfig.getOwnerId() or ctx.author.id == getconfig.getOwnerIdtwo()
+
+# COGS RELOADERS (TESTS)
 @bot.command()
-@commands.check(isOwner)
 async def load(ctx, extension):
     try:
         await bot.load_extension(f'megling.cogs.{extension}')
@@ -55,7 +61,6 @@ async def load(ctx, extension):
         await ctx.send(f"**:interrobang:  Failed to load Cog {extension}.**")
 
 @bot.command()
-@commands.check(isOwner)
 async def unload(ctx, extension):
     try:
         await bot.unload_extension(f'megling.cogs.{extension}')
@@ -64,7 +69,6 @@ async def unload(ctx, extension):
         await ctx.send(f"**:interrobang:  Failed to unload Cog {extension}.**")
 
 @bot.command()
-@commands.check(isOwner)
 async def reload(ctx, extension):
     try:
         await bot.unload_extension(f'megling.cogs.{extension}')
@@ -73,9 +77,12 @@ async def reload(ctx, extension):
     except:
         await ctx.send(f"**:interrobang:  Failed to reload Cog {extension}.**")
 
-@bot.command()
-async def ping(ctx):
-    await ctx.send(f"**:inbox_tray:  Pong avec {round(bot.latency * 1000)} ms.**")
+@bot.tree.command(
+    name="ping",
+    descriptin="Renvoie le ping du bot"
+)
+async def ping(Interaction : discord.Interaction):
+    await Interaction.response.send_message(f"**:inbox_tray:  Pong avec {round(bot.latency * 1000)} ms.**")
 
 
 # RUN
