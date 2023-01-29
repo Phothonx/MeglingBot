@@ -8,7 +8,7 @@ import os
 import discord
 from discord.ext import commands
 
-# colorama
+# COLORAMA
 colorama.init(autoreset=True)
 
 # START
@@ -35,7 +35,6 @@ bot = commands.Bot(command_prefix=megling.getconfig.getPrefix(), intents=intents
 @bot.event
 async def on_ready():
     print(f"{Fore.CYAN}----------------------------------------------------\n{Fore.GREEN}MeglingBot successfully connected !\n")
-
 # LOADING COGS  
     print(f"{Fore.CYAN}Loading extentions...")
     loadNb = 0
@@ -47,12 +46,22 @@ async def on_ready():
             except:
                 print(f"{Fore.RED}Failed to load {files[:-3]} !")
     print(f"{Fore.GREEN}Loaded {loadNb} extentions !\n")
-
+#CHANGE PRESENCE
     await bot.change_presence(status=discord.Status.online, activity=discord.Game(name="/megling"))
-
+# LOAD SLASH COMMANDS
     print(f"{Fore.CYAN}Syncing Slash commands...")
     synced = await bot.tree.sync()
     print(f"{Fore.GREEN}Synced {str(len(synced))} commands !\n")
+# PRINT INFOS
+    infos = await bot.application_info()
+    print(f"""{Fore.CYAN}------------------- APP INFO -----------------------{Fore.YELLOW}
+USER : {infos.name}
+APP ID : {infos.id}
+OWNER ID : {infos.owner.name}
+APP TEAM : {infos.name}
+GUILDS : 
+{Fore.CYAN}----------------------------------------------------\n""")
+    print(f"{Fore.BLUE}{colorama.Style.BRIGHT}                  ! BOT LAUNCHED !                  ")
 
 
 # PING /COMMAND

@@ -27,6 +27,7 @@ class reloader(commands.Cog):
         aliases=["ld"],
         description="Load one/all extension/s"
     )
+    @commands.is_owner()
     async def load(self, ctx, extension = None):
         if extension:
             try:
@@ -44,8 +45,9 @@ class reloader(commands.Cog):
     @commands.command(
         name="unload",
         aliases=["ul"],
-        descriptin="Unload one/all extension/s"
+        description="Unload one/all extension/s"
     )
+    @commands.is_owner()
     async def unload(self, ctx, extension = None):
         if extension:
             try:
@@ -63,8 +65,9 @@ class reloader(commands.Cog):
     @commands.command(
         name="reload",
         aliases=["rl"],
-        descriptin="Reload one/all extension/s"
+        description="Reload one/all extension/s"
     )
+    @commands.is_owner()
     async def reload(self, ctx, extension = None):
         if extension:
             try:
@@ -77,6 +80,22 @@ class reloader(commands.Cog):
             await ctx.send(f"**:arrows_clockwise:  {loadNb} extensions reloaded.**")
             if loadfails:
                 await ctx.send(f"**:interrobang:  Failed to reload {str(len(loadfails))} extensions.**")
+
+    
+    @commands.command(
+        name="sync",
+        aliases=["sc"],
+        description="Sync all slash commands"
+    )
+    @commands.is_owner()
+    async def sync(self, ctx):
+        await ctx.send(f"**:arrows_clockwise:  Trying to sync slash command/s...**")
+        try:
+            await self.bot.tree.sync()
+            await ctx.send(f"**:arrows_clockwise:  Synced slash commands.**")
+        except:
+            await ctx.send(f"**:interrobang:  Failed to sync slash commands.**")  
+
 
 async def setup(bot):
     await bot.add_cog(reloader(bot))
