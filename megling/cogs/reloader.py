@@ -5,6 +5,7 @@ import os
 import discord
 from discord.ext import commands
 
+# THIS IS A TEST EXTENSION
 
 class reloader(commands.Cog):
     def __init__(self, bot):

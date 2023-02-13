@@ -1,7 +1,4 @@
 BOT_TOKEN=
 BOT_PREFIX=$
 BOT_VERSION=0.1
-OWNER_ID=
-TESTSERVER_ID=
-#["/megling", "/mg"]
 # [ /!\ ] DON'T FORGET TO RENAME THE FILE "config" ! [ /!\ ]

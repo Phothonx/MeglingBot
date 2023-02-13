@@ -1,18 +1,20 @@
 import megling
 from megling import getconfig
 
-import colorama
-from colorama import Fore
-
+from colorama import Fore, Back, Style
+from colorama import init as initco
+import time
 import os
+import platform
+
 import discord
 from discord.ext import commands
 
 # COLORAMA
-colorama.init(autoreset=True)
+initco(autoreset=True)
 
 # START
-print(f"""{Fore.BLUE}{colorama.Style.BRIGHT}
+print(f"""{Fore.BLUE}{Style.BRIGHT}
 
  __  __            _ _             ____        _
 |  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
@@ -47,7 +49,7 @@ async def on_ready():
                 print(f"{Fore.RED}Failed to load {files[:-3]} !")
     print(f"{Fore.GREEN}Loaded {loadNb} extentions !\n")
 #CHANGE PRESENCE
-    await bot.change_presence(status=discord.Status.online, activity=discord.Game(name="/megling"))
+    await bot.change_presence(status=discord.Status.online, activity=discord.Game(name="Manage your guild !"))
 # LOAD SLASH COMMANDS
     print(f"{Fore.CYAN}Syncing Slash commands...")
     synced = await bot.tree.sync()
@@ -55,13 +57,13 @@ async def on_ready():
 # PRINT INFOS
     infos = await bot.application_info()
     print(f"""{Fore.CYAN}------------------- APP INFO -----------------------{Fore.YELLOW}
-USER : {infos.name}
+APP NAME : {infos.name}
 APP ID : {infos.id}
 OWNER ID : {infos.owner.name}
 APP TEAM : {infos.name}
 GUILDS : 
 {Fore.CYAN}----------------------------------------------------\n""")
-    print(f"{Fore.BLUE}{colorama.Style.BRIGHT}                  ! BOT LAUNCHED !                  ")
+    print(f"{Fore.BLUE}{Style.BRIGHT}                  ! BOT LAUNCHED !                  ")
 
 
 # PING /COMMAND

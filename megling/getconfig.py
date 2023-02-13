@@ -13,8 +13,5 @@ def getPrefix():
 def getVersion():
     return os.getenv("BOT_VERSION")
 
-def getTestServerId():
-    return int(os.getenv("TESTSERVER_ID"))
-
 def getPath():
     return os.getcwd()
