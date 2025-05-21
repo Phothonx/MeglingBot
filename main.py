@@ -1,20 +1,42 @@
-import megling
-from megling import getconfig
-
-from colorama import Fore, Back, Style
-from colorama import init as initco
-import time
-import os
-import platform
-
 import discord
+
 from discord.ext import commands
+from os import getenv
+from dotenv import load_dotenv
+from megling.extloader import loadExtension
 
-# COLORAMA
-initco(autoreset=True)
+intents = discord.Intents.all()
+bot = commands.Bot(command_prefix="!", intents=intents, help_command=None)
 
-# START
-print(f"""{Fore.BLUE}{Style.BRIGHT}
+@bot.hybrid_command()
+@commands.is_owner()
+async def reload(ctx, extension=None):
+  await loadExtension(bot, extension)
+
+
+@bot.hybrid_command()
+async def ping(ctx):
+    latency = bot.latency
+    await ctx.send(f"**:inbox_tray:  Pong with {round(bot.latency * 1000)} ms.**")
+
+
+@bot.event
+async def on_ready():
+  infos = await bot.application_info()
+  print(f"""
+------------------- APP INFO -----------------------
+APP NAME : {infos.name}
+APP ID : {infos.id}
+OWNER ID : {infos.owner.name}
+APP TEAM : {infos.name}
+GUILDS :
+----------------------------------------------------\n""")
+  await loadExtension(bot)
+  print(f'[OK] Logged in as {bot.user}\n')
+
+
+if __name__ == "__main__":
+  print(r"""
 
  __  __            _ _             ____        _
 |  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
@@ -24,59 +46,9 @@ print(f"""{Fore.BLUE}{Style.BRIGHT}
              |___/           |___/
              By Algabo & Phothonx.
 
-
-{Fore.CYAN}Launching MeglingBot...
-----------------------------------------------------""")
-
-# INTENTS & COMMAND PREFIX
-intents = discord.Intents.all()
-bot = commands.Bot(command_prefix=megling.getconfig.getPrefix(), intents=intents, help_command=None)
-
-
-# ON READY
-@bot.event
-async def on_ready():
-    print(f"{Fore.CYAN}----------------------------------------------------\n{Fore.GREEN}MeglingBot successfully connected !\n")
-# LOADING COGS  
-    print(f"{Fore.CYAN}Loading extentions...")
-    loadNb = 0
-    for files in os.listdir(f"{megling.getconfig.getPath()}\\megling\\cogs"):
-        if files.endswith(".py"):
-            try:
-               await bot.load_extension(f"megling.cogs.{files[:-3]}")
-               loadNb += 1
-            except:
-                print(f"{Fore.RED}Failed to load {files[:-3]} !")
-    print(f"{Fore.GREEN}Loaded {loadNb} extentions !\n")
-#CHANGE PRESENCE
-    await bot.change_presence(status=discord.Status.online, activity=discord.Game(name="Manage your guild !"))
-# LOAD SLASH COMMANDS
-    print(f"{Fore.CYAN}Syncing Slash commands...")
-    synced = await bot.tree.sync()
-    print(f"{Fore.GREEN}Synced {str(len(synced))} commands !\n")
-# PRINT INFOS
-    infos = await bot.application_info()
-    print(f"""{Fore.CYAN}------------------- APP INFO -----------------------{Fore.YELLOW}
-APP NAME : {infos.name}
-APP ID : {infos.id}
-OWNER ID : {infos.owner.name}
-APP TEAM : {infos.name}
-GUILDS : 
-{Fore.CYAN}----------------------------------------------------\n""")
-    print(f"{Fore.BLUE}{Style.BRIGHT}                  ! BOT LAUNCHED !                  ")
-
-
-# PING /COMMAND
-@bot.tree.command(
-    name="ping",
-    description="Return Megling's ping"
-)
-async def ping(Interaction : discord.Interaction):
-    await Interaction.response.send_message(f"**:inbox_tray:  Pong with {round(bot.latency * 1000)} ms.**")
-
-
-# RUN
-try :
-    bot.run(megling.getconfig.getToken())
-except :
-    print(f"{Fore.RED}MeglingBot failed to connect !")
+----------------------------------------------------
+Launching MeglingBot...
+""")
+  load_dotenv()
+  TOKEN = getenv("DISCORD_TOKEN")
+  bot.run(TOKEN)
