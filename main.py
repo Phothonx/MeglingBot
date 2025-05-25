@@ -16,7 +16,6 @@ async def reload(ctx, extension=None):
 
 @bot.hybrid_command()
 async def ping(ctx):
-    latency = bot.latency
     await ctx.send(f"**:inbox_tray:  Pong with {round(bot.latency * 1000)} ms.**")
 
 

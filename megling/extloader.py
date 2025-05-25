@@ -7,8 +7,9 @@ async def loadOne(bot, extension=None):
       await bot.reload_extension(extension)
     else:
       await bot.load_extension(extension)
-  except:
-    print(f"[?!] Failed to load {extension}!")
+  except Exception as e:
+    print(f"[?!] Failed to load {extension}, Exception: {e}")
+
 
 async def loadExtension(bot, extension=None):
   print("(Re)Loading extension(s)...")
