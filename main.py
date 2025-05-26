@@ -1,9 +1,17 @@
 from discord import Intents, ApplicationContext
+from discord.ext.commands import CommandError, CheckFailure
 
 from discord.ext import commands
 from os import getenv
 from dotenv import load_dotenv
 from megling.extloader import loadExtension
+import logging
+
+logger = logging.getLogger('discord')
+logging.basicConfig(level=logging.INFO) # INFO, WARNING, ERROR
+handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
 
 intents = Intents.all()
 bot = commands.Bot(command_prefix="!", intents=intents, help_command=None)
@@ -16,15 +24,35 @@ async def syncCommands():
 @bot.slash_command(name="reload", description="Reload the bot")
 @commands.is_owner()
 async def reload( ctx: ApplicationContext, extension:str|None=None ):
+  await ctx.defer(ephemeral=True)
   loadExtension(bot, extension)
   await syncCommands()
-  await ctx.respond(f":arrows_clockwise:  **Reloading: {extension}**" if extension else ":arrows_clockwise:  **Reloading all**")
+  await ctx.followup.send(f":arrows_clockwise:  **Reloading: {extension}**" if extension else ":arrows_clockwise:  **Reloading all**")
 
 
 @bot.slash_command(name="ping", description="Ping the bot")
 async def ping(ctx:ApplicationContext):
     await ctx.respond(f"**:inbox_tray:  Pong with {round(bot.latency * 1000)} ms.**")
 
+
+# class Block_DM(CheckFailure):
+#   pass
+#
+# @bot.check
+# async def globally_block_dms(ctx):
+#   if ctx.guild is not None or ctx.user.id == 454929922108948480:
+#     return True
+#   else:
+#     raise Block_DM
+#
+# @bot.event
+# async def on_command_error(ctx: ApplicationContext, error: CommandError):
+#   if isinstance(error, Block_DM):
+#     await ctx.respond(":x:  **You can't use this command in DM!**", ephemeral=True)
+#   else:
+#     await ctx.respond(":interrobang: **Unexpected Error!**", ephemeral=True)
+#     logger.error(f"Unhandled command error: {error}")
+#     raise error
 
 @bot.event
 async def on_ready():

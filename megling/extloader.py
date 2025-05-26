@@ -1,6 +1,6 @@
 from discord.ext.commands import Bot
 
-extensions = [ "vc" ]
+extensions = [ "vc", "admin" ]
 
 def loadOne(bot:Bot, extension:str):
   try:
@@ -23,4 +23,3 @@ def loadExtension(bot, extension=None):
   else:
     for ext in extensions:
       loadOne(bot, ext)
-  print("[OK] Extension(s) (Re)loaded")

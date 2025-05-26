@@ -1,8 +1,8 @@
 import aiosqlite
 
 from discord.ext import commands
+from discord.ext.commands import CommandError, CheckFailure
 from discord import ApplicationContext, VoiceChannel, SlashCommandGroup, Bot
-from discord.abc import PrivateChannel
 
 # voice.db:
 # GuildChannels(guildID, channelID)
@@ -13,26 +13,32 @@ from discord.abc import PrivateChannel
 def get_connected_voice_channel(ctx: ApplicationContext):
     return ctx.user.voice.channel if ctx.user.voice else None
 
+class Not_voice_owner(CheckFailure):
+  pass
 
-async def isChannelOwner(ctx: ApplicationContext)->bool:
-  if not ctx.user.voice or not ctx.user.voice.channel:
-    return False
-  async with aiosqlite.connect("db/voice.db") as db:
-    async with db.execute("SELECT ownerID FROM VoiceChannels WHERE channelID = ?", (ctx.user.voice.channel.id,)) as cursor:
-      owner_id = await cursor.fetchone()
-      return owner_id and owner_id[0] == ctx.user.id
+def is_voice_owner():
+  async def predicate(ctx):
+    channel = get_connected_voice_channel(ctx)
+    if channel:
+      async with aiosqlite.connect("db/voice.db") as db:
+        async with db.execute("SELECT ownerID FROM VoiceChannels WHERE channelID = ?", (channel.id,)) as cursor:
+          owner_id = await cursor.fetchone()
+          if bool(owner_id) and owner_id[0] == ctx.user.id:
+            return True
+    raise Not_voice_owner()
+  return commands.check(predicate)
 
 
-async def get_own_channel(ctx: ApplicationContext):
-  if not ctx.user.voice:
-    return None
-  channel = ctx.user.voice.channel
-  async with aiosqlite.connect("db/voice.db") as db:
-    async with db.execute("SELECT ownerID FROM VoiceChannels WHERE channelID = ?", (channel.id,)) as cursor:
-      owner = await cursor.fetchone()
-      if owner and owner[0] == ctx.user.id:
-        return channel
-  return None
+class Not_in_voice_channel(CheckFailure):
+  pass
+
+def is_in_voice_channel():
+  async def predicate(ctx):
+    channel = get_connected_voice_channel(ctx)
+    if channel:
+      return True
+    raise Not_in_voice_channel()
+  return commands.check(predicate)
 
 
 async def cleanup(bot: Bot):
@@ -41,12 +47,9 @@ async def cleanup(bot: Bot):
     async with db.execute("SELECT channelID FROM VoiceChannels") as cursor:
       channels = await cursor.fetchall()
       for (channel_id,) in channels:
-        channel = bot.get_channel(channel_id)
+        channel = await bot.fetch_channel(channel_id)
         if channel and isinstance(channel, VoiceChannel):
-          try:
-            await channel.delete(reason="Cleaning leftover voice channel")
-          except Exception as e:
-            print(f"[?!] Failed to clean leftover voice channel with id: {channel_id}, Exception: {e}")
+          await channel.delete(reason="Cleaning leftover voice channel")
           await db.execute("DELETE FROM VoiceChannels WHERE channelID = ?", (channel_id,))
           await db.commit()
       print(f"[OK] Cleaned voice channels")
@@ -77,7 +80,7 @@ class VCCog(commands.Cog):
                 await member.move_to(channel)
                 await db.execute("INSERT INTO VoiceChannels (channelID, guildID, ownerID) VALUES (?, ?, ?)", (channel.id, guild_id, member.id))
                 await db.commit()
-                def check(*args):
+                def check(*_):
                   return len(channel.members) == 0
                 await self.bot.wait_for('voice_state_update', check=check)
                 await channel.delete()
@@ -101,41 +104,39 @@ class VCCog(commands.Cog):
   @commands.is_owner()
   async def setup(self, ctx: ApplicationContext, channel_name:str="Voice creator"):
     async with aiosqlite.connect("db/voice.db") as db:
-      try:
-        channel = await ctx.guild.create_voice_channel(channel_name, category=None)
-        async with db.execute("SELECT channelID FROM GuildChannels WHERE guildID = ?", (ctx.guild.id,)) as cursor:
-          old_channel_id = await cursor.fetchone()
-          if old_channel_id is None:
-            await db.execute ("INSERT INTO GuildChannels (guildID, channelID) VALUES (?, ?)",(ctx.guild.id, channel.id))
-            await db.commit()
-          else:
-            old_channel = self.bot.get_channel(old_channel_id[0])
-            if old_channel and old_channel != PrivateChannel:
-              await old_channel.delete(reason="Delete old voice creator")
-            await db.execute ("UPDATE GuildChannels SET channelID = ? WHERE guildID = ?",(channel.id, ctx.guild.id))
-            await db.commit()
-          await ctx.respond(":gear:  **You are all setup and ready to go!**")
-      except Exception as e:
-        print(f"[?!] Failed to add/update new guild voice creator channel, Exception : {e}")
-        await ctx.respond(":interrobang:  **Operation failed!**")
+      channel = await ctx.guild.create_voice_channel(channel_name, category=None)
+      async with db.execute("SELECT channelID FROM GuildChannels WHERE guildID = ?", (ctx.guild.id,)) as cursor:
+        old_channel_id = await cursor.fetchone()
+        if old_channel_id is None:
+          await db.execute ("INSERT INTO GuildChannels (guildID, channelID) VALUES (?, ?)",(ctx.guild.id, channel.id))
+          await db.commit()
+        else:
+          old_channel = self.bot.get_channel(old_channel_id[0])
+          if old_channel and isinstance(old_channel, VoiceChannel):
+            await old_channel.delete(reason="Delete old voice creator")
+          await db.execute ("UPDATE GuildChannels SET channelID = ? WHERE guildID = ?",(channel.id, ctx.guild.id))
+          await db.commit()
+        await ctx.respond(":gear:  **You are all setup and ready to go!**")
 
 
   @vc.command(name="claim", description="Claim active channel if owner is gone")
+  @is_in_voice_channel()
   async def claim(self, ctx: ApplicationContext):
-    if ctx.user.voice is None or ctx.user.voice.channel is None:
+    channel = get_connected_voice_channel(ctx)
+    if channel is None:
       await ctx.respond(":interrobang:  **You are not connected to any voice channel**")
     else:
       async with aiosqlite.connect("db/voice.db") as db:
-        async with db.execute("SELECT ownerID FROM VoiceChannels WHERE channelID = ?", (ctx.user.voice.channel.id,)) as cursor:
+        async with db.execute("SELECT ownerID FROM VoiceChannels WHERE channelID = ?", (channel.id,)) as cursor:
           owner_id = await cursor.fetchone()
           if owner_id:
             owner_id = owner_id[0]
             if owner_id == ctx.user.id:
               await ctx.respond(":crown:  **You already are owner of this channel**")
-            elif any(member.id == owner_id for member in ctx.user.voice.channel.members):
+            elif any(member.id == owner_id for member in channel.members):
               await ctx.respond(":interrobang:  **Channel owner is still present**")
             else:
-              await db.execute("UPDATE VoiceChannels SET ownerID = ? WHERE channelID = ?", (ctx.user.id, ctx.user.voice.channel.id))
+              await db.execute("UPDATE VoiceChannels SET ownerID = ? WHERE channelID = ?", (ctx.user.id, channel.id))
               await db.commit()
               await ctx.respond(":crown:  **You are now owner of the channel**")
           else:
@@ -143,98 +144,51 @@ class VCCog(commands.Cog):
 
 
   @vc.command(name="lock", description="Lock active channel")
+  @is_in_voice_channel()
+  @is_voice_owner()
   async def lock(self, ctx: ApplicationContext):
-    if ctx.user.voice is None:
-      await ctx.respond(":interrobang:  **You are not connected to any voice channel**")
-    elif await isChannelOwner(ctx):
-      try:
-        await ctx.user.voice.channel.edit(connect = False)
-        await ctx.respond(":lock:  **Your channel has been locked**")
-      except Exception as e:
-        print(f"[?!] Failed to lock channel, Exception : {e}")
-        await ctx.respond(":interrobang:  **Unexpected error**")
-    else:
-      await ctx.respond(":interrobang:  **You are not owner of the channel**")
+    await ctx.user.voice.channel.edit(connect = False)
+    await ctx.respond(":lock:  **Your channel has been locked**")
 
 
   @vc.command(name="unlock", description="Unlock active channel")
+  @is_in_voice_channel()
+  @is_voice_owner()
   async def unlock(self, ctx: ApplicationContext):
-    if ctx.user.voice is None:
-      await ctx.respond(":interrobang:  **You are not connected to any voice channel**")
-    elif await isChannelOwner(ctx):
-      try:
-        await ctx.user.voice.channel.edit(connect = True)
-        await ctx.respond(":unlock:  **Your channel has been unlocked**")
-      except Exception as e:
-        print(f"[?!] Failed to unlock channel, Exception : {e}")
-        await ctx.respond(":interrobang:  **Unexpected error**")
-    else:
-      await ctx.respond(":interrobang:  **You are not owner of the channel**")
+    await ctx.user.voice.channel.edit(connect = True)
+    await ctx.respond(":unlock:  **Your channel has been unlocked**")
 
 
   @vc.command(name="limit", description="Limit active channel")
+  @is_in_voice_channel()
+  @is_voice_owner()
   async def limit(self, ctx: ApplicationContext, limit: int=0):
-    if ctx.user.voice is None:
-      await ctx.respond(":interrobang:  **You are not connected to any voice channel**")
-    elif await isChannelOwner(ctx):
-      try:
-        await ctx.user.voice.channel.edit(user_limit = limit)
-        if limit == 0:
-          await ctx.respond(f":tada:  **Channel user limit has been removed**")
-        else:
-          await ctx.respond(f":tickets:  **Channel user limit has been set to {limit}**")
-      except Exception as e:
-        print(f"[?!] Failed to limit channel, Exception : {e}")
-        await ctx.respond(":interrobang:  **Unexpected error**")
-    else:
-      await ctx.respond(":interrobang:  **You are not owner of the channel**")
+    await ctx.user.voice.channel.edit(user_limit = limit)
+    await ctx.respond(f":tada:  **Channel user limit has been removed**" if limit == 0 else f":tickets:  **Channel user limit has been set to {limit}**")
 
 
   @vc.command(name="hide", description="Hide active channel")
+  @is_in_voice_channel()
+  @is_voice_owner()
   async def hide(self, ctx: ApplicationContext):
-    if ctx.user.voice is None:
-      await ctx.respond(":interrobang:  **You are not connected to any voice channel**")
-    elif await isChannelOwner(ctx):
-      channel = ctx.user.voice.channel
-      try:
-        await channel.set_permissions(ctx.guild.default_role, view_channel=False)
-        await ctx.respond(":dotted_line_face:  **Your channel is now invisible**")
-      except Exception as e:
-        print(f"[?!] Failed to hide channel, Exception : {e}")
-        await ctx.respond(":interrobang:  **Unexpected error**")
-    else:
-      await ctx.respond(":interrobang:  **You are not owner of the channel**")
+    await ctx.user.voice.channel.set_permissions(ctx.guild.default_role, view_channel=False)
+    await ctx.respond(":dotted_line_face:  **Your channel is now invisible**")
 
 
   @vc.command(name="reveal", description="Reveal active channel")
+  @is_in_voice_channel()
+  @is_voice_owner()
   async def reveal(self, ctx: ApplicationContext):
-    if ctx.user.voice is None:
-      await ctx.respond(":interrobang:  **You are not connected to any voice channel**")
-    elif await isChannelOwner(ctx):
-      channel = ctx.user.voice.channel
-      try:
-        await channel.set_permissions(ctx.guild.default_role, view_channel=True)
-        await ctx.respond(":camera:  **Your channel is now visible**")
-      except Exception as e:
-        print(f"[?!] Failed to reveal channel, Exception : {e}")
-        await ctx.respond(":interrobang:  **Unexpected error**")
-    else:
-      await ctx.respond(":interrobang:  **You are not owner of the channel**")
+    await ctx.user.voice.channel.set_permissions(ctx.guild.default_role, view_channel=True)
+    await ctx.respond(":camera:  **Your channel is now visible**")
 
 
   @vc.command(name="rename", description="Rename active channel")
+  @is_in_voice_channel()
+  @is_voice_owner()
   async def rename(self, ctx: ApplicationContext, name:str):
-    if ctx.user.voice is None:
-      await ctx.respond(":interrobang:  **You are not connected to any voice channel**")
-    elif await isChannelOwner(ctx):
-      try:
-        await ctx.user.voice.channel.edit(name = name)
-        await ctx.respond(f":pen_ballpoint:  **Channel has been renamed to {name}**")
-      except Exception as e:
-        print(f"[?!] Failed to rename channel, Exception : {e}")
-        await ctx.respond(":interrobang:  **Unexpected error**")
-    else:
-      await ctx.respond(":interrobang:  **You are not owner of the channel**")
+    await ctx.user.voice.channel.edit(name = name)
+    await ctx.respond(f":pen_ballpoint:  **Channel has been renamed to {name}**")
 
 
   settings = vc.create_subgroup("settings", description="Voice creator settings")
@@ -260,9 +214,19 @@ class VCCog(commands.Cog):
         if await cursor.fetchone():
           await db.execute ("DELETE FROM UserSettings WHERE userID = ?",(ctx.user.id,))
           await db.commit()
-          await ctx.respond(":wastebasket:  **Default channel settings reseted**")
+          await ctx.respond(":wastebasket:  **Default channel settings reset**")
         else:
           await ctx.respond(":interrobang:  **There were no settings to reset**")
+
+  async def cog_application_command_error(self, ctx: ApplicationContext, error: CommandError):
+    if isinstance(error, Not_voice_owner):
+      await ctx.respond(":interrobang:  **You are not owner of the channel**", ephemeral=True)
+      return # so the error doesn't propagate
+    elif isinstance(error, Not_in_voice_channel):
+      await ctx.respond(":interrobang:  **You are not connected to any voice channel**", ephemeral=True)
+      return
+    else:
+      raise error
 
 
 

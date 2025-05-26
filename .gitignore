@@ -2,3 +2,5 @@
 config
 __pycache__
 .direnv
+discord.log
+db/*
