@@ -28,6 +28,26 @@
 
     forEachSystem = f: lib.genAttrs systems (system: f pkgsFor.${system});
   in {
+    packages = forEachSystem (pkgs:
+      {
+
+        pycord =
+        let
+          pname = "py_cord";
+          version = "2.6.1";
+        in pkgs.python3Packages.buildPythonPackage {
+          inherit pname version;
+          src = pkgs.fetchPypi {
+            inherit pname version;
+            sha256 = "sha256-NgZPIl8se73f5ULV7VgfKldE9hjgOQk8980mWaWLx5s=";
+          };
+          propagatedBuildInputs = with pkgs.python3Packages; [
+            aiohttp
+            yarl
+          ];
+        };
+
+      });
     devShells = forEachSystem (pkgs: {
       default = pkgs.mkShell {
         # if package not in nixpkgs: https://github.com/nix-community/pip2nix
@@ -38,8 +58,8 @@
           pkgs.sqlite
           (pkgs.python3.withPackages (p:
             with p; [
-              discordpy
-              sqlite-utils
+              self.outputs.packages.${pkgs.system}.pycord
+              aiosqlite
               python-dotenv
             ]))
         ];

@@ -1,22 +1,29 @@
-import discord
+from discord import Intents, ApplicationContext
 
 from discord.ext import commands
 from os import getenv
 from dotenv import load_dotenv
 from megling.extloader import loadExtension
 
-intents = discord.Intents.all()
+intents = Intents.all()
 bot = commands.Bot(command_prefix="!", intents=intents, help_command=None)
 
-@bot.hybrid_command()
+async def syncCommands():
+  print("Syncing Slash commands...")
+  await bot.sync_commands()
+  print("[OK] Synced commands\n")
+
+@bot.slash_command(name="reload", description="Reload the bot")
 @commands.is_owner()
-async def reload(ctx, extension=None):
-  await loadExtension(bot, extension)
+async def reload( ctx: ApplicationContext, extension:str|None=None ):
+  loadExtension(bot, extension)
+  await syncCommands()
+  await ctx.respond(f":arrows_clockwise:  **Reloading: {extension}**" if extension else ":arrows_clockwise:  **Reloading all**")
 
 
-@bot.hybrid_command()
-async def ping(ctx):
-    await ctx.send(f"**:inbox_tray:  Pong with {round(bot.latency * 1000)} ms.**")
+@bot.slash_command(name="ping", description="Ping the bot")
+async def ping(ctx:ApplicationContext):
+    await ctx.respond(f"**:inbox_tray:  Pong with {round(bot.latency * 1000)} ms.**")
 
 
 @bot.event
@@ -27,10 +34,10 @@ async def on_ready():
 APP NAME : {infos.name}
 APP ID : {infos.id}
 OWNER ID : {infos.owner.name}
-APP TEAM : {infos.name}
-GUILDS :
+GUILDS : {len(bot.guilds)} servers
 ----------------------------------------------------\n""")
-  await loadExtension(bot)
+  loadExtension(bot)
+  await syncCommands()
   print(f'[OK] Logged in as {bot.user}\n')
 
 
@@ -50,4 +57,6 @@ Launching MeglingBot...
 """)
   load_dotenv()
   TOKEN = getenv("DISCORD_TOKEN")
+  if not TOKEN:
+    raise ValueError("Missing DISCORD_TOKEN in .env file.")
   bot.run(TOKEN)

@@ -1,24 +1,26 @@
-extensions = [ "vc", "admin" ]
+from discord.ext.commands import Bot
 
-async def loadOne(bot, extension=None):
+extensions = [ "vc" ]
+
+def loadOne(bot:Bot, extension:str):
   try:
-    extension = f"megling.cogs.{extension}"
-    if extension in bot.extensions:
-      await bot.reload_extension(extension)
+    if extension not in extensions:
+      print(f"[?!] Unknown extension: {extension}")
     else:
-      await bot.load_extension(extension)
+      extension = f"megling.cogs.{extension}"
+      if extension in bot.extensions:
+        bot.reload_extension(extension)
+      else:
+        bot.load_extension(extension)
   except Exception as e:
-    print(f"[?!] Failed to load {extension}, Exception: {e}")
+    print(f"[?!] Failed to load {extension}: {e}")
 
 
-async def loadExtension(bot, extension=None):
+def loadExtension(bot, extension=None):
   print("(Re)Loading extension(s)...")
   if extension:
-    await loadOne(bot, extension)
+    loadOne(bot, extension)
   else:
-    for extension in extensions:
-      await loadOne(bot, extension)
+    for ext in extensions:
+      loadOne(bot, ext)
   print("[OK] Extension(s) (Re)loaded")
-  print("Syncing Slash commands...")
-  await bot.tree.sync()
-  print("[OK] Synced commands\n")
