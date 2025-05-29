@@ -1,8 +1,11 @@
 import aiosqlite
 
-from discord.ext import commands
-from discord.ext.commands import CommandError, CheckFailure
+from discord.ext import commands, tasks
+from discord.ext.commands import CommandError, CheckFailure, guild_only, NoPrivateMessage
 from discord import ApplicationContext, VoiceChannel, SlashCommandGroup, Bot
+from megling.logsetup import setupLogger
+
+logger = setupLogger(__name__)
 
 # voice.db:
 # GuildChannels(guildID, channelID)
@@ -13,7 +16,7 @@ from discord import ApplicationContext, VoiceChannel, SlashCommandGroup, Bot
 def get_connected_voice_channel(ctx: ApplicationContext):
     return ctx.user.voice.channel if ctx.user.voice else None
 
-class Not_voice_owner(CheckFailure):
+class NotVoiceOwner(CheckFailure):
   pass
 
 def is_voice_owner():
@@ -25,11 +28,11 @@ def is_voice_owner():
           owner_id = await cursor.fetchone()
           if bool(owner_id) and owner_id[0] == ctx.user.id:
             return True
-    raise Not_voice_owner()
+    raise NotVoiceOwner()
   return commands.check(predicate)
 
 
-class Not_in_voice_channel(CheckFailure):
+class NotInVoiceChannel(CheckFailure):
   pass
 
 def is_in_voice_channel():
@@ -37,13 +40,13 @@ def is_in_voice_channel():
     channel = get_connected_voice_channel(ctx)
     if channel:
       return True
-    raise Not_in_voice_channel()
+    raise NotInVoiceChannel()
   return commands.check(predicate)
 
 
 async def cleanup(bot: Bot):
   async with aiosqlite.connect("db/voice.db") as db:
-    print(f"Cleaning leftover channels...")
+    logger.info(f"[~~] Cleaning leftover channels...")
     async with db.execute("SELECT channelID FROM VoiceChannels") as cursor:
       channels = await cursor.fetchall()
       for (channel_id,) in channels:
@@ -52,7 +55,7 @@ async def cleanup(bot: Bot):
           await channel.delete(reason="Cleaning leftover voice channel")
           await db.execute("DELETE FROM VoiceChannels WHERE channelID = ?", (channel_id,))
           await db.commit()
-      print(f"[OK] Cleaned voice channels")
+      logger.info(f"[OK] Cleaned voice channels")
 
 
 
@@ -60,6 +63,25 @@ async def cleanup(bot: Bot):
 class VCCog(commands.Cog):
   def __init__(self, bot):
     self.bot = bot
+    self.auto_clean.start()
+
+
+  def cog_unload(self):
+      self.printer.cancel()
+
+  @tasks.loop(hours=1)
+  async def auto_clean(self):
+    await cleanup(self.bot)
+
+  @auto_clean.before_loop
+  async def first_clean(self):
+    logger.info("[~~] SQLite checkup...")
+    async with aiosqlite.connect("db/voice.db") as db:
+      await db.execute("CREATE TABLE IF NOT EXISTS GuildChannels (guildID INTEGER PRIMARY KEY, channelID INTEGER)")
+      await db.execute("CREATE TABLE IF NOT EXISTS VoiceChannels (channelID INTEGER PRIMARY KEY, guildID INTEGER, ownerID INTEGER)")
+      await db.execute("CREATE TABLE IF NOT EXISTS UserSettings (userID INTEGER PRIMARY KEY, channelName TEXT, channelLimit INTEGER)")
+      await db.commit()
+      logger.info("[OK] SQLite checkup completed")
 
 
   @commands.Cog.listener()
@@ -87,7 +109,7 @@ class VCCog(commands.Cog):
                 await db.execute('DELETE FROM VoiceChannels WHERE channelID=?', (channel.id,))
                 await db.commit()
           except Exception as e:
-            print(f"[?!] Failed to voice state update from voice creator, Exception : {e}")
+            logger.error(f"[?!] Failed to voice state update from voice creator, Exception : {e}")
 
 
   vc = SlashCommandGroup("vc", description="Voice creator")
@@ -101,6 +123,7 @@ class VCCog(commands.Cog):
 
 
   @vc.command(name="setup", description="Setup voice creator")
+  @guild_only()
   @commands.is_owner()
   async def setup(self, ctx: ApplicationContext, channel_name:str="Voice creator"):
     async with aiosqlite.connect("db/voice.db") as db:
@@ -120,6 +143,7 @@ class VCCog(commands.Cog):
 
 
   @vc.command(name="claim", description="Claim active channel if owner is gone")
+  @guild_only()
   @is_in_voice_channel()
   async def claim(self, ctx: ApplicationContext):
     channel = get_connected_voice_channel(ctx)
@@ -144,6 +168,7 @@ class VCCog(commands.Cog):
 
 
   @vc.command(name="lock", description="Lock active channel")
+  @guild_only()
   @is_in_voice_channel()
   @is_voice_owner()
   async def lock(self, ctx: ApplicationContext):
@@ -152,6 +177,7 @@ class VCCog(commands.Cog):
 
 
   @vc.command(name="unlock", description="Unlock active channel")
+  @guild_only()
   @is_in_voice_channel()
   @is_voice_owner()
   async def unlock(self, ctx: ApplicationContext):
@@ -160,6 +186,7 @@ class VCCog(commands.Cog):
 
 
   @vc.command(name="limit", description="Limit active channel")
+  @guild_only()
   @is_in_voice_channel()
   @is_voice_owner()
   async def limit(self, ctx: ApplicationContext, limit: int=0):
@@ -168,6 +195,7 @@ class VCCog(commands.Cog):
 
 
   @vc.command(name="hide", description="Hide active channel")
+  @guild_only()
   @is_in_voice_channel()
   @is_voice_owner()
   async def hide(self, ctx: ApplicationContext):
@@ -176,6 +204,7 @@ class VCCog(commands.Cog):
 
 
   @vc.command(name="reveal", description="Reveal active channel")
+  @guild_only()
   @is_in_voice_channel()
   @is_voice_owner()
   async def reveal(self, ctx: ApplicationContext):
@@ -184,6 +213,7 @@ class VCCog(commands.Cog):
 
 
   @vc.command(name="rename", description="Rename active channel")
+  @guild_only()
   @is_in_voice_channel()
   @is_voice_owner()
   async def rename(self, ctx: ApplicationContext, name:str):
@@ -195,6 +225,7 @@ class VCCog(commands.Cog):
 
 
   @settings.command(name="set", description="Defaul channel settings")
+  @guild_only()
   async def set(self, ctx: ApplicationContext, name:str, limit:int=0):
     async with aiosqlite.connect("db/voice.db") as db:
       async with db.execute("SELECT * FROM UserSettings WHERE userID = ?", (ctx.user.id,)) as cursor:
@@ -208,6 +239,7 @@ class VCCog(commands.Cog):
 
 
   @settings.command(name="reset", description="Reset default channel settings")
+  @guild_only()
   async def reset(self, ctx):
     async with aiosqlite.connect("db/voice.db") as db:
       async with db.execute("SELECT * FROM UserSettings WHERE userID = ?", (ctx.user.id,)) as cursor:
@@ -218,29 +250,23 @@ class VCCog(commands.Cog):
         else:
           await ctx.respond(":interrobang:  **There were no settings to reset**")
 
-  async def cog_application_command_error(self, ctx: ApplicationContext, error: CommandError):
-    if isinstance(error, Not_voice_owner):
-      await ctx.respond(":interrobang:  **You are not owner of the channel**", ephemeral=True)
-      return # so the error doesn't propagate
-    elif isinstance(error, Not_in_voice_channel):
-      await ctx.respond(":interrobang:  **You are not connected to any voice channel**", ephemeral=True)
-      return
-    else:
-      raise error
 
+  async def cog_command_error(self, ctx: ApplicationContext, error: CommandError):
+    match error:
+      case NotVoiceOwner():
+        await ctx.respond(":interrobang:  **You are not owner of the channel**", ephemeral=True)
+        return
+      case NotInVoiceChannel():
+        await ctx.respond(":interrobang:  **You are not connected to any voice channel**", ephemeral=True)
+        return
+      case NoPrivateMessage():
+        await ctx.respond(":interrobang:  **This command shoul be used in a discord server**", ephemeral=True)
+        return
+      case _:
+        raise error
 
 
 def setup(bot):
-  print("[~~] Loading vc...")
+  logger.info("[~~] Loading vc...")
   bot.add_cog(VCCog(bot))
-  print("[OK] vc loaded")
-
-  # print("SQLite checkup...")
-  # async with aiosqlite.connect("db/voice.db") as db:
-  #   await db.execute("CREATE TABLE IF NOT EXISTS GuildChannels (guildID INTEGER PRIMARY KEY, channelID INTEGER)")
-  #   await db.execute("CREATE TABLE IF NOT EXISTS VoiceChannels (channelID INTEGER PRIMARY KEY, guildID INTEGER, ownerID INTEGER)")
-  #   await db.execute("CREATE TABLE IF NOT EXISTS UserSettings (userID INTEGER PRIMARY KEY, channelName TEXT, channelLimit INTEGER)")
-  #   await db.commit()
-  #   print("[OK] SQLite checkup completed")
-  #
-  # await cleanup(bot)
+  logger.info("[OK] vc loaded")

@@ -1,11 +1,14 @@
 from discord.ext.commands import Bot
+from megling.logsetup import setupLogger
+
+logger = setupLogger(__name__)
 
 extensions = [ "vc", "admin" ]
 
 def loadOne(bot:Bot, extension:str):
   try:
     if extension not in extensions:
-      print(f"[?!] Unknown extension: {extension}")
+      logger.info(f"[?!] Unknown extension: {extension}")
     else:
       extension = f"megling.cogs.{extension}"
       if extension in bot.extensions:
@@ -13,11 +16,11 @@ def loadOne(bot:Bot, extension:str):
       else:
         bot.load_extension(extension)
   except Exception as e:
-    print(f"[?!] Failed to load {extension}: {e}")
+    logger.error(f"[?!] Failed to load {extension}: {e}")
 
 
 def loadExtension(bot, extension=None):
-  print("(Re)Loading extension(s)...")
+  logger.info("(Re)Loading extension(s)...")
   if extension:
     loadOne(bot, extension)
   else:

@@ -1,6 +1,8 @@
 from discord.ext import commands
 from discord import ApplicationContext, SlashCommandGroup, Bot
+from megling.logsetup import setupLogger
 
+logger = setupLogger(__name__)
 
 class admin(commands.Cog):
   def __init__(self, bot:Bot):
@@ -17,6 +19,6 @@ class admin(commands.Cog):
 
 
 def setup(bot:Bot):
-  print("[~~]Loading admin...")
+  logger.info("[~~]Loading admin...")
   bot.add_cog(admin(bot))
-  print("[OK] admin loaded")
+  logger.info("[OK] admin loaded")
