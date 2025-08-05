@@ -72,3 +72,1077 @@ GUILDS : 2 servers
 2025-05-29 12:56:12,568 | INFO | __main__ | 
 [OK] Logged in as Megling#1409
 
+2025-05-29 13:03:06,926 | INFO | __main__ | 
+
+ __  __            _ _             ____        _
+|  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
+| |\/| |/ _ \/ _` | | | '_ \ / _` |  _ \ / _ \| __|
+| |  | |  __| (_| | | | | | | (_| | |_) | (_) | |_
+|_|  |_|\___|\__, |_|_|_| |_|\__, |____/ \___/ \__|
+             |___/           |___/
+             By Algabo & Phothonx.
+
+----------------------------------------------------
+[~~] Launching MeglingBot...
+
+2025-05-29 13:03:09,974 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-05-29 13:03:09,974 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-05-29 13:03:09,984 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-05-29 13:03:09,984 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-05-29 13:03:09,985 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-05-29 13:03:09,985 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-05-29 13:03:09,985 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-05-29 13:03:09,986 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-05-29 13:03:09,988 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-05-29 13:03:09,989 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-29 13:03:09,990 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-29 13:03:10,833 | INFO | __main__ | [OK] Synced commands
+
+2025-05-29 13:03:10,833 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-05-29 13:12:54,145 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-05-29 13:12:54,155 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-05-29 13:12:54,156 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-05-29 13:12:54,157 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-05-29 13:12:54,157 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-05-29 13:12:54,157 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-05-29 13:12:54,158 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-05-29 13:12:54,160 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-05-29 13:12:54,162 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-29 13:12:54,163 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-29 13:12:54,759 | INFO | __main__ | [OK] Synced commands
+
+2025-05-29 13:16:13,556 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-05-29 13:16:13,563 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-05-29 13:16:13,563 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-05-29 13:16:13,565 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-05-29 13:16:13,565 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-05-29 13:16:13,565 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-05-29 13:16:13,566 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-05-29 13:16:13,568 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-05-29 13:16:13,569 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-29 13:16:13,570 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-29 13:16:14,193 | INFO | __main__ | [OK] Synced commands
+
+2025-05-29 13:19:31,414 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-05-29 13:19:31,421 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-05-29 13:19:31,422 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-05-29 13:19:31,423 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-05-29 13:19:31,423 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-05-29 13:19:31,423 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-05-29 13:19:31,424 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-05-29 13:19:31,426 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-05-29 13:19:31,427 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-29 13:19:31,428 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-29 13:19:32,029 | INFO | __main__ | [OK] Synced commands
+
+2025-05-29 14:50:39,443 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-05-29 14:50:39,443 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-05-29 14:50:39,446 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-05-29 14:50:39,447 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-05-29 14:50:39,448 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-05-29 14:50:39,448 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-05-29 14:50:39,448 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-05-29 14:50:39,449 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-05-29 14:50:39,450 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-05-29 14:50:39,451 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-29 14:50:39,452 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-29 14:50:40,178 | INFO | __main__ | [OK] Synced commands
+
+2025-05-29 14:50:40,178 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-05-29 15:33:23,529 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-29 15:33:24,124 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-29 15:33:24,308 | ERROR | megling.cogs.vc | [?!] Failed to voice state update from voice creator, Exception : 404 Not Found (error code: 10003): Unknown Channel
+2025-05-29 15:43:07,696 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-29 15:43:13,287 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-29 15:43:13,520 | ERROR | megling.cogs.vc | [?!] Failed to voice state update from voice creator, Exception : 404 Not Found (error code: 10003): Unknown Channel
+2025-05-29 15:46:27,108 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-29 15:46:27,722 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-29 15:46:27,852 | ERROR | megling.cogs.vc | [?!] Failed to voice state update from voice creator, Exception : 404 Not Found (error code: 10003): Unknown Channel
+2025-05-29 15:49:44,958 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-29 15:49:44,959 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-29 15:50:40,314 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-29 15:50:40,315 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-29 16:33:23,535 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-29 16:33:23,536 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-29 16:43:07,700 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-29 16:43:07,701 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-29 16:46:27,110 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-29 16:46:27,111 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-29 16:49:44,963 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-29 16:49:44,964 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-29 16:50:40,317 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-29 16:50:40,318 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-29 17:33:23,541 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-29 17:33:23,542 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-29 17:43:07,703 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-29 17:43:07,704 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-29 17:46:27,119 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-29 17:46:27,120 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-29 17:49:44,963 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-29 17:49:44,963 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-29 17:50:40,318 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-29 17:50:40,319 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-29 23:56:00,677 | INFO | __main__ | 
+
+ __  __            _ _             ____        _
+|  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
+| |\/| |/ _ \/ _` | | | '_ \ / _` |  _ \ / _ \| __|
+| |  | |  __| (_| | | | | | | (_| | |_) | (_) | |_
+|_|  |_|\___|\__, |_|_|_| |_|\__, |____/ \___/ \__|
+             |___/           |___/
+             By Algabo & Phothonx.
+
+----------------------------------------------------
+[~~] Launching MeglingBot...
+
+2025-05-29 23:56:03,960 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-05-29 23:56:03,960 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-05-29 23:56:03,983 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-05-29 23:56:03,984 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-05-29 23:56:03,985 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-05-29 23:56:03,985 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-05-29 23:56:03,986 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-05-29 23:56:03,987 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-05-29 23:56:03,990 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-05-29 23:56:03,991 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-29 23:56:03,992 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-29 23:56:04,697 | INFO | __main__ | [OK] Synced commands
+
+2025-05-29 23:56:04,697 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-05-30 13:27:45,914 | INFO | __main__ | 
+
+ __  __            _ _             ____        _
+|  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
+| |\/| |/ _ \/ _` | | | '_ \ / _` |  _ \ / _ \| __|
+| |  | |  __| (_| | | | | | | (_| | |_) | (_) | |_
+|_|  |_|\___|\__, |_|_|_| |_|\__, |____/ \___/ \__|
+             |___/           |___/
+             By Algabo & Phothonx.
+
+----------------------------------------------------
+[~~] Launching MeglingBot...
+
+2025-05-30 13:27:49,134 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-05-30 13:27:49,134 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-05-30 13:27:49,156 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-05-30 13:27:49,157 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-05-30 13:27:49,160 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-05-30 13:27:49,160 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-05-30 13:27:49,160 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-05-30 13:27:49,162 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-05-30 13:27:49,166 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-05-30 13:27:49,169 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-30 13:27:49,170 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-30 13:27:49,742 | INFO | __main__ | [OK] Synced commands
+
+2025-05-30 13:27:49,742 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-05-30 13:28:13,757 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-30 13:28:14,250 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-30 13:28:14,495 | ERROR | megling.cogs.vc | [?!] Failed to delete voice channel: 404 Not Found (error code: 10003): Unknown Channel
+2025-05-30 13:33:00,912 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-05-30 13:33:00,932 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-05-30 13:33:00,933 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-05-30 13:33:00,935 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-05-30 13:33:00,936 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-05-30 13:33:00,936 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-05-30 13:33:00,938 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-05-30 13:33:00,942 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-05-30 13:33:00,944 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-30 13:33:00,945 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-30 13:33:02,387 | INFO | __main__ | [OK] Synced commands
+
+2025-05-30 13:33:12,454 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-30 13:33:12,711 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-30 13:33:43,105 | INFO | __main__ | 
+
+ __  __            _ _             ____        _
+|  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
+| |\/| |/ _ \/ _` | | | '_ \ / _` |  _ \ / _ \| __|
+| |  | |  __| (_| | | | | | | (_| | |_) | (_) | |_
+|_|  |_|\___|\__, |_|_|_| |_|\__, |____/ \___/ \__|
+             |___/           |___/
+             By Algabo & Phothonx.
+
+----------------------------------------------------
+[~~] Launching MeglingBot...
+
+2025-05-30 13:33:46,346 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-05-30 13:33:46,346 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-05-30 13:33:46,372 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-05-30 13:33:46,373 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-05-30 13:33:46,375 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-05-30 13:33:46,375 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-05-30 13:33:46,375 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-05-30 13:33:46,377 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-05-30 13:33:46,380 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-05-30 13:33:46,383 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-30 13:33:46,622 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-30 13:33:46,988 | INFO | __main__ | [OK] Synced commands
+
+2025-05-30 13:33:46,988 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-05-31 09:46:00,921 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-05-31 09:46:00,924 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-05-31 09:46:00,939 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-05-31 09:46:00,939 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-05-31 09:46:00,941 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-05-31 09:46:00,941 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-05-31 09:46:00,941 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-05-31 09:46:00,942 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-05-31 09:46:00,946 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-05-31 09:46:00,948 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-31 09:46:00,948 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-31 09:46:01,467 | INFO | __main__ | [OK] Synced commands
+
+2025-05-31 09:46:01,467 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-05-31 09:53:06,087 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-05-31 09:53:06,087 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-05-31 09:53:06,091 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-05-31 09:53:06,092 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-05-31 09:53:06,093 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-05-31 09:53:06,093 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-05-31 09:53:06,093 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-05-31 09:53:06,094 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-05-31 09:53:06,097 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-05-31 09:53:06,098 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-31 09:53:06,099 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-31 09:53:06,872 | INFO | __main__ | [OK] Synced commands
+
+2025-05-31 09:53:06,872 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-05-31 10:32:49,346 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-05-31 10:32:49,347 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-05-31 10:32:49,351 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-05-31 10:32:49,352 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-05-31 10:32:49,353 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-05-31 10:32:49,354 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-05-31 10:32:49,354 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-05-31 10:32:49,355 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-05-31 10:32:49,357 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-05-31 10:32:49,358 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-31 10:32:49,359 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-31 10:32:49,891 | INFO | __main__ | [OK] Synced commands
+
+2025-05-31 10:32:49,892 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-05-31 12:07:32,558 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-05-31 12:07:32,559 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-05-31 12:07:32,563 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-05-31 12:07:32,564 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-05-31 12:07:32,566 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-05-31 12:07:32,566 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-05-31 12:07:32,566 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-05-31 12:07:32,568 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-05-31 12:07:32,570 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-05-31 12:07:32,572 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-31 12:07:32,572 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-31 12:07:33,172 | INFO | __main__ | [OK] Synced commands
+
+2025-05-31 12:07:33,172 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-05-31 12:57:45,351 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-05-31 12:57:45,351 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-05-31 12:57:45,355 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-05-31 12:57:45,356 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-05-31 12:57:45,357 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-05-31 12:57:45,357 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-05-31 12:57:45,358 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-05-31 12:57:45,358 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-05-31 12:57:45,360 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-05-31 12:57:45,361 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-31 12:57:45,362 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-31 14:20:59,287 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-05-31 14:20:59,287 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-05-31 14:20:59,291 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-05-31 14:20:59,292 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-05-31 14:20:59,293 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-05-31 14:20:59,294 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-05-31 14:20:59,294 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-05-31 14:20:59,294 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-05-31 14:20:59,296 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-05-31 14:20:59,297 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-05-31 14:20:59,298 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-05-31 14:21:00,797 | INFO | __main__ | [OK] Synced commands
+
+2025-05-31 14:21:00,797 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-06-01 10:12:48,700 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-06-01 10:12:48,700 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-06-01 10:12:48,704 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-06-01 10:12:48,705 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-06-01 10:12:48,706 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-06-01 10:12:48,707 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-06-01 10:12:48,707 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-06-01 10:12:48,707 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-06-01 10:12:48,710 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-06-01 10:12:48,711 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-06-01 10:12:48,712 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-06-01 10:12:49,242 | INFO | __main__ | [OK] Synced commands
+
+2025-06-01 10:12:49,242 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-06-01 11:42:34,377 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-06-01 11:42:34,380 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-06-01 11:42:34,383 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-06-01 11:42:34,383 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-06-01 11:42:34,385 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-06-01 11:42:34,385 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-06-01 11:42:34,386 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-06-01 11:42:34,386 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-06-01 11:42:34,390 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-06-01 11:42:34,391 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-06-01 11:42:34,392 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-06-01 11:42:34,861 | INFO | __main__ | [OK] Synced commands
+
+2025-06-01 11:42:34,861 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-06-01 14:28:30,865 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-06-01 14:28:30,865 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-06-01 14:28:30,870 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-06-01 14:28:30,872 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-06-01 14:28:30,874 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-06-01 14:28:30,876 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-06-01 14:28:30,876 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-06-01 14:28:30,877 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-06-01 14:28:30,879 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-06-01 14:28:30,881 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-06-01 14:28:30,882 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-06-01 14:28:31,595 | INFO | __main__ | [OK] Synced commands
+
+2025-06-01 14:28:31,595 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-06-13 16:03:04,114 | INFO | __main__ | 
+
+ __  __            _ _             ____        _
+|  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
+| |\/| |/ _ \/ _` | | | '_ \ / _` |  _ \ / _ \| __|
+| |  | |  __| (_| | | | | | | (_| | |_) | (_) | |_
+|_|  |_|\___|\__, |_|_|_| |_|\__, |____/ \___/ \__|
+             |___/           |___/
+             By Algabo & Phothonx.
+
+----------------------------------------------------
+[~~] Launching MeglingBot...
+
+2025-06-13 16:03:07,443 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-06-13 16:03:07,443 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-06-13 16:03:07,465 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-06-13 16:03:07,467 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-06-13 16:03:07,469 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-06-13 16:03:07,469 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-06-13 16:03:07,469 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-06-13 16:03:07,471 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-06-13 16:03:07,476 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-06-13 16:03:07,478 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-06-13 16:03:07,479 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-06-13 16:03:08,214 | INFO | __main__ | [OK] Synced commands
+
+2025-06-13 16:03:08,214 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-06-14 13:55:20,729 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-06-14 13:55:20,735 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-06-14 13:55:20,764 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-06-14 13:55:20,765 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-06-14 13:55:20,768 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-06-14 13:55:20,768 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-06-14 13:55:20,768 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-06-14 13:55:20,770 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-06-14 13:55:20,776 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-06-14 13:55:20,777 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-06-14 13:55:20,778 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-06-14 13:55:21,435 | INFO | __main__ | [OK] Synced commands
+
+2025-06-14 13:55:21,435 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-06-19 15:06:40,586 | INFO | __main__ | 
+
+ __  __            _ _             ____        _
+|  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
+| |\/| |/ _ \/ _` | | | '_ \ / _` |  _ \ / _ \| __|
+| |  | |  __| (_| | | | | | | (_| | |_) | (_) | |_
+|_|  |_|\___|\__, |_|_|_| |_|\__, |____/ \___/ \__|
+             |___/           |___/
+             By Algabo & Phothonx.
+
+----------------------------------------------------
+[~~] Launching MeglingBot...
+
+2025-06-19 15:06:43,787 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-06-19 15:06:43,787 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-06-19 15:06:43,822 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-06-19 15:06:43,824 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-06-19 15:06:43,828 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-06-19 15:06:43,828 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-06-19 15:06:43,830 | ERROR | megling.extloader | [?!] Failed to load megling.cogs.rr: Extension 'megling.cogs.rr' raised an error: ImportError: cannot import name 'setuplogger' from 'megling.logsetup' (/home/nico/Dev/MeglingBot/megling/logsetup.py)
+2025-06-19 15:06:43,830 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-06-19 15:06:43,831 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-06-19 15:06:43,834 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-06-19 15:06:43,836 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-06-19 15:06:43,837 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-06-19 15:06:44,395 | INFO | __main__ | [OK] Synced commands
+
+2025-06-19 15:06:44,395 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-06-19 15:08:21,476 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-06-19 15:08:21,481 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-06-19 15:08:21,483 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-06-19 15:08:21,486 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-06-19 15:08:21,486 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-06-19 15:08:21,493 | ERROR | megling.extloader | [?!] Failed to load megling.cogs.rr: Extension 'megling.cogs.rr' raised an error: NameError: name 'discord' is not defined
+2025-06-19 15:08:21,493 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-06-19 15:08:21,495 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-06-19 15:08:21,499 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-06-19 15:08:21,500 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-06-19 15:08:21,502 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-06-19 15:08:22,101 | INFO | __main__ | [OK] Synced commands
+
+2025-06-19 15:08:52,320 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-06-19 15:08:52,324 | ERROR | megling.extloader | [?!] Failed to load megling.cogs.rr: Extension 'megling.cogs.rr' raised an error: NameError: name 'bot' is not defined
+2025-06-19 15:08:52,324 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-06-19 15:08:52,953 | INFO | __main__ | [OK] Synced commands
+
+2025-06-19 15:10:12,596 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-06-19 15:10:12,602 | INFO | megling.cogs.rr | [~~]Loading Reaction Role...
+2025-06-19 15:10:12,603 | ERROR | megling.extloader | [?!] Failed to load megling.cogs.rr: Extension 'megling.cogs.rr' raised an error: ClientException: Callback for flavor command is missing "context" parameter.
+2025-06-19 15:10:12,603 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-06-19 15:10:13,174 | INFO | __main__ | [OK] Synced commands
+
+2025-06-19 15:11:01,716 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-06-19 15:11:01,723 | INFO | megling.cogs.rr | [~~]Loading Reaction Role...
+2025-06-19 15:11:01,723 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-06-19 15:11:02,363 | INFO | __main__ | [OK] Synced commands
+
+2025-06-19 15:12:56,020 | INFO | __main__ | 
+
+ __  __            _ _             ____        _
+|  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
+| |\/| |/ _ \/ _` | | | '_ \ / _` |  _ \ / _ \| __|
+| |  | |  __| (_| | | | | | | (_| | |_) | (_) | |_
+|_|  |_|\___|\__, |_|_|_| |_|\__, |____/ \___/ \__|
+             |___/           |___/
+             By Algabo & Phothonx.
+
+----------------------------------------------------
+[~~] Launching MeglingBot...
+
+2025-06-19 15:12:59,193 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-06-19 15:12:59,193 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-06-19 15:12:59,207 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-06-19 15:12:59,208 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-06-19 15:12:59,209 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-06-19 15:12:59,210 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-06-19 15:12:59,214 | INFO | megling.cogs.rr | [~~]Loading Reaction Role...
+2025-06-19 15:12:59,214 | INFO | megling.cogs.rr | [OK] Reaction Role loaded
+2025-06-19 15:12:59,215 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-06-19 15:12:59,216 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-06-19 15:12:59,221 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-06-19 15:12:59,224 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-06-19 15:12:59,225 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-06-19 15:12:59,703 | INFO | __main__ | [OK] Synced commands
+
+2025-06-19 15:12:59,704 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-06-19 19:44:25,526 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-06-19 19:44:25,526 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-06-19 19:44:25,530 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-06-19 19:44:25,531 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-06-19 19:44:25,532 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-06-19 19:44:25,532 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-06-19 19:44:25,534 | INFO | megling.cogs.rr | [~~]Loading Reaction Role...
+2025-06-19 19:44:25,534 | INFO | megling.cogs.rr | [OK] Reaction Role loaded
+2025-06-19 19:44:25,534 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-06-19 19:44:25,535 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-06-19 19:44:25,537 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-06-19 19:44:25,538 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-06-19 19:44:25,539 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-06-19 19:44:25,977 | INFO | __main__ | [OK] Synced commands
+
+2025-06-19 19:44:25,977 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-06-19 20:20:36,546 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-06-19 20:20:36,550 | INFO | megling.cogs.rr | [~~]Loading Reaction Role...
+2025-06-19 20:20:36,551 | INFO | megling.cogs.rr | [OK] Reaction Role loaded
+2025-06-19 20:20:36,551 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-06-19 20:20:37,544 | INFO | __main__ | [OK] Synced commands
+
+2025-06-19 20:21:07,051 | INFO | __main__ | 
+
+ __  __            _ _             ____        _
+|  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
+| |\/| |/ _ \/ _` | | | '_ \ / _` |  _ \ / _ \| __|
+| |  | |  __| (_| | | | | | | (_| | |_) | (_) | |_
+|_|  |_|\___|\__, |_|_|_| |_|\__, |____/ \___/ \__|
+             |___/           |___/
+             By Algabo & Phothonx.
+
+----------------------------------------------------
+[~~] Launching MeglingBot...
+
+2025-06-19 20:21:10,111 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-06-19 20:21:10,112 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-06-19 20:21:10,148 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-06-19 20:21:10,150 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-06-19 20:21:10,152 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-06-19 20:21:10,152 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-06-19 20:21:10,154 | INFO | megling.cogs.rr | [~~]Loading Reaction Role...
+2025-06-19 20:21:10,154 | INFO | megling.cogs.rr | [OK] Reaction Role loaded
+2025-06-19 20:21:10,154 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-06-19 20:21:10,155 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-06-19 20:21:10,158 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-06-19 20:21:10,159 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-06-19 20:21:10,160 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-06-19 20:21:11,089 | INFO | __main__ | [OK] Synced commands
+
+2025-06-19 20:21:11,090 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-06-19 21:19:21,005 | INFO | __main__ | 
+
+ __  __            _ _             ____        _
+|  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
+| |\/| |/ _ \/ _` | | | '_ \ / _` |  _ \ / _ \| __|
+| |  | |  __| (_| | | | | | | (_| | |_) | (_) | |_
+|_|  |_|\___|\__, |_|_|_| |_|\__, |____/ \___/ \__|
+             |___/           |___/
+             By Algabo & Phothonx.
+
+----------------------------------------------------
+[~~] Launching MeglingBot...
+
+2025-06-19 21:19:24,098 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-06-19 21:19:24,098 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-06-19 21:19:24,112 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-06-19 21:19:24,113 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-06-19 21:19:24,114 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-06-19 21:19:24,114 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-06-19 21:19:24,115 | ERROR | megling.extloader | [?!] Failed to load megling.cogs.rr: Extension 'megling.cogs.rr' raised an error: IndentationError: unindent does not match any outer indentation level (rr.py, line 12)
+2025-06-19 21:19:24,115 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-06-19 21:19:24,116 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-06-19 21:19:24,120 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-06-19 21:19:24,122 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-06-19 21:19:24,123 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-06-19 21:19:24,718 | INFO | __main__ | [OK] Synced commands
+
+2025-06-19 21:19:24,718 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-06-19 21:20:08,892 | INFO | __main__ | 
+
+ __  __            _ _             ____        _
+|  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
+| |\/| |/ _ \/ _` | | | '_ \ / _` |  _ \ / _ \| __|
+| |  | |  __| (_| | | | | | | (_| | |_) | (_) | |_
+|_|  |_|\___|\__, |_|_|_| |_|\__, |____/ \___/ \__|
+             |___/           |___/
+             By Algabo & Phothonx.
+
+----------------------------------------------------
+[~~] Launching MeglingBot...
+
+2025-06-19 21:20:12,270 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-06-19 21:20:12,270 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-06-19 21:20:12,284 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-06-19 21:20:12,285 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-06-19 21:20:12,286 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-06-19 21:20:12,287 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-06-19 21:20:12,290 | ERROR | megling.extloader | [?!] Failed to load megling.cogs.rr: Extension 'megling.cogs.rr' raised an error: NameError: name 'List' is not defined
+2025-06-19 21:20:12,290 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-06-19 21:20:12,291 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-06-19 21:20:12,295 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-06-19 21:20:12,297 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-06-19 21:20:12,299 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-06-19 21:20:53,187 | INFO | __main__ | [OK] Synced commands
+
+2025-06-19 21:20:53,188 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-06-19 21:21:46,763 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-06-19 21:21:46,768 | INFO | megling.cogs.rr | [~~]Loading Reaction Role...
+2025-06-19 21:21:46,768 | ERROR | megling.extloader | [?!] Failed to load megling.cogs.rr: Extension 'megling.cogs.rr' raised an error: TypeError: RoleMenu.__init__() missing 1 required positional argument: 'roles_list'
+2025-06-19 21:21:46,768 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-06-19 21:21:47,498 | INFO | __main__ | [OK] Synced commands
+
+2025-06-19 21:25:16,520 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-06-19 21:25:16,524 | INFO | megling.cogs.rr | [~~]Loading Reaction Role...
+2025-06-19 21:25:16,525 | ERROR | megling.extloader | [?!] Failed to load megling.cogs.rr: Extension 'megling.cogs.rr' raised an error: TypeError: RoleMenu.__init__() missing 1 required positional argument: 'roles_list'
+2025-06-19 21:25:16,525 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-06-19 21:25:17,504 | INFO | __main__ | [OK] Synced commands
+
+2025-06-19 21:51:13,552 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-06-19 21:51:13,552 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-06-19 21:51:13,559 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-06-19 21:51:13,560 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-06-19 21:51:13,562 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-06-19 21:51:13,562 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-06-19 21:51:13,564 | INFO | megling.cogs.rr | [~~]Loading Reaction Role...
+2025-06-19 21:51:13,565 | ERROR | megling.extloader | [?!] Failed to load megling.cogs.rr: Extension 'megling.cogs.rr' raised an error: TypeError: RoleMenu.__init__() missing 1 required positional argument: 'roles_list'
+2025-06-19 21:51:13,566 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-06-19 21:51:13,567 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-06-19 21:51:13,569 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-06-19 21:51:13,570 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-06-19 21:51:13,571 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-06-19 21:51:14,030 | INFO | __main__ | [OK] Synced commands
+
+2025-06-19 21:51:14,031 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-06-19 22:13:34,081 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-06-19 22:13:34,081 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-06-19 22:13:34,086 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-06-19 22:13:34,087 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-06-19 22:13:34,089 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-06-19 22:13:34,089 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-06-19 22:13:34,090 | INFO | megling.cogs.rr | [~~]Loading Reaction Role...
+2025-06-19 22:13:34,091 | ERROR | megling.extloader | [?!] Failed to load megling.cogs.rr: Extension 'megling.cogs.rr' raised an error: TypeError: RoleMenu.__init__() missing 1 required positional argument: 'roles_list'
+2025-06-19 22:13:34,091 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-06-19 22:13:34,092 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-06-19 22:13:34,094 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-06-19 22:13:34,095 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-06-19 22:13:34,096 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-06-19 22:15:51,481 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-06-19 22:15:51,482 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-06-19 22:15:51,487 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-06-19 22:15:51,487 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-06-19 22:15:51,489 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-06-19 22:15:51,489 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-06-19 22:15:51,490 | INFO | megling.cogs.rr | [~~]Loading Reaction Role...
+2025-06-19 22:15:51,490 | ERROR | megling.extloader | [?!] Failed to load megling.cogs.rr: Extension 'megling.cogs.rr' raised an error: TypeError: RoleMenu.__init__() missing 1 required positional argument: 'roles_list'
+2025-06-19 22:15:51,490 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-06-19 22:15:51,491 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-06-19 22:15:51,493 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-06-19 22:15:51,494 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-06-19 22:15:51,495 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-06-19 22:15:52,009 | INFO | __main__ | [OK] Synced commands
+
+2025-06-19 22:15:52,009 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-06-19 22:32:00,209 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-06-19 22:32:00,211 | INFO | megling.cogs.rr | [~~]Loading Reaction Role...
+2025-06-19 22:32:00,212 | ERROR | megling.extloader | [?!] Failed to load megling.cogs.rr: Extension 'megling.cogs.rr' raised an error: TypeError: RoleMenu.__init__() missing 1 required positional argument: 'roles_list'
+2025-06-19 22:32:00,212 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-06-19 22:32:00,949 | INFO | __main__ | [OK] Synced commands
+
+2025-06-19 22:35:49,225 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-06-19 22:35:49,232 | INFO | megling.cogs.rr | [~~]Loading Reaction Role...
+2025-06-19 22:35:49,233 | INFO | megling.cogs.rr | [OK] Reaction Role loaded
+2025-06-19 22:35:49,233 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-06-19 22:35:49,996 | INFO | __main__ | [OK] Synced commands
+
+2025-06-19 22:36:51,196 | ERROR | megling.cogs.rr | [?!] Reaction role failed to asign role: 403 Forbidden (error code: 50013): Missing Permissions
+2025-06-25 16:55:27,329 | INFO | __main__ | 
+
+ __  __            _ _             ____        _
+|  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
+| |\/| |/ _ \/ _` | | | '_ \ / _` |  _ \ / _ \| __|
+| |  | |  __| (_| | | | | | | (_| | |_) | (_) | |_
+|_|  |_|\___|\__, |_|_|_| |_|\__, |____/ \___/ \__|
+             |___/           |___/
+             By Algabo & Phothonx.
+
+----------------------------------------------------
+[~~] Launching MeglingBot...
+
+2025-06-25 16:55:30,770 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-06-25 16:55:30,771 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-06-25 16:55:30,787 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-06-25 16:55:30,787 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-06-25 16:55:30,788 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-06-25 16:55:30,789 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-06-25 16:55:30,790 | ERROR | megling.extloader | [?!] Failed to load megling.cogs.rr: Extension 'megling.cogs.rr' raised an error: NameError: name 'self' is not defined
+2025-06-25 16:55:30,790 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-06-25 16:55:30,790 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-06-25 16:55:30,793 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-06-25 16:55:30,794 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-06-25 16:55:30,794 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-06-25 16:55:31,530 | INFO | __main__ | [OK] Synced commands
+
+2025-06-25 16:55:31,530 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-06-25 19:17:42,595 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-06-25 19:17:42,595 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-06-25 19:17:42,597 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-06-25 19:17:42,597 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-06-25 19:17:42,598 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-06-25 19:17:42,598 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-06-25 19:17:42,598 | ERROR | megling.extloader | [?!] Failed to load megling.cogs.rr: Extension 'megling.cogs.rr' raised an error: NameError: name 'self' is not defined
+2025-06-25 19:17:42,598 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-06-25 19:17:42,598 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-06-25 19:17:42,600 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-06-25 19:17:42,600 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-06-25 19:17:42,601 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-06-25 19:17:43,208 | INFO | __main__ | [OK] Synced commands
+
+2025-06-25 19:17:43,209 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-08-05 15:15:59,989 | INFO | __main__ | 
+
+ __  __            _ _             ____        _
+|  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
+| |\/| |/ _ \/ _` | | | '_ \ / _` |  _ \ / _ \| __|
+| |  | |  __| (_| | | | | | | (_| | |_) | (_) | |_
+|_|  |_|\___|\__, |_|_|_| |_|\__, |____/ \___/ \__|
+             |___/           |___/
+             By Algabo & Phothonx.
+
+----------------------------------------------------
+[~~] Launching MeglingBot...
+
+2025-08-05 15:16:03,271 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-08-05 15:16:03,272 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-08-05 15:16:03,288 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-08-05 15:16:03,289 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-08-05 15:16:03,290 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-08-05 15:16:03,290 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-08-05 15:16:03,291 | ERROR | megling.extloader | [?!] Failed to load megling.cogs.rr: Extension 'megling.cogs.rr' raised an error: NameError: name 'self' is not defined
+2025-08-05 15:16:03,291 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-08-05 15:16:03,292 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-08-05 15:16:03,295 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-08-05 15:16:03,297 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-08-05 15:16:03,298 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-08-05 15:16:03,887 | INFO | __main__ | [OK] Synced commands
+
+2025-08-05 15:16:03,887 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-08-05 15:30:22,485 | INFO | __main__ | 
+
+ __  __            _ _             ____        _
+|  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
+| |\/| |/ _ \/ _` | | | '_ \ / _` |  _ \ / _ \| __|
+| |  | |  __| (_| | | | | | | (_| | |_) | (_) | |_
+|_|  |_|\___|\__, |_|_|_| |_|\__, |____/ \___/ \__|
+             |___/           |___/
+             By Algabo & Phothonx.
+
+----------------------------------------------------
+[~~] Launching MeglingBot...
+
+2025-08-05 15:30:25,921 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-08-05 15:30:25,922 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-08-05 15:30:25,943 | INFO | megling.cogs.vc | [~~] Loading vc...
+2025-08-05 15:30:25,944 | INFO | megling.cogs.vc | [OK] vc loaded
+2025-08-05 15:30:25,945 | INFO | megling.cogs.admin | [~~]Loading admin...
+2025-08-05 15:30:25,946 | INFO | megling.cogs.admin | [OK] admin loaded
+2025-08-05 15:30:25,947 | ERROR | megling.extloader | [?!] Failed to load megling.cogs.rr: Extension 'megling.cogs.rr' raised an error: NameError: name 'self' is not defined
+2025-08-05 15:30:25,947 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-08-05 15:30:25,949 | INFO | megling.cogs.vc | [~~] SQLite checkup...
+2025-08-05 15:30:25,951 | INFO | megling.cogs.vc | [OK] SQLite checkup completed
+2025-08-05 15:30:25,953 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-08-05 15:30:26,448 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-08-05 15:30:27,048 | INFO | __main__ | [OK] Synced commands
+
+2025-08-05 15:30:27,048 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+

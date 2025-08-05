@@ -13,20 +13,23 @@ logger = setupLogger(__name__)
 # UserSettings(userID, channelName, channelLimit)
 
 
-def get_connected_voice_channel(ctx: ApplicationContext):
+def get_connected_voice_channel(ctx: ApplicationContext): # return the guild voice channel which the command user is into (None if none)
+  if not ctx.guild:
+    raise NoPrivateMessage()
+  else:
     return ctx.user.voice.channel if ctx.user.voice else None
 
 class NotVoiceOwner(CheckFailure):
   pass
 
-def is_voice_owner():
-  async def predicate(ctx):
+def is_voice_owner(): # check that command user is owner if his voice channel (True if not connected)
+  async def predicate(ctx:ApplicationContext):
     channel = get_connected_voice_channel(ctx)
     if channel:
       async with aiosqlite.connect("db/voice.db") as db:
         async with db.execute("SELECT ownerID FROM VoiceChannels WHERE channelID = ?", (channel.id,)) as cursor:
           owner_id = await cursor.fetchone()
-          if bool(owner_id) and owner_id[0] == ctx.user.id:
+          if bool(owner_id) and owner_id[0] == ctx.user.id: # compare owner id and command user id
             return True
     raise NotVoiceOwner()
   return commands.check(predicate)
@@ -35,8 +38,8 @@ def is_voice_owner():
 class NotInVoiceChannel(CheckFailure):
   pass
 
-def is_in_voice_channel():
-  async def predicate(ctx):
+def is_in_voice_channel(): # check that command user is in a voice channel
+  async def predicate(ctx:ApplicationContext):
     channel = get_connected_voice_channel(ctx)
     if channel:
       return True
@@ -51,25 +54,27 @@ async def cleanup(bot: Bot):
       channels = await cursor.fetchall()
       for (channel_id,) in channels:
         channel = await bot.fetch_channel(channel_id)
-        if channel and isinstance(channel, VoiceChannel):
-          await channel.delete(reason="Cleaning leftover voice channel")
-          await db.execute("DELETE FROM VoiceChannels WHERE channelID = ?", (channel_id,))
-          await db.commit()
+        if not isinstance(channel, VoiceChannel) or len(channel.members) == 0:
+          try:
+            await channel.delete(reason="Cleaning leftover voice channel")
+          except Exception as e:
+            logger.error(f"[?!] Failed to clean a channel, removing from database: {e}")
+          finally: # delete channel from db anyway
+            await db.execute("DELETE FROM VoiceChannels WHERE channelID = ?", (channel_id,))
+            await db.commit()
       logger.info(f"[OK] Cleaned voice channels")
 
 
 
-
 class VCCog(commands.Cog):
-  def __init__(self, bot):
+  def __init__(self, bot:Bot):
     self.bot = bot
-    self.auto_clean.start()
-
+    self.auto_clean.start() # start cleaning process
 
   def cog_unload(self):
-      self.printer.cancel()
+    self.auto_clean.cancel() # cancel process when unloading
 
-  @tasks.loop(hours=1)
+  @tasks.loop(hours=24)
   async def auto_clean(self):
     await cleanup(self.bot)
 
@@ -88,28 +93,40 @@ class VCCog(commands.Cog):
   async def on_voice_state_update(self, member, before, after):
     async with aiosqlite.connect("db/voice.db") as db:
       guild_id = member.guild.id
-      async with db.execute("SELECT ChannelID FROM GuildChannels WHERE guildID = ?", (guild_id,)) as cursor:
+
+      # Channel creation
+      async with db.execute("SELECT channelID FROM GuildChannels WHERE guildID = ?", (guild_id,)) as cursor:
         voice = await cursor.fetchone()
         if voice:
           voice_id = voice[0]
-          try:
-            if after.channel and after.channel.id == voice_id:
-              async with db.execute("SELECT channelName, channelLimit FROM UserSettings WHERE userID = ?", (member.id,)) as cursor:
-                settings = await cursor.fetchone()
-                name = settings[0] if settings else f"{member.name}'s channel"
-                limit = int(settings[1]) if settings else 0
+          if after.channel and after.channel.id == voice_id:
+            async with db.execute("SELECT channelName, channelLimit FROM UserSettings WHERE userID = ?", (member.id,)) as cursor:
+              settings = await cursor.fetchone()
+              name = settings[0] if settings else f"{member.name}'s channel"
+              limit = int(settings[1]) if settings else 0
+              try:
                 channel = await member.guild.create_voice_channel(name, category=after.channel.category, user_limit=limit)
                 await member.move_to(channel)
                 await db.execute("INSERT INTO VoiceChannels (channelID, guildID, ownerID) VALUES (?, ?, ?)", (channel.id, guild_id, member.id))
                 await db.commit()
-                def check(*_):
-                  return len(channel.members) == 0
-                await self.bot.wait_for('voice_state_update', check=check)
-                await channel.delete()
-                await db.execute('DELETE FROM VoiceChannels WHERE channelID=?', (channel.id,))
-                await db.commit()
-          except Exception as e:
-            logger.error(f"[?!] Failed to voice state update from voice creator, Exception : {e}")
+              except Exception as e:
+                logger.error(f"[?!] Failed to create/move user to voice channel: {e}")
+
+          # Channel deletion
+          elif before.channel and before.channel.id != (after.channel.id if after.channel else None):
+            channel = before.channel
+            async with db.execute("SELECT channelID FROM VoiceChannels WHERE channelID = ?", (channel.id,)) as cursor:
+              voice = await cursor.fetchone()
+              if voice:
+                if len(channel.members) == 0:
+                  try:
+                    if isinstance(channel, VoiceChannel):
+                      await channel.delete()
+                  except Exception as e:
+                    logger.error(f"[?!] Failed to delete voice channel: {e}")
+                  await db.execute('DELETE FROM VoiceChannels WHERE channelID=?', (channel.id,))
+                  await db.commit()
+
 
 
   vc = SlashCommandGroup("vc", description="Voice creator")
@@ -172,7 +189,9 @@ class VCCog(commands.Cog):
   @is_in_voice_channel()
   @is_voice_owner()
   async def lock(self, ctx: ApplicationContext):
-    await ctx.user.voice.channel.edit(connect = False)
+    overwrite = ctx.user.voice.channel.overwrites_for(ctx.guild.default_role)
+    overwrite.connect = False
+    await ctx.user.voice.channel.set_permissions(ctx.guild.default_role, overwrite=overwrite)
     await ctx.respond(":lock:  **Your channel has been locked**")
 
 
@@ -181,7 +200,9 @@ class VCCog(commands.Cog):
   @is_in_voice_channel()
   @is_voice_owner()
   async def unlock(self, ctx: ApplicationContext):
-    await ctx.user.voice.channel.edit(connect = True)
+    overwrite = ctx.user.voice.channel.overwrites_for(ctx.guild.default_role)
+    overwrite.connect = True
+    await ctx.user.voice.channel.set_permissions(ctx.guild.default_role, overwrite=overwrite)
     await ctx.respond(":unlock:  **Your channel has been unlocked**")
 
 
@@ -224,7 +245,7 @@ class VCCog(commands.Cog):
   settings = vc.create_subgroup("settings", description="Voice creator settings")
 
 
-  @settings.command(name="set", description="Defaul channel settings")
+  @settings.command(name="set", description="Default channel settings")
   @guild_only()
   async def set(self, ctx: ApplicationContext, name:str, limit:int=0):
     async with aiosqlite.connect("db/voice.db") as db:
@@ -260,7 +281,7 @@ class VCCog(commands.Cog):
         await ctx.respond(":interrobang:  **You are not connected to any voice channel**", ephemeral=True)
         return
       case NoPrivateMessage():
-        await ctx.respond(":interrobang:  **This command shoul be used in a discord server**", ephemeral=True)
+        await ctx.respond(":interrobang:  **This command should be used in a discord server**", ephemeral=True)
         return
       case _:
         raise error

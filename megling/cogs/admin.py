@@ -4,7 +4,7 @@ from megling.logsetup import setupLogger
 
 logger = setupLogger(__name__)
 
-class admin(commands.Cog):
+class Admin(commands.Cog):
   def __init__(self, bot:Bot):
       self.bot = bot
 
@@ -20,5 +20,5 @@ class admin(commands.Cog):
 
 def setup(bot:Bot):
   logger.info("[~~]Loading admin...")
-  bot.add_cog(admin(bot))
+  bot.add_cog(Admin(bot))
   logger.info("[OK] admin loaded")
