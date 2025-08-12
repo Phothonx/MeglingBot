@@ -94,26 +94,13 @@ class VCCog(commands.Cog):
     async with aiosqlite.connect("db/voice.db") as db:
       guild_id = member.guild.id
 
-      # Channel creation
       async with db.execute("SELECT channelID FROM GuildChannels WHERE guildID = ?", (guild_id,)) as cursor:
         voice = await cursor.fetchone()
         if voice:
           voice_id = voice[0]
-          if after.channel and after.channel.id == voice_id:
-            async with db.execute("SELECT channelName, channelLimit FROM UserSettings WHERE userID = ?", (member.id,)) as cursor:
-              settings = await cursor.fetchone()
-              name = settings[0] if settings else f"{member.name}'s channel"
-              limit = int(settings[1]) if settings else 0
-              try:
-                channel = await member.guild.create_voice_channel(name, category=after.channel.category, user_limit=limit)
-                await member.move_to(channel)
-                await db.execute("INSERT INTO VoiceChannels (channelID, guildID, ownerID) VALUES (?, ?, ?)", (channel.id, guild_id, member.id))
-                await db.commit()
-              except Exception as e:
-                logger.error(f"[?!] Failed to create/move user to voice channel: {e}")
 
           # Channel deletion
-          elif before.channel and before.channel.id != (after.channel.id if after.channel else None):
+          if before.channel and before.channel.id != (after.channel.id if after.channel else None):
             channel = before.channel
             async with db.execute("SELECT channelID FROM VoiceChannels WHERE channelID = ?", (channel.id,)) as cursor:
               voice = await cursor.fetchone()
@@ -127,6 +114,19 @@ class VCCog(commands.Cog):
                   await db.execute('DELETE FROM VoiceChannels WHERE channelID=?', (channel.id,))
                   await db.commit()
 
+          # Channel creation
+          if after.channel and after.channel.id == voice_id:
+            async with db.execute("SELECT channelName, channelLimit FROM UserSettings WHERE userID = ?", (member.id,)) as cursor:
+              settings = await cursor.fetchone()
+              name = settings[0] if settings else f"{member.name}'s channel"
+              limit = int(settings[1]) if settings else 0
+              try:
+                channel = await member.guild.create_voice_channel(name, category=after.channel.category, user_limit=limit)
+                await member.move_to(channel)
+                await db.execute("INSERT INTO VoiceChannels (channelID, guildID, ownerID) VALUES (?, ?, ?)", (channel.id, guild_id, member.id))
+                await db.commit()
+              except Exception as e:
+                logger.error(f"[?!] Failed to create/move user to voice channel: {e}")
 
 
   vc = SlashCommandGroup("vc", description="Voice creator")
@@ -288,6 +288,6 @@ class VCCog(commands.Cog):
 
 
 def setup(bot):
-  logger.info("[~~] Loading vc...")
+  logger.info("[~~] Loading Voice Creator...")
   bot.add_cog(VCCog(bot))
-  logger.info("[OK] vc loaded")
+  logger.info("[OK] Voice Creator loaded")

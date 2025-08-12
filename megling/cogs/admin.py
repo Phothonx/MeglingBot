@@ -19,6 +19,6 @@ class Admin(commands.Cog):
 
 
 def setup(bot:Bot):
-  logger.info("[~~]Loading admin...")
+  logger.info("[~~]Loading Admin...")
   bot.add_cog(Admin(bot))
-  logger.info("[OK] admin loaded")
+  logger.info("[OK] Admin loaded")
