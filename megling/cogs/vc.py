@@ -1,5 +1,4 @@
 import aiosqlite
-
 from discord.ext import commands, tasks
 from discord.ext.commands import CommandError, CheckFailure, guild_only, NoPrivateMessage
 from discord import ApplicationContext, VoiceChannel, SlashCommandGroup, Bot
@@ -65,7 +64,6 @@ async def cleanup(bot: Bot):
       logger.info(f"[OK] Cleaned voice channels")
 
 
-
 class VCCog(commands.Cog):
   def __init__(self, bot:Bot):
     self.bot = bot
@@ -80,13 +78,13 @@ class VCCog(commands.Cog):
 
   @auto_clean.before_loop
   async def first_clean(self):
-    logger.info("[~~] SQLite checkup...")
+    logger.info("[~~] SQLite voice.db checkup...")
     async with aiosqlite.connect("db/voice.db") as db:
       await db.execute("CREATE TABLE IF NOT EXISTS GuildChannels (guildID INTEGER PRIMARY KEY, channelID INTEGER)")
       await db.execute("CREATE TABLE IF NOT EXISTS VoiceChannels (channelID INTEGER PRIMARY KEY, guildID INTEGER, ownerID INTEGER)")
       await db.execute("CREATE TABLE IF NOT EXISTS UserSettings (userID INTEGER PRIMARY KEY, channelName TEXT, channelLimit INTEGER)")
       await db.commit()
-      logger.info("[OK] SQLite checkup completed")
+      logger.info("[OK] SQLite voice.db checkup completed")
 
 
   @commands.Cog.listener()
