@@ -2811,3 +2811,44 @@ GUILDS : 2 servers
 [OK] Logged in as Megling#1409
 ----------------------------------------------------
 
+2025-08-15 22:27:36,379 | INFO | __main__ | 
+
+ __  __            _ _             ____        _
+|  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
+| |\/| |/ _ \/ _` | | | '_ \ / _` |  _ \ / _ \| __|
+| |  | |  __| (_| | | | | | | (_| | |_) | (_) | |_
+|_|  |_|\___|\__, |_|_|_| |_|\__, |____/ \___/ \__|
+             |___/           |___/
+             By Algabo & Phothonx.
+
+----------------------------------------------------
+[~~] Launching MeglingBot...
+
+2025-08-15 22:27:41,190 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-08-15 22:27:41,190 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-08-15 22:27:41,238 | INFO | megling.cogs.vc | [~~] Loading Voice Creator...
+2025-08-15 22:27:41,240 | INFO | megling.cogs.vc | [OK] Voice Creator loaded
+2025-08-15 22:27:41,241 | INFO | megling.cogs.admin | [~~]Loading Admin...
+2025-08-15 22:27:41,242 | INFO | megling.cogs.admin | [OK] Admin loaded
+2025-08-15 22:27:41,245 | INFO | megling.cogs.views | [~~] Loading Views...
+2025-08-15 22:27:41,246 | INFO | megling.cogs.views | [OK] Views loaded
+2025-08-15 22:27:41,246 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-08-15 22:27:41,247 | INFO | megling.cogs.vc | [~~] SQLite voice.db checkup...
+2025-08-15 22:27:41,252 | INFO | megling.cogs.vc | [OK] SQLite voice.db checkup completed
+2025-08-15 22:27:41,254 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-08-15 22:27:41,255 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-08-15 22:27:42,315 | INFO | __main__ | [OK] Synced commands
+
+2025-08-15 22:27:42,315 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+

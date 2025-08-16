@@ -6,7 +6,7 @@ logger = setupLogger(__name__)
 
 
 # raid.db
-# RaidTemplates(templateName, url, description, footer, image, thumbnail)
+# RaidTemplates(templateName, url, description, image, thumbnail, ownerID)
 # TemplateRoles(templateName, roleName, roleIcon, maxSlots)
 # Raids(raidID, leaderID, templateName, title, raidTime, number)
 # Signups(signupID, userID, raidID, roleName, note, signupTime, signupRank)
@@ -24,9 +24,9 @@ CREATE TABLE IF NOT EXISTS RaidTemplates (
   templateName TEXT PRIMARY KEY,
   url TEXT,
   description TEXT,
-  footer TEXT,
   image TEXT,
   thumbnail TEXT
+  ownerID INTERGER,
 );
       """)
       await db.execute("""
@@ -83,6 +83,12 @@ CREATE TABLE IF NOT EXISTS Signups (
     async with aiosqlite.connect(self.db_path) as db:
       cursor = await db.execute("SELECT roleName, roleIcon, maxSlots FROM TemplateRoles WHERE templateName = ?", (templateName,))
       return await cursor.fetchall()
+
+
+  # TODO create roles
+  async def create_template(self, templateName:str, url:str|None, description:str|None, image:str|None, thumbnail:str|None, ownerID:int|None):
+    async def with aiosqlite.connect(self.db_path) sa db:
+      await db.execute("INSERT INTO RaidTemplates (templateName, url, description, image, thumbnail, ownerID) VALUES (?, ?, ?, ?, ?, ?)", (templateName, url, description, image, thumbnail, ownerID))
 
 
   async def add_raid(self, leaderId: int, templateName: str, title: str, raidTime: datetime) -> int:
