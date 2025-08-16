@@ -3,7 +3,7 @@ from megling.logsetup import setupLogger
 
 logger = setupLogger(__name__)
 
-extensions = [ "vc", "admin", "views" ]
+extensions = [ "vc", "admin", "views", "raid" ]
 
 def loadOne(bot:Bot, extension:str):
   try:

@@ -1,62 +1,79 @@
-from re import template
-from shlex import join
 from typing import Literal
-import aiosqlite
-import disco
 from datetime import datetime
-from megling.cogs.raidDBManager import RaidDB
 
+from megling.cogs.raidDBManager import RaidDB
 from megling.logsetup import setupLogger
 
+from discord import ApplicationContext, SlashCommandGroup, Bot, ui, Embed, Colour
+from discord.ext import commands, tasks
 from discord.ext.commands import CheckFailure
-from discord import ApplicationContext, SlashCommandGroup, Bot, ui, Embed, EmbedAuthor, EmbedMedia, EmbedFooter, Colour, get_user
-from discord.ext import commands
 
 logger = setupLogger(__name__)
 
 db = RaidDB()
 
 class RaidEmbed(Embed):
-  def __init__(self, raidID):
-    raid = db.get_raid(raidID)
-    self.raidID = raidID
-    self.template = db.get_template(raid[2])
+  def __init__(self, bot, raid, template):
+    self.bot = bot
     super().__init__(
-      colour=Colour.blue,
-      url=self.template[1] if self.template[1] else None,
-      description=self.template[2] if self.template[2] else None,
+      colour=Colour.blue(),
+      url=template[1] if template[1] else None,
+      description=template[2] if template[2] else None,
       title=raid[3],
       timestamp=datetime.now()
     )
-    self.set_footer(text=self.template[0])
-    self.set_author(name=raid[1])
-    if self.template[3]:
-      self.set_image(url=self.template[3])
-    if self.template[4]:
-      self.set_thumbnail(url=self.template[4])
+    self.raidID = raid[0]
+    self.template = template
 
-  async def update(self):
-    raid = db.get_raid(self.raidID)
-    roles = db.get_template_roles(raid[2])
-    signups = db.get_signups(self.raidID)
+    self.set_footer(text=template[0])
+    self.set_author(name=str(raid[1]))  # leader id, ideally fetch name
+    if template[3]:
+      self.set_image(url=template[3])
+    if template[4]:
+      self.set_thumbnail(url=template[4])
+
+  @classmethod
+  async def create(cls, bot, raid_id: int):
+    raid = await db.get_raid(raid_id)
+    template = await db.get_template(raid[2])
+    print(raid)
+    print(template)
+    return cls(bot, raid, template)
+
+  async def update_embed(self):
+    print("updating")
+    raid = await db.get_raid(self.raidID)
+    roles = await db.get_template_roles(raid[2])
+    signups = await db.get_signups(self.raidID)
+    print(roles)
+    print(signups)
+    print(raid)
 
     self.clear_fields()
+    self.add_field(name=f"<t:{int(raid[4].timestamp())}:R>", value="")
+    print("added fields")
 
-    self.add_field(name=f"<t:{str(raid[4])}:R>", value="")
+    total_signed = 0
+    max_slots = 0
 
-    max = 0
     for role in roles:
+      rolename, roleicon, maxslots = role
       role_signups = []
-      max+= role[3]
+
       for signup in signups:
-        if signup[3] = role[1]
-          userName = await get_user(signup[1]).name
-          role_signups.append(f"{signup[6]} {userName}")
-      role_signups.sort() # will sort according to signup rank (will be issues >10 idc)
-      self.add_field(name=f":{role[2]}: {role[1]}", value="\n".join(role_signups)+"\n")
+        if signup[1] == rolename:
+          user = await bot.get_user(signup[0])
+          username = user.name if user else f"<@{signup[0]}>"
+          role_signups.append(f"{signup[4]} {username}")
 
-    self.insert_field_at(index=1, name=f"{raid[5]}/{max} raiders", value="")
+      total_signed += len(role_signups)
+      max_slots += maxslots
+      role_signups.sort()
+      value = "\n".join(role_signups) or "—"
+      self.add_field(name=f":{roleicon}: {rolename}", value=value)
 
+    print("insert member count")
+    self.insert_field_at(index=1, name=f"{total_signed}/{max_slots} raiders", value="")
 
 class RaidView(ui.View):
   def __init__(self):
@@ -66,39 +83,44 @@ class RaidView(ui.View):
 class Raid(commands.Cog):
   def __init__(self, bot: Bot):
     self.bot = bot
+    self.checkuploop.start()
 
   def cog_unload(self):
-    self.checkuploop().cancel()
+    self.checkuploop.cancel()
 
   @tasks.loop(hours=24)
   async def checkuploop(self):
-    pass
+    await db.checkup()
 
   @checkuploop.before_loop
-  async def first_checkup(self):
-    db.checkup()
+  async def before_checkup(self):
+    await self.bot.wait_until_ready()
 
 
-  template = SlashCommandGroup("temlpate", description="Create and edit raid temlpates")
+  template = SlashCommandGroup("template", description="Create and edit raid temlpates")
 
 
-  template.command(name="crate")
-  async def create(self, ctx: ApplicationContext, templateName:str, url:str|None, description:str|None, image:str|None, thumbnail:str|None):
+  @template.command(name="create")
+  async def create(self, ctx: ApplicationContext, templatename:str, url:str, description:str, image:str, thumbnail:str):
     userID = ctx.user.id
-    db.create_template(templateName=templateName, url=url, description=description, image=image, thumbnail=thumbnail, ownerID=userID):
+    await db.create_template(templateName=templatename, url=url, description=description, image=image, thumbnail=thumbnail, ownerID=userID)
+    await ctx.respond(f"✅ Template `{templatename}` created.", ephemeral=True)
 
 
   raid = SlashCommandGroup("raid", description="Manage and start raids")
 
 
   @raid.command(name="start")
-  async def start(self, ctx: ApplicationContext, templateName:str, title:str, raidTime:str):
+  async def start(self, ctx: ApplicationContext, templatename:str, title:str, raidtime:str):
     userID = ctx.user.id
-    raidTime = datetime.now() # change later
-    db.add_raid(leaderId=userID, templateName=templateName, title=title, raidTime=raidTime)
-    embed = RaidEmbed()
-    ctx.channel.send(embed=RaidEmbed)
-    embed.update()
+    raid_time = datetime.strptime(raidtime, "%Y-%m-%d %H:%M")
+    raid_id = await db.add_raid(leaderId=userID, templateName=templatename, title=title, raidTime=raid_time)
+    embed = await RaidEmbed.create(bot=self.bot, raid_id=raid_id)
+    await ctx.defer()
+    msg = await ctx.channel.send(embed=embed)
+    await embed.update_embed()
+    await msg.edit(embed=embed) # maybe put this in the RaidEmbed class to auto edit itself
+    await ctx.respond("done")
 
 
 def setup(bot: Bot):

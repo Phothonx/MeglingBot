@@ -1,3 +1,4 @@
+from tempfile import template
 import aiosqlite
 from datetime import datetime
 from megling.logsetup import setupLogger
@@ -25,8 +26,8 @@ CREATE TABLE IF NOT EXISTS RaidTemplates (
   url TEXT,
   description TEXT,
   image TEXT,
-  thumbnail TEXT
-  ownerID INTERGER,
+  thumbnail TEXT,
+  ownerID INTERGER
 );
       """)
       await db.execute("""
@@ -70,7 +71,10 @@ CREATE TABLE IF NOT EXISTS Signups (
   async def get_raid(self, raidID: int):
     async with aiosqlite.connect(self.db_path) as db:
       cursor = await db.execute("SELECT * FROM Raids WHERE raidID = ?", (raidID,))
-      return await cursor.fetchone()
+      raid = await cursor.fetchone()
+      raid_id, leader_id, template_name, title, raid_time_str, number = raid
+      raid_time = datetime.fromisoformat(raid_time_str)
+      return (raid_id, leader_id, template_name, title, raid_time, number)
 
 
   async def get_template(self, templateName):
@@ -79,29 +83,32 @@ CREATE TABLE IF NOT EXISTS Signups (
       return await cursor.fetchone()
 
 
-   async def get_template_roles(self, templateName):
-    async with aiosqlite.connect(self.db_path) as db:
-      cursor = await db.execute("SELECT roleName, roleIcon, maxSlots FROM TemplateRoles WHERE templateName = ?", (templateName,))
-      return await cursor.fetchall()
+  async def get_template_roles(self, templateName):
+   async with aiosqlite.connect(self.db_path) as db:
+     cursor = await db.execute("SELECT roleName, roleIcon, maxSlots FROM TemplateRoles WHERE templateName = ?", (templateName,))
+     return await cursor.fetchall()
 
 
   # TODO create roles
   async def create_template(self, templateName:str, url:str|None, description:str|None, image:str|None, thumbnail:str|None, ownerID:int|None):
-    async def with aiosqlite.connect(self.db_path) sa db:
+    async with aiosqlite.connect(self.db_path) as db:
       await db.execute("INSERT INTO RaidTemplates (templateName, url, description, image, thumbnail, ownerID) VALUES (?, ?, ?, ?, ?, ?)", (templateName, url, description, image, thumbnail, ownerID))
+      await db.commit()
+
 
 
   async def add_raid(self, leaderId: int, templateName: str, title: str, raidTime: datetime) -> int:
     async with aiosqlite.connect(self.db_path) as db:
+      raid_time_str = raidTime.isoformat(sep=" ")
       cursor = await db.execute(
         "INSERT INTO Raids (leaderID, templateName, title, raidTime, number) VALUES (?, ?, ?, ?, 0)",
-        (leaderId, templateName, title, raidTime.isoformat())
+        (leaderId, templateName, title, raid_time_str)
       )
       await db.commit()
       return cursor.lastrowid
 
 
-  async def signup_user(self, userID: int, raidID: int, roleName: str, note: str = "") -> Bool:
+  async def signup_user(self, userID: int, raidID: int, roleName: str, note: str = ""):
     async with aiosqlite.connect(self.db_path) as db:
       cursor = await db.execute("SELECT roleName FROM Signups WHERE raidID = ? AND userID = ?", (raidID, userID))
       signedRoleName = await cursor.fetchone()
