@@ -1,17 +1,14 @@
-from tempfile import template
 import aiosqlite
 from datetime import datetime
 from megling.logsetup import setupLogger
 
 logger = setupLogger(__name__)
 
-
 # raid.db
 # RaidTemplates(templateName, url, description, image, thumbnail, ownerID)
 # TemplateRoles(templateName, roleName, roleIcon, maxSlots)
-# Raids(raidID, leaderID, templateName, title, raidTime, number)
-# Signups(signupID, userID, raidID, roleName, note, signupTime, signupRank)
-
+# Raids(raidID, leaderID, templateName, title, raidTime, messageID, channelID)
+# Signups(signupID, userID, raidID, roleName, signupTime, signupRank)
 
 class RaidDB:
   def __init__(self, db_path: str = "db/raid.db"):
@@ -27,7 +24,7 @@ CREATE TABLE IF NOT EXISTS RaidTemplates (
   description TEXT,
   image TEXT,
   thumbnail TEXT,
-  ownerID INTERGER
+  ownerID INTEGER
 );
       """)
       await db.execute("""
@@ -47,7 +44,8 @@ CREATE TABLE IF NOT EXISTS Raids (
   templateName TEXT NOT NULL,
   title TEXT NOT NULL,
   raidTime DATETIME NOT NULL,
-  number INTEGER,
+  messageID INTEGER,
+  channelID INTEGER,
   FOREIGN KEY (templateName) REFERENCES RaidTemplates(templateName)
 );
       """)
@@ -57,7 +55,6 @@ CREATE TABLE IF NOT EXISTS Signups (
   userID INTEGER NOT NULL,
   raidID INTEGER NOT NULL,
   roleName TEXT,
-  note TEXT,
   signupTime DATETIME DEFAULT CURRENT_TIMESTAMP,
   signupRank INTEGER,
   FOREIGN KEY (raidID) REFERENCES Raids(raidID),
@@ -67,69 +64,116 @@ CREATE TABLE IF NOT EXISTS Signups (
       await db.commit()
       logger.info("[OK] SQLite raid.db checkup completed")
 
-
-  async def get_raid(self, raidID: int):
+  async def get_raid(self, raid_id: int):
     async with aiosqlite.connect(self.db_path) as db:
-      cursor = await db.execute("SELECT * FROM Raids WHERE raidID = ?", (raidID,))
+      cursor = await db.execute(
+        "SELECT * FROM Raids WHERE raidID = ?",
+        (raid_id,)
+      )
       raid = await cursor.fetchone()
-      raid_id, leader_id, template_name, title, raid_time_str, number = raid
+      if not raid:
+        return None
+      raid_id, leader_id, template_name, title, raid_time_str, message_id, channel_id = raid
       raid_time = datetime.fromisoformat(raid_time_str)
-      return (raid_id, leader_id, template_name, title, raid_time, number)
+      return (raid_id, leader_id, template_name, title, raid_time, message_id, channel_id)
 
-
-  async def get_template(self, templateName):
+  async def get_template(self, template_name: str):
     async with aiosqlite.connect(self.db_path) as db:
-      cursor = await db.execute("SELECT * FROM RaidTemplates WHERE templateName = ?", (templateName,))
+      cursor = await db.execute(
+        "SELECT * FROM RaidTemplates WHERE templateName = ?",
+        (template_name,)
+      )
       return await cursor.fetchone()
 
-
-  async def get_template_roles(self, templateName):
-   async with aiosqlite.connect(self.db_path) as db:
-     cursor = await db.execute("SELECT roleName, roleIcon, maxSlots FROM TemplateRoles WHERE templateName = ?", (templateName,))
-     return await cursor.fetchall()
-
-
-  # TODO create roles
-  async def create_template(self, templateName:str, url:str|None, description:str|None, image:str|None, thumbnail:str|None, ownerID:int|None):
+  async def get_template_roles(self, template_name: str):
     async with aiosqlite.connect(self.db_path) as db:
-      await db.execute("INSERT INTO RaidTemplates (templateName, url, description, image, thumbnail, ownerID) VALUES (?, ?, ?, ?, ?, ?)", (templateName, url, description, image, thumbnail, ownerID))
+      cursor = await db.execute(
+        "SELECT roleName, roleIcon, maxSlots FROM TemplateRoles WHERE templateName = ?",
+        (template_name,)
+      )
+      return await cursor.fetchall()
+
+  async def create_template(
+    self,
+    template_name: str,
+    url: str | None,
+    description: str | None,
+    image: str | None,
+    thumbnail: str | None,
+    owner_id: int | None
+  ):
+    async with aiosqlite.connect(self.db_path) as db:
+      await db.execute(
+        "INSERT INTO RaidTemplates (templateName, url, description, image, thumbnail, ownerID) VALUES (?, ?, ?, ?, ?, ?)",
+        (template_name, url, description, image, thumbnail, owner_id)
+      )
       await db.commit()
 
-
-
-  async def add_raid(self, leaderId: int, templateName: str, title: str, raidTime: datetime) -> int:
+  async def add_template_role(
+    self,
+    template_name:str,
+    role_name:str,
+    role_icon:str,
+    max_slots:int
+  ):
     async with aiosqlite.connect(self.db_path) as db:
-      raid_time_str = raidTime.isoformat(sep=" ")
+      await db.execute(
+        "INSERT INTO TemplateRoles (templateName, roleName, roleIcon, maxSlots) VALUES (?, ?, ?, ?)",
+        (template_name, role_name, role_icon, max_slots)
+      )
+      await db.commit()
+
+  async def add_raid(
+    self,
+    leader_id: int,
+    template_name: str,
+    title: str,
+    raid_time: datetime,
+    message_id: int,
+    channel_id: int
+  ) -> int:
+    async with aiosqlite.connect(self.db_path) as db:
+      raid_time_str = raid_time.isoformat(sep=" ")
       cursor = await db.execute(
-        "INSERT INTO Raids (leaderID, templateName, title, raidTime, number) VALUES (?, ?, ?, ?, 0)",
-        (leaderId, templateName, title, raid_time_str)
+        "INSERT INTO Raids (leaderID, templateName, title, raidTime, messageID, channelID) VALUES (?, ?, ?, ?, ?, ?)",
+        (leader_id, template_name, title, raid_time_str, message_id, channel_id)
       )
       await db.commit()
       return cursor.lastrowid
 
-
-  async def signup_user(self, userID: int, raidID: int, roleName: str, note: str = ""):
+  async def signup_user(
+    self,
+    user_id: int,
+    raid_id: int,
+    role_name: str,
+  ) -> bool:
     async with aiosqlite.connect(self.db_path) as db:
-      cursor = await db.execute("SELECT roleName FROM Signups WHERE raidID = ? AND userID = ?", (raidID, userID))
-      signedRoleName = await cursor.fetchone()
-      if signedRoleName:
-        await db.execute ("UPDATE Signups SET roleName = ? WHERE raidID = ? AND userID = ?",(roleName, raidID, userID))
+      cursor = await db.execute(
+        "SELECT roleName FROM Signups WHERE raidID = ? AND userID = ?",
+        (raid_id, user_id)
+      )
+      existing = await cursor.fetchone()
+
+      if existing:
+        await db.execute(
+          "UPDATE Signups SET roleName = ? WHERE raidID = ? AND userID = ?",
+          (role_name, raid_id, user_id)
+        )
         await db.commit()
         return False
       else:
-        raidInfo = await self.get_raid(raidID)
-        lastPlace = raidInfo[5]+1
+        signups = await self.get_signups(raid_id)
+        last_place = len(signups) + 1
         await db.execute(
-          "INSERT INTO Signups (userID, raidID, roleName, note, signupRank) VALUES (?, ?, ?, ?, ?)",
-          (userID, raidID, roleName, note, lastPlace)
+          "INSERT INTO Signups (userID, raidID, roleName, signupRank) VALUES (?, ?, ?, ?)",
+          (user_id, raid_id, role_name, last_place)
         )
-        await db.execute ("UPDATE Raids SET number = ? WHERE raidID = ?",(lastPlace, raidID))
         await db.commit()
         return True
 
-
   async def get_signups(self, raid_id: int):
     async with aiosqlite.connect(self.db_path) as db:
-      cursor = await db.execute("SELECT userID, roleName, note, signupTime, signupRank FROM Signups WHERE raidID = ? ORDER BY signupRank ASC", (raid_id,))
-      rows = await cursor.fetchall()
-      return rows
+      cursor = await db.execute(
+        "SELECT userID, roleName, signupTime, signupRank FROM Signups WHERE raidID = ? ORDER BY signupRank ASC",
+        (raid_id,))
+      return await cursor.fetchall()
