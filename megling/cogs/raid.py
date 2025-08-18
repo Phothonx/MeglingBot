@@ -4,7 +4,7 @@ from datetime import datetime
 from megling.cogs.raidDBManager import RaidDB
 from megling.logsetup import setupLogger
 
-from discord import ApplicationContext, SlashCommandGroup, Bot, ui, Embed, Colour, Permissions
+from discord import ApplicationContext, SlashCommandGroup, Bot, ui, Embed, Colour, Permissions, SelectOption, Interaction, ButtonStyle
 from discord.ext import commands, tasks
 from discord.ext.commands import CheckFailure
 
@@ -85,9 +85,87 @@ class RaidEmbed(Embed):
     self.insert_field_at(index=1, name=f"{total_signed}/{max_raid_slots}", value="")
     self.insert_field_at(index=1, name="", value="")
 
+
+# maybe add caching to get templates and roles to avoid useless requests, later
+
+class RoleSelector(ui.Select):
+  def __init__(self, bot:Bot, raid:tuple, template:tuple, roles:tuple):
+    self.bot = bot
+    self.raid = raid
+    self.template = template
+    self.roles = roles
+    options = [
+      SelectOption(label=role_name, value=role_name) # emoji=role_icon, 
+      for role_name, role_icon, max_slots in self.roles
+    ]
+    super().__init__(
+      placeholder="Chose a role to signup",
+      min_values=1,
+      max_values=1,
+      options=options
+    )
+
+  async def callback(self, interaction: Interaction):
+    await interaction.response.defer(ephemeral=True)
+    user_id = interaction.user.id
+    raid_id, leader_id, template_name, title, raid_time_str, message_id, channel_id = self.raid
+    role_name = self.values[0]
+    await db.signup_user(user_id=user_id, raid_id=raid_id, role_name=role_name)
+
+    embed = await RaidEmbed.create(self.bot, raid_id)
+    view = await RaidView.create(self.bot, raid_id)
+
+    channel = await self.bot.fetch_channel(channel_id)
+    message = await channel.fetch_message(message_id)
+    await message.edit(embed=embed, view=view)
+    await interaction.response.send_message("✅ Signed up!", ephemeral=True)
+
+
+
+class AbsenceButton(ui.Button):
+  def __init__(self, bot:Bot, raid:tuple, template:tuple, roles:tuple):
+    self.bot = bot
+    self.raid = raid
+    self.template = template
+    self.roles = roles
+    super().__init__(
+      label="Absent",
+      style=ButtonStyle.red
+    )
+
+  async def callback(self, interaction: Interaction):
+    await interaction.response.defer(ephemeral=True)
+    user_id = interaction.user.id
+    raid_id, leader_id, template_name, title, raid_time_str, message_id, channel_id = self.raid
+    await db.signup_user(user_id=user_id, raid_id=raid_id, role_name="absent")
+
+    embed = await RaidEmbed.create(self.bot, raid_id)
+    view = await RaidView.create(self.bot, raid_id)
+
+    channel = await self.bot.fetch_channel(channel_id)
+    message = await channel.fetch_message(message_id)
+    await message.edit(embed=embed, view=view)
+    await interaction.response.send_message("✅ Signed up!", ephemeral=True)
+
+
+
 class RaidView(ui.View):
-  def __init__(self):
+  def __init__(self, bot:Bot, raid:tuple, template:tuple, roles:tuple) -> None:
     super().__init__(timeout=None)
+    self.add_item(RoleSelector(bot, raid, template, roles))
+    self.add_item(AbsenceButton(bot, raid, template, roles))
+
+
+  @classmethod
+  async def create(cls, bot, raid_id: int):
+    raid = await db.get_raid(raid_id)
+    raid_id, leader_id, template_name, title, raid_time, message_id, channel_id = raid
+    template = await db.get_template(template_name)
+    roles = await db.get_template_roles(template_name)
+
+    view = cls(bot, raid, template, roles)
+    return view
+
 
 
 class Raid(commands.Cog):
@@ -136,7 +214,8 @@ class Raid(commands.Cog):
     msg = await ctx.channel.send("*making raid...*")
     raid_id = await db.add_raid(leader_id=user_id, template_name=template_name, title=title, raid_time=raid_time, message_id=msg.id, channel_id=msg.channel.id)
     embed = await RaidEmbed.create(bot=self.bot, raid_id=raid_id)
-    await msg.edit(content="", embed=embed)
+    view = await RaidView.create(bot=self.bot, raid_id=raid_id)
+    await msg.edit(content="", embed=embed, view=view)
     await ctx.respond("raid created")
 
 

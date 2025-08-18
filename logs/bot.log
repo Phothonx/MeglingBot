@@ -3940,3 +3940,120 @@ GUILDS : 2 servers
 2025-08-18 14:03:54,063 | INFO | megling.cogs.raidDBManager | [OK] SQLite raid.db checkup completed
 2025-08-18 14:03:54,859 | INFO | __main__ | [OK] Synced commands
 
+2025-08-18 14:34:44,168 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-08-18 14:34:44,168 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-08-18 14:34:44,173 | INFO | megling.cogs.vc | [~~] Loading Voice Creator...
+2025-08-18 14:34:44,174 | INFO | megling.cogs.vc | [OK] Voice Creator loaded
+2025-08-18 14:34:44,176 | INFO | megling.cogs.admin | [~~]Loading Admin...
+2025-08-18 14:34:44,176 | INFO | megling.cogs.admin | [OK] Admin loaded
+2025-08-18 14:34:44,178 | INFO | megling.cogs.views | [~~] Loading Views...
+2025-08-18 14:34:44,179 | INFO | megling.cogs.views | [OK] Views loaded
+2025-08-18 14:34:44,181 | INFO | megling.cogs.raid | [~~] Loading Raid...
+2025-08-18 14:34:44,182 | INFO | megling.cogs.raid | [OK] Raid loaded
+2025-08-18 14:34:44,182 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-08-18 14:34:44,183 | INFO | megling.cogs.vc | [~~] SQLite voice.db checkup...
+2025-08-18 14:34:44,186 | INFO | megling.cogs.raidDBManager | [~~] SQLite raid.db checkup...
+2025-08-18 14:34:44,187 | INFO | megling.cogs.vc | [OK] SQLite voice.db checkup completed
+2025-08-18 14:34:44,187 | INFO | megling.cogs.raidDBManager | [OK] SQLite raid.db checkup completed
+2025-08-18 14:34:44,189 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-08-18 14:34:44,190 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-08-18 14:34:44,881 | INFO | __main__ | [OK] Synced commands
+
+2025-08-18 14:34:44,881 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-08-18 20:32:41,597 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-08-18 20:32:41,598 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-08-18 20:32:41,603 | INFO | megling.cogs.vc | [~~] Loading Voice Creator...
+2025-08-18 20:32:41,603 | INFO | megling.cogs.vc | [OK] Voice Creator loaded
+2025-08-18 20:32:41,605 | INFO | megling.cogs.admin | [~~]Loading Admin...
+2025-08-18 20:32:41,605 | INFO | megling.cogs.admin | [OK] Admin loaded
+2025-08-18 20:32:41,606 | INFO | megling.cogs.views | [~~] Loading Views...
+2025-08-18 20:32:41,607 | INFO | megling.cogs.views | [OK] Views loaded
+2025-08-18 20:32:41,609 | INFO | megling.cogs.raid | [~~] Loading Raid...
+2025-08-18 20:32:41,609 | INFO | megling.cogs.raid | [OK] Raid loaded
+2025-08-18 20:32:41,609 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-08-18 20:32:41,610 | INFO | megling.cogs.vc | [~~] SQLite voice.db checkup...
+2025-08-18 20:32:41,612 | INFO | megling.cogs.raidDBManager | [~~] SQLite raid.db checkup...
+2025-08-18 20:32:41,613 | INFO | megling.cogs.vc | [OK] SQLite voice.db checkup completed
+2025-08-18 20:32:41,614 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-08-18 20:32:41,614 | INFO | megling.cogs.raidDBManager | [OK] SQLite raid.db checkup completed
+2025-08-18 20:32:41,615 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-08-18 20:32:42,624 | INFO | __main__ | [OK] Synced commands
+
+2025-08-18 20:32:42,624 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-08-18 21:17:17,386 | INFO | __main__ | 
+
+ __  __            _ _             ____        _
+|  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
+| |\/| |/ _ \/ _` | | | '_ \ / _` |  _ \ / _ \| __|
+| |  | |  __| (_| | | | | | | (_| | |_) | (_) | |_
+|_|  |_|\___|\__, |_|_|_| |_|\__, |____/ \___/ \__|
+             |___/           |___/
+             By Algabo & Phothonx.
+
+----------------------------------------------------
+[~~] Launching MeglingBot...
+
+2025-08-18 21:17:21,970 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-08-18 21:17:21,970 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-08-18 21:17:21,984 | INFO | megling.cogs.vc | [~~] Loading Voice Creator...
+2025-08-18 21:17:21,985 | INFO | megling.cogs.vc | [OK] Voice Creator loaded
+2025-08-18 21:17:21,987 | INFO | megling.cogs.admin | [~~]Loading Admin...
+2025-08-18 21:17:21,987 | INFO | megling.cogs.admin | [OK] Admin loaded
+2025-08-18 21:17:21,989 | INFO | megling.cogs.views | [~~] Loading Views...
+2025-08-18 21:17:21,989 | INFO | megling.cogs.views | [OK] Views loaded
+2025-08-18 21:17:22,003 | INFO | megling.cogs.raid | [~~] Loading Raid...
+2025-08-18 21:17:22,004 | INFO | megling.cogs.raid | [OK] Raid loaded
+2025-08-18 21:17:22,004 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-08-18 21:17:22,005 | INFO | megling.cogs.vc | [~~] SQLite voice.db checkup...
+2025-08-18 21:17:22,007 | INFO | megling.cogs.raidDBManager | [~~] SQLite raid.db checkup...
+2025-08-18 21:17:22,008 | INFO | megling.cogs.vc | [OK] SQLite voice.db checkup completed
+2025-08-18 21:17:22,010 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-08-18 21:17:22,010 | INFO | megling.cogs.raidDBManager | [OK] SQLite raid.db checkup completed
+2025-08-18 21:17:22,011 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-08-18 21:17:22,993 | INFO | __main__ | [OK] Synced commands
+
+2025-08-18 21:17:22,994 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-08-18 21:19:07,443 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-08-18 21:19:07,455 | INFO | megling.cogs.raid | [~~] Loading Raid...
+2025-08-18 21:19:07,456 | INFO | megling.cogs.raid | [OK] Raid loaded
+2025-08-18 21:19:07,456 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-08-18 21:19:07,458 | INFO | megling.cogs.raidDBManager | [~~] SQLite raid.db checkup...
+2025-08-18 21:19:07,460 | INFO | megling.cogs.raidDBManager | [OK] SQLite raid.db checkup completed
+2025-08-18 21:19:08,365 | INFO | __main__ | [OK] Synced commands
+
