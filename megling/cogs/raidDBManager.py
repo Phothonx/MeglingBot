@@ -1,12 +1,13 @@
 import aiosqlite
 from datetime import datetime
 from megling.logsetup import setupLogger
+from typing import List, Tuple
 
 logger = setupLogger(__name__)
 
 # raid.db
 # RaidTemplates(templateName, url, description, image, thumbnail, ownerID)
-# TemplateRoles(templateName, roleName, roleIcon, maxSlots)
+# TemplateRoles(templateName, roleName, roleIcon, maxSlots, ownerID)
 # Raids(raidID, leaderID, templateName, title, raidTime, messageID, channelID)
 # Signups(signupID, userID, raidID, roleName, signupTime, signupRank)
 
@@ -19,12 +20,13 @@ class RaidDB:
       logger.info("[~~] SQLite raid.db checkup...")
       await db.execute("""
 CREATE TABLE IF NOT EXISTS RaidTemplates (
-  templateName TEXT PRIMARY KEY,
+  templateName TEXT,
   url TEXT,
   description TEXT,
   image TEXT,
   thumbnail TEXT,
-  ownerID INTEGER
+  ownerID INTEGER,
+  PRIMARY KEY (templateName, ownerID)
 );
       """)
       await db.execute("""
@@ -33,8 +35,8 @@ CREATE TABLE IF NOT EXISTS TemplateRoles (
   roleName TEXT,
   roleIcon TEXT,
   maxSlots INTEGER,
-  PRIMARY KEY (templateName, roleName),
-  FOREIGN KEY (templateName) REFERENCES RaidTemplates(templateName)
+  ownerID INTEGER,
+  PRIMARY KEY (templateName, ownerID, roleName)
 );
       """)
       await db.execute("""
@@ -45,8 +47,7 @@ CREATE TABLE IF NOT EXISTS Raids (
   title TEXT NOT NULL,
   raidTime DATETIME NOT NULL,
   messageID INTEGER,
-  channelID INTEGER,
-  FOREIGN KEY (templateName) REFERENCES RaidTemplates(templateName)
+  channelID INTEGER
 );
       """)
       await db.execute("""
@@ -57,7 +58,6 @@ CREATE TABLE IF NOT EXISTS Signups (
   roleName TEXT,
   signupTime DATETIME DEFAULT CURRENT_TIMESTAMP,
   signupRank INTEGER,
-  FOREIGN KEY (raidID) REFERENCES Raids(raidID),
   UNIQUE(userID, raidID)
 );
       """)
@@ -77,19 +77,19 @@ CREATE TABLE IF NOT EXISTS Signups (
       raid_time = datetime.fromisoformat(raid_time_str)
       return (raid_id, leader_id, template_name, title, raid_time, message_id, channel_id)
 
-  async def get_template(self, template_name: str):
+  async def get_template(self, template_name: str, owner_id: int):
     async with aiosqlite.connect(self.db_path) as db:
       cursor = await db.execute(
-        "SELECT * FROM RaidTemplates WHERE templateName = ?",
-        (template_name,)
+        "SELECT * FROM RaidTemplates WHERE templateName = ? AND ownerID = ?",
+        (template_name, owner_id)
       )
       return await cursor.fetchone()
 
-  async def get_template_roles(self, template_name: str):
+  async def get_template_roles(self, template_name: str, owner_id: int):
     async with aiosqlite.connect(self.db_path) as db:
       cursor = await db.execute(
-        "SELECT roleName, roleIcon, maxSlots FROM TemplateRoles WHERE templateName = ?",
-        (template_name,)
+        "SELECT roleName, roleIcon, maxSlots FROM TemplateRoles WHERE templateName = ? AND ownerID = ?",
+        (template_name, owner_id)
       )
       return await cursor.fetchall()
 
@@ -108,20 +108,65 @@ CREATE TABLE IF NOT EXISTS Signups (
         (template_name, url, description, image, thumbnail, owner_id)
       )
       await db.commit()
+      logger.info(f"[DB] Created template: {template_name} by {owner_id}")
+
+  async def remove_template(
+    self,
+    template_name:str,
+    owner_id: int
+  ):
+    async with aiosqlite.connect(self.db_path) as db:
+      await db.execute(
+        "DELETE FROM TemplateRoles WHERE templateName = ? AND ownerID = ?",
+        (template_name, owner_id)
+      )
+      cursor = await db.execute(
+        "DELETE FROM RaidTemplates WHERE templateName = ? AND ownerID = ?",
+        (template_name, owner_id)
+      )
+      await db.commit()
+      if cursor.rowcount == 0:
+        return False
+      else:
+        logger.info(f"[DB] Removed template from template: {template_name} by {owner_id}")
+        return True
+
 
   async def add_template_role(
     self,
     template_name:str,
     role_name:str,
     role_icon:str,
-    max_slots:int
+    max_slots:int,
+    owner_id: int,
   ):
     async with aiosqlite.connect(self.db_path) as db:
       await db.execute(
-        "INSERT INTO TemplateRoles (templateName, roleName, roleIcon, maxSlots) VALUES (?, ?, ?, ?)",
-        (template_name, role_name, role_icon, max_slots)
+        "INSERT OR REPLACE INTO TemplateRoles (templateName, roleName, roleIcon, maxSlots, ownerID) VALUES (?, ?, ?, ?, ?)",
+        (template_name, role_name, role_icon, max_slots, owner_id)
       )
       await db.commit()
+      logger.info(f"[DB] Added role to template: {role_name} to {template_name} by {owner_id}")
+
+
+  async def remove_template_role(
+    self,
+    template_name:str,
+    role_name:str,
+    owner_id: int
+  )-> bool:
+    async with aiosqlite.connect(self.db_path) as db:
+      cursor = await db.execute(
+        "DELETE FROM TemplateRoles WHERE templateName = ? AND roleName = ? AND ownerID = ?",
+        (template_name, role_name, owner_id)
+      )
+      await db.commit()
+      if cursor.rowcount == 0:
+        return False
+      else:
+        logger.info(f"[DB] Removed role from template: {role_name} from {template_name} by {owner_id}")
+        return True
+
 
   async def add_raid(
     self,
@@ -139,6 +184,7 @@ CREATE TABLE IF NOT EXISTS Signups (
         (leader_id, template_name, title, raid_time_str, message_id, channel_id)
       )
       await db.commit()
+      logger.info(f"[DB] Raid created: {template_name} by {leader_id}")
       return cursor.lastrowid
 
   async def signup_user(
@@ -160,20 +206,36 @@ CREATE TABLE IF NOT EXISTS Signups (
           (role_name, raid_id, user_id)
         )
         await db.commit()
+        logger.info(f"[DB] User signup updated: {user_id} from {raid_id}")
         return False
       else:
-        signups = await self.get_signups(raid_id)
-        last_place = len(signups) + 1
+        cursor = await db.execute("SELECT COUNT(*) FROM Signups WHERE raidID = ?", (raid_id,))
+        row = await cursor.fetchone()
+        last_place = (row[0] or 0) + 1
         await db.execute(
           "INSERT INTO Signups (userID, raidID, roleName, signupRank) VALUES (?, ?, ?, ?)",
           (user_id, raid_id, role_name, last_place)
         )
         await db.commit()
+        logger.info(f"[DB] User signup: {user_id} to {raid_id}")
         return True
 
-  async def get_signups(self, raid_id: int):
+  async def get_signups(self, raid_id: int) -> List[Tuple[int, str, str, int]]:
     async with aiosqlite.connect(self.db_path) as db:
       cursor = await db.execute(
         "SELECT userID, roleName, signupTime, signupRank FROM Signups WHERE raidID = ? ORDER BY signupRank ASC",
-        (raid_id,))
+        (raid_id,)
+      )
       return await cursor.fetchall()
+
+  async def remove_raid(self, raid_id: int) -> bool:
+    async with aiosqlite.connect(self.db_path) as db:
+      await db.execute("DELETE FROM Signups WHERE raidID = ?", (raid_id,))
+      cursor = await db.execute("DELETE FROM Raids WHERE raidID = ?", (raid_id,))
+      await db.commit()
+      if cursor.rowcount == 0:
+        logger.warning(f"[DB] Raid not found to be removed: {raid_id}")
+        return False
+      else:
+        logger.info(f"[DB] Raid and Signups removed: {raid_id}")
+        return True
