@@ -1,5 +1,6 @@
 from typing import Literal
 import re
+import unicodedata
 from datetime import datetime
 
 from megling.cogs.raidDBManager import RaidDB
@@ -15,8 +16,24 @@ db = RaidDB()
 
 CUSTOM_EMOJI_PATTERN = re.compile(r"^<a?:\w+:\d+>$")
 def is_custom_discord_emoji(s: str) -> bool:
-    return bool(CUSTOM_EMOJI_PATTERN.fullmatch(s.strip()))
+  return bool(CUSTOM_EMOJI_PATTERN.fullmatch(s.strip()))
 
+def is_unicode_emoji(s: str) -> bool:
+  if len(s) == 0:
+    return False
+  # Check if every character has a "So" (Symbol, other) Unicode category
+  return all(unicodedata.category(char) in {"So", "Sk"} for char in s)
+
+def parse_emoji(s: str) -> PartialEmoji | None:
+  s = s.strip()
+  if is_custom_discord_emoji(s):
+    try:
+      return PartialEmoji.from_str(s)
+    except Exception:
+      return None
+  elif is_unicode_emoji(s):
+    return PartialEmoji(name=s)
+  return None
 
 class RaidEmbed(Embed):
   def __init__(self, bot:Bot, raid:tuple, template:tuple, roles:tuple, signups:tuple):
@@ -27,7 +44,7 @@ class RaidEmbed(Embed):
     self.signups = signups
 
     raid_id, leader_id, template_name, title, raid_time, message_id, channel_id = self.raid
-    template_name, url, description, image, thumbnail, owner_id = self.template
+    template_name, url, description, image, owner_id = self.template
 
     super().__init__(
       colour=Colour.blue(),
@@ -40,8 +57,6 @@ class RaidEmbed(Embed):
     self.set_footer(text=template_name)
     if image:
       self.set_image(url=image)
-    # if thumbnail: # TODO enlever thumbnail
-    #   self.set_thumbnail(url=thumbnail)
 
   @classmethod
   async def create(cls, bot, raid_id: int):
@@ -66,12 +81,11 @@ class RaidEmbed(Embed):
 
   async def set_fields(self):
     raid_id, leader_id, template_name, title, raid_timer, message_id, channel_id = self.raid
-    template_name, url, description, image, thumbnail, owner_id = self.template
+    template_name, url, description, image, owner_id = self.template
     self.add_field(name=f"\u200b", value="", inline=False)
     self.add_field(name=f"<t:{int(raid_timer.timestamp())}:D>", value="")
     self.add_field(name=f"<t:{int(raid_timer.timestamp())}:t>", value="")
     self.add_field(name=f"<t:{int(raid_timer.timestamp())}:R>", value="")
-    self.add_field(name=f"\u200b", value="", inline=False)
     self.add_field(name=f"\u200b", value="", inline=False)
 
     total_signed = 0
@@ -91,12 +105,22 @@ class RaidEmbed(Embed):
       max_raid_slots += max_slots
       role_signups.sort()
       value = "\n".join(role_signups) or "—"
-      value = value + "\n\u200b"
+      value = value + "\n \u200b"
       self.add_field(name=f"{role_icon} {role_name} {len(role_signups)}/{max_slots}", value=value)
 
-    self.insert_field_at(index=5, name=f":busts_in_silhouette: {total_signed}/{max_raid_slots} participants", value=f"", inline=False)
 
-# maybe add caching to get templates and roles to avoid useless requests, too lazy, will never happen
+    absents = []
+    for signup in self.signups:
+      user_id, signup_role_name, signup_time, signup_rank = signup
+      if signup_role_name == "absent":
+        user_name = f"<@{user_id}>"
+        absents.append(f"`{signup_rank}` {user_name}")
+
+    value = "\n".join(absents) or "—"
+    self.add_field(name=f":no_entry_sign: {len(absents)} Absents", value=value, inline=False)
+
+    self.insert_field_at(index=4, name=f":busts_in_silhouette: {total_signed}/{max_raid_slots} participants", value="", inline=False)
+
 
 class RoleSelector(ui.Select):
   def __init__(self, bot:Bot, raid:tuple, template:tuple, roles:tuple):
@@ -105,7 +129,7 @@ class RoleSelector(ui.Select):
     self.template = template
     self.roles = roles
     options = [
-      SelectOption(label=role_name,  value=role_name) # TODO # emoji=PartialEmoji.from_str(role_icon),
+      SelectOption(label=role_name, emoji=parse_emoji(role_icon), value=role_name)
       for role_name, role_icon, max_slots in self.roles
     ]
     super().__init__(
@@ -142,10 +166,10 @@ class AbsenceButton(ui.Button):
     self.roles = roles
     super().__init__(
       label="Absent",
-      # emoji=PartialEmoji.from_str("<:no_entry_sign:>"), # TODO
-      style=ButtonStyle.red
+      emoji="🚫",
+      style=ButtonStyle.grey
     )
-
+# TODO make absent button not working when not signed up
   async def callback(self, interaction: Interaction):
     user_id = interaction.user.id
     raid_id, leader_id, template_name, title, raid_time_str, message_id, channel_id = self.raid
@@ -188,13 +212,22 @@ class Raid(commands.Cog):
   def cog_unload(self):
     self.checkuploop.cancel()
 
-  @tasks.loop(hours=24)
+  @tasks.loop(hours=2)
   async def checkuploop(self):
-    await db.checkup()
+    messages_infos = await db.clean_expired_raids()
+    for message_info in messages_infos:
+      message_id, channel_id = message_info
+      try:
+        channel = await self.bot.fetch_channel(channel_id)
+        message = await channel.fetch_message(message_id)
+        await message.edit(content="*Ce raid est terminé* :saluting_face:",view=None)
+      except Exception as e:
+        logger.error(f"[!?] Could not update raid message: {e}")
+
 
   @checkuploop.before_loop
   async def before_checkup(self):
-    await self.bot.wait_until_ready()
+    await db.checkup()
 
 
   template = SlashCommandGroup(
@@ -204,6 +237,8 @@ class Raid(commands.Cog):
   )
 
 
+  # TODO switch to modals
+  # @commands.cooldown(1, 30, commands.BucketType.user)
   @template.command(
     name="creer",
     description="Crée un nouveau modèle avec som nom, sa description etc... (Attention, les modèles sont publics)",
@@ -216,14 +251,13 @@ class Raid(commands.Cog):
     url:Option(name="lien", input_type=str|None, default=None, required=False, description="(Optionel) Un hyperlien dans le titre de l'embed"),
     description:Option(name="description", input_type=str|None,  default=None, required=False,description="(Optionel) Les infos/directives pour ton raid (Le markdown marche)"),
     image:Option(name="image", input_type=str|None, default=None, required=False, description="(Optionel) Lien vers une image insérée en bas de l'embed"),
-    thumbnail:Option(name="miniature", input_type=str|None, default=None, required=False, description="(Optionel) Lien vers une petite image insérée en haut à gauche de l'embed"),
   ):
     user_id = ctx.user.id
     template = await db.get_template(template_name=template_name, owner_id=user_id)
     if template:
       await ctx.respond(f":warning:  **Tu possèdes déjà un modèle nommé `{template_name}`, supprime le ou change de nom**", ephemeral=True)
       return
-    await db.create_template(template_name=template_name, url=url, description=description, image=image, thumbnail=thumbnail, owner_id=user_id)
+    await db.create_template(template_name=template_name, url=url, description=description, image=image, owner_id=user_id)
     await ctx.respond(f":white_check_mark: **Modèle `{template_name}` créé avec succès**", ephemeral=True)
 
 
@@ -264,11 +298,11 @@ class Raid(commands.Cog):
     role_icon:Option(name="icone", input_type=str, description="L'icone du rôle (un emoji discord)"),
     max_slots:Option(name="places", input_type=int, description="Le nombre de places pour ce rôle"),
   ):
-    max_slots = int(max_slots) # TODO
+    max_slots = int(max_slots)
     if max_slots <= 0:
       await ctx.respond(f":x: **Le rôle doit avoir au moins une place**", ephemeral=True)
       return
-    if False: # not is_custom_discord_emoji(role_icon): # TODO
+    if not ( is_custom_discord_emoji(role_icon) or is_unicode_emoji(role_icon) ):
       await ctx.respond(f":x: **L'icone du rôle n'est pas un emoji**", ephemeral=True)
       return
     user_id = ctx.user.id
@@ -277,7 +311,7 @@ class Raid(commands.Cog):
       await db.add_template_role(template_name=template_name, role_name=role_name, role_icon=role_icon, max_slots=max_slots, owner_id=user_id)
       await ctx.respond(f":white_check_mark: **Le rôle `{role_name}` a été ajouté au modèle `{template_name}`**", ephemeral=True)
     else:
-      await ctx.respond(f":x: **Tu ne possède pas de modèle nommé `{template_name}`**", ephemeral=True)
+      await ctx.respond(f":x: **Tu ne possèdes pas de modèle nommé `{template_name}`**", ephemeral=True)
 
 
   @role.command(
@@ -306,7 +340,7 @@ class Raid(commands.Cog):
   )
 
   @guild_only()
-  @commands.cooldown(1, 30, commands.BucketType.user)
+  # @commands.cooldown(1, 30, commands.BucketType.user)
   @raid.command(
     name="lancer",
     description="Lance un raid",
@@ -316,7 +350,7 @@ class Raid(commands.Cog):
     self,
     ctx: ApplicationContext,
     template_name:Option(name="modele", input_type=str, description="Nom du modèle à utiliser"), title:Option(name="titre", input_type=str, description="Titre du template (convertit en capitales)"),
-    user_raid_time:Option(name="horaire", input_type=str, description="Date et horaire de début du raid, format ISO 8601: YYYY-mm-dd HH:MM")
+    user_raid_time:Option(name="horaire", input_type=str, description="Date et horaire de début du raid, format ISO 8601: YYYY-mm-dd HH:MM, regardes sur internet")
   ):
     await ctx.defer()
     user_id = ctx.user.id
@@ -325,12 +359,16 @@ class Raid(commands.Cog):
     except ValueError:
       await ctx.respond(f":x: **La date n'est pas au format ISO 8601**", ephemeral=True)
       return
-    if raid_time < datetime.utcnow(): # TODO marche pas
+    if raid_time < datetime.now(): # TODO maybe make all utc and ask user to precise time zone ?
       await ctx.respond(":x: **T'es dans le passé là...**", ephemeral=True)
       return
     template = await db.get_template(template_name, user_id)
     if not template:
       await ctx.respond(f":x: **Aucun modèle trouvé nommé `{template_name}`**", ephemeral=True)
+      return
+    roles = await db.get_template_roles(template_name=template_name, owner_id=user_id)
+    if not roles:
+      await ctx.respond(f":x: **Aucun n'est associé au modele `{template_name}`, ajoutes en au moins un**", ephemeral=True)
       return
     msg = await ctx.channel.send(":construction: *making raid...*")
     raid_id = await db.add_raid(leader_id=user_id, template_name=template_name, title=title, raid_time=raid_time, message_id=msg.id, channel_id=msg.channel.id)

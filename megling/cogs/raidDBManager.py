@@ -6,7 +6,7 @@ from typing import List, Tuple
 logger = setupLogger(__name__)
 
 # raid.db
-# RaidTemplates(templateName, url, description, image, thumbnail, ownerID)
+# RaidTemplates(templateName, url, description, image, ownerID)
 # TemplateRoles(templateName, roleName, roleIcon, maxSlots, ownerID)
 # Raids(raidID, leaderID, templateName, title, raidTime, messageID, channelID)
 # Signups(signupID, userID, raidID, roleName, signupTime, signupRank)
@@ -24,7 +24,6 @@ CREATE TABLE IF NOT EXISTS RaidTemplates (
   url TEXT,
   description TEXT,
   image TEXT,
-  thumbnail TEXT,
   ownerID INTEGER,
   PRIMARY KEY (templateName, ownerID)
 );
@@ -99,13 +98,12 @@ CREATE TABLE IF NOT EXISTS Signups (
     url: str | None,
     description: str | None,
     image: str | None,
-    thumbnail: str | None,
     owner_id: int | None
   ):
     async with aiosqlite.connect(self.db_path) as db:
       await db.execute(
-        "INSERT INTO RaidTemplates (templateName, url, description, image, thumbnail, ownerID) VALUES (?, ?, ?, ?, ?, ?)",
-        (template_name, url, description, image, thumbnail, owner_id)
+        "INSERT INTO RaidTemplates (templateName, url, description, image, ownerID) VALUES (?, ?, ?, ?, ?)",
+        (template_name, url, description, image, owner_id)
       )
       await db.commit()
       logger.info(f"[DB] Created template: {template_name} by {owner_id}")
@@ -239,3 +237,21 @@ CREATE TABLE IF NOT EXISTS Signups (
       else:
         logger.info(f"[DB] Raid and Signups removed: {raid_id}")
         return True
+
+  async def clean_expired_raids(self):
+    async with aiosqlite.connect(self.db_path) as db:
+      logger.info("[~] Running raid DB cleanup...")
+      now = datetime.now()
+      cursor = await db.execute("SELECT raidID, messageID, channelID FROM Raids WHERE raidTime < ?", (now,))
+      expired_raids = await cursor.fetchall()
+      messages_infos = []
+
+      for raid in expired_raids:
+        raid_id, message_id, channel_id = raid
+        await db.execute("DELETE FROM Signups WHERE raidID = ?", (raid_id,))
+        await db.execute("DELETE FROM Raids WHERE raidID = ?", (raid_id,))
+        await db.commit()
+        messages_infos.append((message_id, channel_id))
+        logger.info(f"[~] raid {raid_id} deleted")
+      logger.info("[OK] Cleanup completed")
+      return messages_infos
