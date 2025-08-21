@@ -5463,3 +5463,659 @@ GUILDS : 2 servers
 [OK] Logged in as Megling#1409
 ----------------------------------------------------
 
+2025-08-21 12:27:04,855 | INFO | __main__ | 
+
+ __  __            _ _             ____        _
+|  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
+| |\/| |/ _ \/ _` | | | '_ \ / _` |  _ \ / _ \| __|
+| |  | |  __| (_| | | | | | | (_| | |_) | (_) | |_
+|_|  |_|\___|\__, |_|_|_| |_|\__, |____/ \___/ \__|
+             |___/           |___/
+             By Algabo & Phothonx.
+
+----------------------------------------------------
+[~~] Launching MeglingBot...
+
+2025-08-21 12:27:09,144 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-08-21 12:27:09,145 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-08-21 12:27:09,158 | INFO | megling.cogs.vc | [~~] Loading Voice Creator...
+2025-08-21 12:27:09,159 | INFO | megling.cogs.vc | [OK] Voice Creator loaded
+2025-08-21 12:27:09,160 | INFO | megling.cogs.admin | [~~]Loading Admin...
+2025-08-21 12:27:09,161 | INFO | megling.cogs.admin | [OK] Admin loaded
+2025-08-21 12:27:09,162 | INFO | megling.cogs.views | [~~] Loading Views...
+2025-08-21 12:27:09,163 | INFO | megling.cogs.views | [OK] Views loaded
+2025-08-21 12:27:09,181 | ERROR | megling.extloader | [?!] Failed to load megling.cogs.raid: Extension 'megling.cogs.raid' raised an error: ImportError: cannot import name 'TextStyle' from 'discord' (/nix/store/6p565vz6b1fmnly6xssp5s75w670sdxb-python3-3.12.8-env/lib/python3.12/site-packages/discord/__init__.py)
+2025-08-21 12:27:09,181 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-08-21 12:27:09,182 | INFO | megling.cogs.vc | [~~] SQLite voice.db checkup...
+2025-08-21 12:27:09,184 | INFO | megling.cogs.vc | [OK] SQLite voice.db checkup completed
+2025-08-21 12:27:09,186 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-08-21 12:27:09,186 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-08-21 12:27:09,964 | INFO | __main__ | [OK] Synced commands
+
+2025-08-21 12:27:09,964 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-08-21 12:32:53,468 | INFO | __main__ | 
+
+ __  __            _ _             ____        _
+|  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
+| |\/| |/ _ \/ _` | | | '_ \ / _` |  _ \ / _ \| __|
+| |  | |  __| (_| | | | | | | (_| | |_) | (_) | |_
+|_|  |_|\___|\__, |_|_|_| |_|\__, |____/ \___/ \__|
+             |___/           |___/
+             By Algabo & Phothonx.
+
+----------------------------------------------------
+[~~] Launching MeglingBot...
+
+2025-08-21 12:32:57,813 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-08-21 12:32:57,814 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-08-21 12:32:57,828 | INFO | megling.cogs.vc | [~~] Loading Voice Creator...
+2025-08-21 12:32:57,829 | INFO | megling.cogs.vc | [OK] Voice Creator loaded
+2025-08-21 12:32:57,830 | INFO | megling.cogs.admin | [~~]Loading Admin...
+2025-08-21 12:32:57,831 | INFO | megling.cogs.admin | [OK] Admin loaded
+2025-08-21 12:32:57,832 | INFO | megling.cogs.views | [~~] Loading Views...
+2025-08-21 12:32:57,833 | INFO | megling.cogs.views | [OK] Views loaded
+2025-08-21 12:32:57,853 | INFO | megling.cogs.raid | [~~] Loading Raid...
+2025-08-21 12:32:57,854 | INFO | megling.cogs.raid | [OK] Raid loaded
+2025-08-21 12:32:57,854 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-08-21 12:32:57,855 | INFO | megling.cogs.vc | [~~] SQLite voice.db checkup...
+2025-08-21 12:32:57,857 | INFO | megling.cogs.raidDBManager | [~~] SQLite raid.db checkup...
+2025-08-21 12:32:57,859 | INFO | megling.cogs.vc | [OK] SQLite voice.db checkup completed
+2025-08-21 12:32:57,861 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-08-21 12:32:57,862 | INFO | megling.cogs.raidDBManager | [OK] SQLite raid.db checkup completed
+2025-08-21 12:32:57,864 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-08-21 12:32:57,865 | INFO | megling.cogs.raidDBManager | [~] Running raid DB cleanup...
+2025-08-21 12:32:57,866 | INFO | megling.cogs.raidDBManager | [OK] Cleanup completed
+2025-08-21 12:32:59,042 | INFO | __main__ | [OK] Synced commands
+
+2025-08-21 12:32:59,042 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-08-21 12:35:16,349 | INFO | __main__ | 
+
+ __  __            _ _             ____        _
+|  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
+| |\/| |/ _ \/ _` | | | '_ \ / _` |  _ \ / _ \| __|
+| |  | |  __| (_| | | | | | | (_| | |_) | (_) | |_
+|_|  |_|\___|\__, |_|_|_| |_|\__, |____/ \___/ \__|
+             |___/           |___/
+             By Algabo & Phothonx.
+
+----------------------------------------------------
+[~~] Launching MeglingBot...
+
+2025-08-21 12:35:21,580 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-08-21 12:35:21,581 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-08-21 12:35:21,596 | INFO | megling.cogs.vc | [~~] Loading Voice Creator...
+2025-08-21 12:35:21,597 | INFO | megling.cogs.vc | [OK] Voice Creator loaded
+2025-08-21 12:35:21,598 | INFO | megling.cogs.admin | [~~]Loading Admin...
+2025-08-21 12:35:21,598 | INFO | megling.cogs.admin | [OK] Admin loaded
+2025-08-21 12:35:21,599 | INFO | megling.cogs.views | [~~] Loading Views...
+2025-08-21 12:35:21,599 | INFO | megling.cogs.views | [OK] Views loaded
+2025-08-21 12:35:21,614 | INFO | megling.cogs.raid | [~~] Loading Raid...
+2025-08-21 12:35:21,615 | INFO | megling.cogs.raid | [OK] Raid loaded
+2025-08-21 12:35:21,616 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-08-21 12:35:21,618 | INFO | megling.cogs.vc | [~~] SQLite voice.db checkup...
+2025-08-21 12:35:21,621 | INFO | megling.cogs.raidDBManager | [~~] SQLite raid.db checkup...
+2025-08-21 12:35:21,623 | INFO | megling.cogs.vc | [OK] SQLite voice.db checkup completed
+2025-08-21 12:35:21,626 | INFO | megling.cogs.raidDBManager | [OK] SQLite raid.db checkup completed
+2025-08-21 12:35:21,627 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-08-21 12:35:21,630 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-08-21 12:35:21,631 | INFO | megling.cogs.raidDBManager | [~] Running raid DB cleanup...
+2025-08-21 12:35:21,633 | INFO | megling.cogs.raidDBManager | [OK] Cleanup completed
+2025-08-21 12:35:22,604 | INFO | __main__ | [OK] Synced commands
+
+2025-08-21 12:35:22,605 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-08-21 12:41:12,807 | INFO | __main__ | 
+
+ __  __            _ _             ____        _
+|  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
+| |\/| |/ _ \/ _` | | | '_ \ / _` |  _ \ / _ \| __|
+| |  | |  __| (_| | | | | | | (_| | |_) | (_) | |_
+|_|  |_|\___|\__, |_|_|_| |_|\__, |____/ \___/ \__|
+             |___/           |___/
+             By Algabo & Phothonx.
+
+----------------------------------------------------
+[~~] Launching MeglingBot...
+
+2025-08-21 12:41:18,299 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-08-21 12:41:18,300 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-08-21 12:41:18,315 | INFO | megling.cogs.vc | [~~] Loading Voice Creator...
+2025-08-21 12:41:18,317 | INFO | megling.cogs.vc | [OK] Voice Creator loaded
+2025-08-21 12:41:18,318 | INFO | megling.cogs.admin | [~~]Loading Admin...
+2025-08-21 12:41:18,318 | INFO | megling.cogs.admin | [OK] Admin loaded
+2025-08-21 12:41:18,320 | INFO | megling.cogs.views | [~~] Loading Views...
+2025-08-21 12:41:18,320 | INFO | megling.cogs.views | [OK] Views loaded
+2025-08-21 12:41:18,340 | INFO | megling.cogs.raid | [~~] Loading Raid...
+2025-08-21 12:41:18,340 | INFO | megling.cogs.raid | [OK] Raid loaded
+2025-08-21 12:41:18,340 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-08-21 12:41:18,341 | INFO | megling.cogs.vc | [~~] SQLite voice.db checkup...
+2025-08-21 12:41:18,343 | INFO | megling.cogs.raidDBManager | [~~] SQLite raid.db checkup...
+2025-08-21 12:41:18,344 | INFO | megling.cogs.vc | [OK] SQLite voice.db checkup completed
+2025-08-21 12:41:18,345 | INFO | megling.cogs.raidDBManager | [OK] SQLite raid.db checkup completed
+2025-08-21 12:41:18,345 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-08-21 12:41:18,346 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-08-21 12:41:18,347 | INFO | megling.cogs.raidDBManager | [~] Running raid DB cleanup...
+2025-08-21 12:41:18,348 | INFO | megling.cogs.raidDBManager | [OK] Cleanup completed
+2025-08-21 12:41:19,427 | INFO | __main__ | [OK] Synced commands
+
+2025-08-21 12:41:19,428 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-08-21 12:42:26,344 | INFO | megling.cogs.raidDBManager | [DB] Created template: test2 by 454929922108948480
+2025-08-21 12:43:00,813 | INFO | __main__ | 
+
+ __  __            _ _             ____        _
+|  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
+| |\/| |/ _ \/ _` | | | '_ \ / _` |  _ \ / _ \| __|
+| |  | |  __| (_| | | | | | | (_| | |_) | (_) | |_
+|_|  |_|\___|\__, |_|_|_| |_|\__, |____/ \___/ \__|
+             |___/           |___/
+             By Algabo & Phothonx.
+
+----------------------------------------------------
+[~~] Launching MeglingBot...
+
+2025-08-21 12:43:05,233 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-08-21 12:43:05,233 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-08-21 12:43:05,249 | INFO | megling.cogs.vc | [~~] Loading Voice Creator...
+2025-08-21 12:43:05,250 | INFO | megling.cogs.vc | [OK] Voice Creator loaded
+2025-08-21 12:43:05,251 | INFO | megling.cogs.admin | [~~]Loading Admin...
+2025-08-21 12:43:05,252 | INFO | megling.cogs.admin | [OK] Admin loaded
+2025-08-21 12:43:05,254 | INFO | megling.cogs.views | [~~] Loading Views...
+2025-08-21 12:43:05,254 | INFO | megling.cogs.views | [OK] Views loaded
+2025-08-21 12:43:05,280 | INFO | megling.cogs.raid | [~~] Loading Raid...
+2025-08-21 12:43:05,281 | INFO | megling.cogs.raid | [OK] Raid loaded
+2025-08-21 12:43:05,281 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-08-21 12:43:05,282 | INFO | megling.cogs.vc | [~~] SQLite voice.db checkup...
+2025-08-21 12:43:05,284 | INFO | megling.cogs.raidDBManager | [~~] SQLite raid.db checkup...
+2025-08-21 12:43:05,285 | INFO | megling.cogs.vc | [OK] SQLite voice.db checkup completed
+2025-08-21 12:43:05,287 | INFO | megling.cogs.raidDBManager | [OK] SQLite raid.db checkup completed
+2025-08-21 12:43:05,287 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-08-21 12:43:05,288 | INFO | megling.cogs.raidDBManager | [~] Running raid DB cleanup...
+2025-08-21 12:43:05,288 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-08-21 12:43:05,289 | INFO | megling.cogs.raidDBManager | [OK] Cleanup completed
+2025-08-21 12:43:06,155 | INFO | __main__ | [OK] Synced commands
+
+2025-08-21 12:43:06,155 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-08-21 12:44:01,580 | INFO | megling.cogs.raidDBManager | [DB] Removed template from template: test2 by 454929922108948480
+2025-08-21 12:44:27,479 | INFO | megling.cogs.raidDBManager | [DB] Created template: test2 by 454929922108948480
+2025-08-21 12:47:44,495 | INFO | megling.cogs.raidDBManager | [DB] Added role to template: role to test2 by 454929922108948480
+2025-08-21 12:48:15,439 | INFO | megling.cogs.raidDBManager | [DB] Raid created: test2 by 454929922108948480
+2025-08-21 12:50:05,516 | INFO | __main__ | 
+
+ __  __            _ _             ____        _
+|  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
+| |\/| |/ _ \/ _` | | | '_ \ / _` |  _ \ / _ \| __|
+| |  | |  __| (_| | | | | | | (_| | |_) | (_) | |_
+|_|  |_|\___|\__, |_|_|_| |_|\__, |____/ \___/ \__|
+             |___/           |___/
+             By Algabo & Phothonx.
+
+----------------------------------------------------
+[~~] Launching MeglingBot...
+
+2025-08-21 12:50:09,742 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-08-21 12:50:09,743 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-08-21 12:50:09,768 | INFO | megling.cogs.vc | [~~] Loading Voice Creator...
+2025-08-21 12:50:09,770 | INFO | megling.cogs.vc | [OK] Voice Creator loaded
+2025-08-21 12:50:09,772 | INFO | megling.cogs.admin | [~~]Loading Admin...
+2025-08-21 12:50:09,773 | INFO | megling.cogs.admin | [OK] Admin loaded
+2025-08-21 12:50:09,775 | INFO | megling.cogs.views | [~~] Loading Views...
+2025-08-21 12:50:09,775 | INFO | megling.cogs.views | [OK] Views loaded
+2025-08-21 12:50:09,800 | INFO | megling.cogs.raid | [~~] Loading Raid...
+2025-08-21 12:50:09,802 | INFO | megling.cogs.raid | [OK] Raid loaded
+2025-08-21 12:50:09,802 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-08-21 12:50:09,804 | INFO | megling.cogs.vc | [~~] SQLite voice.db checkup...
+2025-08-21 12:50:09,808 | INFO | megling.cogs.raidDBManager | [~~] SQLite raid.db checkup...
+2025-08-21 12:50:09,809 | INFO | megling.cogs.vc | [OK] SQLite voice.db checkup completed
+2025-08-21 12:50:09,812 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-08-21 12:50:09,814 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-08-21 12:50:09,823 | INFO | megling.cogs.raidDBManager | [OK] SQLite raid.db checkup completed
+2025-08-21 12:50:09,826 | INFO | megling.cogs.raidDBManager | [~] Running raid DB cleanup...
+2025-08-21 12:50:09,828 | INFO | megling.cogs.raidDBManager | [OK] Cleanup completed
+2025-08-21 12:50:10,663 | INFO | __main__ | [OK] Synced commands
+
+2025-08-21 12:50:10,664 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-08-21 12:54:49,055 | INFO | megling.cogs.raidDBManager | [DB] Created template: hg_5c5_ftb by 454929922108948480
+2025-08-21 12:56:41,332 | INFO | megling.cogs.raidDBManager | [DB] Added role to template: GHammer to hg_5c5_ftb by 454929922108948480
+2025-08-21 12:57:05,082 | INFO | megling.cogs.raidDBManager | [DB] Added role to template: Blight to hg_5c5_ftb by 454929922108948480
+2025-08-21 12:57:29,653 | INFO | megling.cogs.raidDBManager | [DB] Added role to template: Carrion to hg_5c5_ftb by 454929922108948480
+2025-08-21 12:58:01,439 | INFO | megling.cogs.raidDBManager | [DB] Added role to template: Ent to hg_5c5_ftb by 454929922108948480
+2025-08-21 12:58:29,026 | INFO | megling.cogs.raidDBManager | [DB] Added role to template: Rotcaller to hg_5c5_ftb by 454929922108948480
+2025-08-21 13:00:00,344 | INFO | megling.cogs.raidDBManager | [DB] Raid created: hg_5c5_ftb by 454929922108948480
+2025-08-21 13:00:19,210 | INFO | megling.cogs.raidDBManager | [DB] User signup: 454929922108948480 to 1
+2025-08-21 22:03:21,261 | INFO | __main__ | 
+
+ __  __            _ _             ____        _
+|  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
+| |\/| |/ _ \/ _` | | | '_ \ / _` |  _ \ / _ \| __|
+| |  | |  __| (_| | | | | | | (_| | |_) | (_) | |_
+|_|  |_|\___|\__, |_|_|_| |_|\__, |____/ \___/ \__|
+             |___/           |___/
+             By Algabo & Phothonx.
+
+----------------------------------------------------
+[~~] Launching MeglingBot...
+
+2025-08-21 22:03:25,856 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-08-21 22:03:25,856 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-08-21 22:03:25,872 | INFO | megling.cogs.vc | [~~] Loading Voice Creator...
+2025-08-21 22:03:25,873 | INFO | megling.cogs.vc | [OK] Voice Creator loaded
+2025-08-21 22:03:25,874 | INFO | megling.cogs.admin | [~~]Loading Admin...
+2025-08-21 22:03:25,875 | INFO | megling.cogs.admin | [OK] Admin loaded
+2025-08-21 22:03:25,876 | INFO | megling.cogs.views | [~~] Loading Views...
+2025-08-21 22:03:25,877 | INFO | megling.cogs.views | [OK] Views loaded
+2025-08-21 22:03:25,891 | ERROR | megling.extloader | [?!] Failed to load megling.cogs.raid: Extension 'megling.cogs.raid' raised an error: NameError: name 'Modal' is not defined
+2025-08-21 22:03:25,892 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-08-21 22:03:25,893 | INFO | megling.cogs.vc | [~~] SQLite voice.db checkup...
+2025-08-21 22:03:25,895 | INFO | megling.cogs.vc | [OK] SQLite voice.db checkup completed
+2025-08-21 22:03:25,897 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-08-21 22:03:25,898 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-08-21 22:03:26,494 | INFO | __main__ | [OK] Synced commands
+
+2025-08-21 22:03:26,494 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-08-21 22:05:32,046 | INFO | __main__ | 
+
+ __  __            _ _             ____        _
+|  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
+| |\/| |/ _ \/ _` | | | '_ \ / _` |  _ \ / _ \| __|
+| |  | |  __| (_| | | | | | | (_| | |_) | (_) | |_
+|_|  |_|\___|\__, |_|_|_| |_|\__, |____/ \___/ \__|
+             |___/           |___/
+             By Algabo & Phothonx.
+
+----------------------------------------------------
+[~~] Launching MeglingBot...
+
+2025-08-21 22:05:35,756 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-08-21 22:05:35,756 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-08-21 22:05:35,770 | INFO | megling.cogs.vc | [~~] Loading Voice Creator...
+2025-08-21 22:05:35,771 | INFO | megling.cogs.vc | [OK] Voice Creator loaded
+2025-08-21 22:05:35,772 | INFO | megling.cogs.admin | [~~]Loading Admin...
+2025-08-21 22:05:35,772 | INFO | megling.cogs.admin | [OK] Admin loaded
+2025-08-21 22:05:35,773 | INFO | megling.cogs.views | [~~] Loading Views...
+2025-08-21 22:05:35,774 | INFO | megling.cogs.views | [OK] Views loaded
+2025-08-21 22:05:35,787 | ERROR | megling.extloader | [?!] Failed to load megling.cogs.raid: Extension 'megling.cogs.raid' raised an error: ImportError: cannot import name 'Modal' from 'discord' (/nix/store/6p565vz6b1fmnly6xssp5s75w670sdxb-python3-3.12.8-env/lib/python3.12/site-packages/discord/__init__.py)
+2025-08-21 22:05:35,788 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-08-21 22:05:35,789 | INFO | megling.cogs.vc | [~~] SQLite voice.db checkup...
+2025-08-21 22:05:35,792 | INFO | megling.cogs.vc | [OK] SQLite voice.db checkup completed
+2025-08-21 22:05:35,794 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-08-21 22:05:35,795 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-08-21 22:05:36,671 | INFO | __main__ | [OK] Synced commands
+
+2025-08-21 22:05:36,671 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-08-21 22:06:24,303 | INFO | __main__ | 
+
+ __  __            _ _             ____        _
+|  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
+| |\/| |/ _ \/ _` | | | '_ \ / _` |  _ \ / _ \| __|
+| |  | |  __| (_| | | | | | | (_| | |_) | (_) | |_
+|_|  |_|\___|\__, |_|_|_| |_|\__, |____/ \___/ \__|
+             |___/           |___/
+             By Algabo & Phothonx.
+
+----------------------------------------------------
+[~~] Launching MeglingBot...
+
+2025-08-21 22:06:27,813 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-08-21 22:06:27,813 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-08-21 22:06:27,828 | INFO | megling.cogs.vc | [~~] Loading Voice Creator...
+2025-08-21 22:06:27,828 | INFO | megling.cogs.vc | [OK] Voice Creator loaded
+2025-08-21 22:06:27,829 | INFO | megling.cogs.admin | [~~]Loading Admin...
+2025-08-21 22:06:27,830 | INFO | megling.cogs.admin | [OK] Admin loaded
+2025-08-21 22:06:27,831 | INFO | megling.cogs.views | [~~] Loading Views...
+2025-08-21 22:06:27,831 | INFO | megling.cogs.views | [OK] Views loaded
+2025-08-21 22:06:27,845 | INFO | megling.cogs.raid | [~~] Loading Raid...
+2025-08-21 22:06:27,845 | INFO | megling.cogs.raid | [OK] Raid loaded
+2025-08-21 22:06:27,845 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-08-21 22:06:27,846 | INFO | megling.cogs.vc | [~~] SQLite voice.db checkup...
+2025-08-21 22:06:27,847 | INFO | megling.cogs.raidDBManager | [~~] SQLite raid.db checkup...
+2025-08-21 22:06:27,848 | INFO | megling.cogs.vc | [OK] SQLite voice.db checkup completed
+2025-08-21 22:06:27,850 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-08-21 22:06:27,850 | INFO | megling.cogs.raidDBManager | [OK] SQLite raid.db checkup completed
+2025-08-21 22:06:27,851 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-08-21 22:06:27,851 | INFO | megling.cogs.raidDBManager | [~] Running raid DB cleanup...
+2025-08-21 22:06:27,854 | INFO | megling.cogs.raidDBManager | [~] raid 1 deleted
+2025-08-21 22:06:27,854 | INFO | megling.cogs.raidDBManager | [OK] Cleanup completed
+2025-08-21 22:07:04,985 | INFO | __main__ | [OK] Synced commands
+
+2025-08-21 22:07:04,985 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-08-21 22:08:30,702 | INFO | megling.cogs.raidDBManager | [DB] Created template: test3 by 454929922108948480
+2025-08-21 22:10:32,449 | INFO | megling.cogs.raidDBManager | [DB] Added role to template: asldjc to test3 by 454929922108948480
+2025-08-21 22:17:13,017 | INFO | __main__ | 
+
+ __  __            _ _             ____        _
+|  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
+| |\/| |/ _ \/ _` | | | '_ \ / _` |  _ \ / _ \| __|
+| |  | |  __| (_| | | | | | | (_| | |_) | (_) | |_
+|_|  |_|\___|\__, |_|_|_| |_|\__, |____/ \___/ \__|
+             |___/           |___/
+             By Algabo & Phothonx.
+
+----------------------------------------------------
+[~~] Launching MeglingBot...
+
+2025-08-21 22:17:17,328 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-08-21 22:17:17,329 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-08-21 22:17:17,344 | INFO | megling.cogs.vc | [~~] Loading Voice Creator...
+2025-08-21 22:17:17,345 | INFO | megling.cogs.vc | [OK] Voice Creator loaded
+2025-08-21 22:17:17,347 | INFO | megling.cogs.admin | [~~]Loading Admin...
+2025-08-21 22:17:17,348 | INFO | megling.cogs.admin | [OK] Admin loaded
+2025-08-21 22:17:17,350 | INFO | megling.cogs.views | [~~] Loading Views...
+2025-08-21 22:17:17,350 | INFO | megling.cogs.views | [OK] Views loaded
+2025-08-21 22:17:17,372 | INFO | megling.cogs.raid | [~~] Loading Raid...
+2025-08-21 22:17:17,372 | INFO | megling.cogs.raid | [OK] Raid loaded
+2025-08-21 22:17:17,372 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-08-21 22:17:17,374 | INFO | megling.cogs.vc | [~~] SQLite voice.db checkup...
+2025-08-21 22:17:17,376 | INFO | megling.cogs.raidDBManager | [~~] SQLite raid.db checkup...
+2025-08-21 22:17:17,378 | INFO | megling.cogs.vc | [OK] SQLite voice.db checkup completed
+2025-08-21 22:17:17,381 | INFO | megling.cogs.raidDBManager | [OK] SQLite raid.db checkup completed
+2025-08-21 22:17:17,381 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-08-21 22:17:17,383 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-08-21 22:17:17,384 | INFO | megling.cogs.raidDBManager | [~] Running raid DB cleanup...
+2025-08-21 22:17:17,385 | INFO | megling.cogs.raidDBManager | [OK] Cleanup completed
+2025-08-21 22:17:18,250 | INFO | __main__ | [OK] Synced commands
+
+2025-08-21 22:17:18,251 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-08-21 22:19:20,728 | INFO | megling.cogs.raidDBManager | [DB] Raid created: test3 by 454929922108948480
+2025-08-21 22:19:59,891 | INFO | megling.cogs.raidDBManager | [DB] User signup: 454929922108948480 to 2
+2025-08-21 22:20:04,553 | INFO | megling.cogs.raidDBManager | [DB] User signup updated: 454929922108948480 from 2
+2025-08-21 22:40:20,540 | INFO | __main__ | 
+
+ __  __            _ _             ____        _
+|  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
+| |\/| |/ _ \/ _` | | | '_ \ / _` |  _ \ / _ \| __|
+| |  | |  __| (_| | | | | | | (_| | |_) | (_) | |_
+|_|  |_|\___|\__, |_|_|_| |_|\__, |____/ \___/ \__|
+             |___/           |___/
+             By Algabo & Phothonx.
+
+----------------------------------------------------
+[~~] Launching MeglingBot...
+
+2025-08-21 22:40:24,475 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-08-21 22:40:24,475 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-08-21 22:40:24,490 | INFO | megling.cogs.vc | [~~] Loading Voice Creator...
+2025-08-21 22:40:24,491 | INFO | megling.cogs.vc | [OK] Voice Creator loaded
+2025-08-21 22:40:24,492 | INFO | megling.cogs.admin | [~~]Loading Admin...
+2025-08-21 22:40:24,493 | INFO | megling.cogs.admin | [OK] Admin loaded
+2025-08-21 22:40:24,494 | INFO | megling.cogs.views | [~~] Loading Views...
+2025-08-21 22:40:24,495 | INFO | megling.cogs.views | [OK] Views loaded
+2025-08-21 22:40:24,522 | INFO | megling.cogs.raid | [~~] Loading Raid...
+2025-08-21 22:40:24,523 | INFO | megling.cogs.raid | [OK] Raid loaded
+2025-08-21 22:40:24,523 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-08-21 22:40:24,525 | INFO | megling.cogs.vc | [~~] SQLite voice.db checkup...
+2025-08-21 22:40:24,528 | INFO | megling.cogs.raidDBManager | [~~] SQLite raid.db checkup...
+2025-08-21 22:40:24,529 | INFO | megling.cogs.vc | [OK] SQLite voice.db checkup completed
+2025-08-21 22:40:24,531 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-08-21 22:40:24,531 | INFO | megling.cogs.raidDBManager | [OK] SQLite raid.db checkup completed
+2025-08-21 22:40:24,533 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-08-21 22:40:24,533 | INFO | megling.cogs.raidDBManager | [~] Running raid DB cleanup...
+2025-08-21 22:40:24,538 | INFO | megling.cogs.raidDBManager | [~] raid 2 deleted
+2025-08-21 22:40:24,538 | INFO | megling.cogs.raidDBManager | [OK] Cleanup completed
+2025-08-21 22:40:25,411 | INFO | __main__ | [OK] Synced commands
+
+2025-08-21 22:40:25,412 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-08-21 22:42:00,172 | INFO | __main__ | 
+
+ __  __            _ _             ____        _
+|  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
+| |\/| |/ _ \/ _` | | | '_ \ / _` |  _ \ / _ \| __|
+| |  | |  __| (_| | | | | | | (_| | |_) | (_) | |_
+|_|  |_|\___|\__, |_|_|_| |_|\__, |____/ \___/ \__|
+             |___/           |___/
+             By Algabo & Phothonx.
+
+----------------------------------------------------
+[~~] Launching MeglingBot...
+
+2025-08-21 22:42:04,033 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-08-21 22:42:04,033 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-08-21 22:42:04,047 | INFO | megling.cogs.vc | [~~] Loading Voice Creator...
+2025-08-21 22:42:04,048 | INFO | megling.cogs.vc | [OK] Voice Creator loaded
+2025-08-21 22:42:04,049 | INFO | megling.cogs.admin | [~~]Loading Admin...
+2025-08-21 22:42:04,049 | INFO | megling.cogs.admin | [OK] Admin loaded
+2025-08-21 22:42:04,050 | INFO | megling.cogs.views | [~~] Loading Views...
+2025-08-21 22:42:04,051 | INFO | megling.cogs.views | [OK] Views loaded
+2025-08-21 22:42:04,065 | INFO | megling.cogs.raid | [~~] Loading Raid...
+2025-08-21 22:42:04,066 | INFO | megling.cogs.raid | [OK] Raid loaded
+2025-08-21 22:42:04,066 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-08-21 22:42:04,067 | INFO | megling.cogs.vc | [~~] SQLite voice.db checkup...
+2025-08-21 22:42:04,069 | INFO | megling.cogs.raidDBManager | [~~] SQLite raid.db checkup...
+2025-08-21 22:42:04,070 | INFO | megling.cogs.vc | [OK] SQLite voice.db checkup completed
+2025-08-21 22:42:04,071 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-08-21 22:42:04,071 | INFO | megling.cogs.raidDBManager | [OK] SQLite raid.db checkup completed
+2025-08-21 22:42:04,073 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-08-21 22:42:04,073 | INFO | megling.cogs.raidDBManager | [~] Running raid DB cleanup...
+2025-08-21 22:42:04,074 | INFO | megling.cogs.raidDBManager | [OK] Cleanup completed
+2025-08-21 22:42:05,159 | INFO | __main__ | [OK] Synced commands
+
+2025-08-21 22:42:05,160 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+
+2025-08-21 22:42:21,010 | INFO | __main__ | 
+
+ __  __            _ _             ____        _
+|  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
+| |\/| |/ _ \/ _` | | | '_ \ / _` |  _ \ / _ \| __|
+| |  | |  __| (_| | | | | | | (_| | |_) | (_) | |_
+|_|  |_|\___|\__, |_|_|_| |_|\__, |____/ \___/ \__|
+             |___/           |___/
+             By Algabo & Phothonx.
+
+----------------------------------------------------
+[~~] Launching MeglingBot...
+
+2025-08-21 22:42:24,622 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-08-21 22:42:24,623 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-08-21 22:42:24,637 | INFO | megling.cogs.vc | [~~] Loading Voice Creator...
+2025-08-21 22:42:24,638 | INFO | megling.cogs.vc | [OK] Voice Creator loaded
+2025-08-21 22:42:24,639 | INFO | megling.cogs.admin | [~~]Loading Admin...
+2025-08-21 22:42:24,639 | INFO | megling.cogs.admin | [OK] Admin loaded
+2025-08-21 22:42:24,640 | INFO | megling.cogs.views | [~~] Loading Views...
+2025-08-21 22:42:24,641 | INFO | megling.cogs.views | [OK] Views loaded
+2025-08-21 22:42:24,656 | INFO | megling.cogs.raid | [~~] Loading Raid...
+2025-08-21 22:42:24,656 | INFO | megling.cogs.raid | [OK] Raid loaded
+2025-08-21 22:42:24,657 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-08-21 22:42:24,657 | INFO | megling.cogs.vc | [~~] SQLite voice.db checkup...
+2025-08-21 22:42:24,659 | INFO | megling.cogs.raidDBManager | [~~] SQLite raid.db checkup...
+2025-08-21 22:42:24,659 | INFO | megling.cogs.vc | [OK] SQLite voice.db checkup completed
+2025-08-21 22:42:24,661 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-08-21 22:42:24,662 | INFO | megling.cogs.raidDBManager | [OK] SQLite raid.db checkup completed
+2025-08-21 22:42:24,662 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-08-21 22:42:24,664 | INFO | megling.cogs.raidDBManager | [~] Running raid DB cleanup...
+2025-08-21 22:42:24,664 | INFO | megling.cogs.raidDBManager | [OK] Cleanup completed
+2025-08-21 22:44:05,019 | INFO | __main__ | 
+
+ __  __            _ _             ____        _
+|  \/  | ___  __ _| (_)_ __   __ _| __ )  ___ | |_
+| |\/| |/ _ \/ _` | | | '_ \ / _` |  _ \ / _ \| __|
+| |  | |  __| (_| | | | | | | (_| | |_) | (_) | |_
+|_|  |_|\___|\__, |_|_|_| |_|\__, |____/ \___/ \__|
+             |___/           |___/
+             By Algabo & Phothonx.
+
+----------------------------------------------------
+[~~] Launching MeglingBot...
+
+2025-08-21 22:44:08,882 | INFO | __main__ | 
+
+------------------- APP INFO -----------------------
+APP NAME : Megling
+APP ID : 1067505208420221008
+OWNER ID : team1069221651549540423
+GUILDS : 2 servers
+----------------------------------------------------
+
+2025-08-21 22:44:08,883 | INFO | megling.extloader | (Re)Loading extension(s)...
+2025-08-21 22:44:08,897 | INFO | megling.cogs.vc | [~~] Loading Voice Creator...
+2025-08-21 22:44:08,898 | INFO | megling.cogs.vc | [OK] Voice Creator loaded
+2025-08-21 22:44:08,899 | INFO | megling.cogs.admin | [~~]Loading Admin...
+2025-08-21 22:44:08,899 | INFO | megling.cogs.admin | [OK] Admin loaded
+2025-08-21 22:44:08,901 | INFO | megling.cogs.views | [~~] Loading Views...
+2025-08-21 22:44:08,901 | INFO | megling.cogs.views | [OK] Views loaded
+2025-08-21 22:44:08,907 | INFO | megling.cogs.raid | [~~] Loading Raid...
+2025-08-21 22:44:08,908 | INFO | megling.cogs.raid | [OK] Raid loaded
+2025-08-21 22:44:08,908 | INFO | __main__ | [~~] Syncing Slash commands...
+2025-08-21 22:44:08,910 | INFO | megling.cogs.vc | [~~] SQLite voice.db checkup...
+2025-08-21 22:44:08,916 | INFO | megling.cogs.raidDBManager | [~~] SQLite raid.db checkup...
+2025-08-21 22:44:08,918 | INFO | megling.cogs.vc | [OK] SQLite voice.db checkup completed
+2025-08-21 22:44:08,919 | INFO | megling.cogs.raidDBManager | [OK] SQLite raid.db checkup completed
+2025-08-21 22:44:08,919 | INFO | megling.cogs.vc | [~~] Cleaning leftover channels...
+2025-08-21 22:44:08,920 | INFO | megling.cogs.vc | [OK] Cleaned voice channels
+2025-08-21 22:44:08,921 | INFO | megling.cogs.raidDBManager | [~] Running raid DB cleanup...
+2025-08-21 22:44:08,922 | INFO | megling.cogs.raidDBManager | [OK] Cleanup completed
+2025-08-21 22:44:09,805 | INFO | __main__ | [OK] Synced commands
+
+2025-08-21 22:44:09,805 | INFO | __main__ | 
+
+[OK] Logged in as Megling#1409
+----------------------------------------------------
+

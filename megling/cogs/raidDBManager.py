@@ -165,6 +165,16 @@ CREATE TABLE IF NOT EXISTS Signups (
         logger.info(f"[DB] Removed role from template: {role_name} from {template_name} by {owner_id}")
         return True
 
+  async def get_templates_by_owner(
+    self,
+    user_id:int
+  ):
+    async with aiosqlite.connect(self.db_path) as db:
+      cursor = await db.execute(
+        "SELECT * FROM RaidTemplates WHERE ownerID = ?",
+        (user_id, )
+      )
+      return await cursor.fetchall()
 
   async def add_raid(
     self,

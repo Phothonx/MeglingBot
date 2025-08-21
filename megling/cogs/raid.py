@@ -6,7 +6,7 @@ from datetime import datetime
 from megling.cogs.raidDBManager import RaidDB
 from megling.logsetup import setupLogger
 
-from discord import ApplicationContext, SlashCommandGroup, Bot, ui, Embed, Colour, Permissions, SelectOption, Interaction, ButtonStyle, Option, guild_only, PartialEmoji
+from discord import ApplicationContext, SlashCommandGroup, Bot, ui, Embed, Colour, Permissions, SelectOption, Interaction, ButtonStyle, Option, guild_only, PartialEmoji, InputTextStyle
 from discord.ext import commands, tasks
 from discord.ext.commands import CheckFailure
 
@@ -34,6 +34,168 @@ def parse_emoji(s: str) -> PartialEmoji | None:
   elif is_unicode_emoji(s):
     return PartialEmoji(name=s)
   return None
+
+class RaidModal(ui.Modal):
+  def __init__(self, bot: Bot, user_id: int):
+    super().__init__(title="Lancer un Raid")
+    self.bot = bot
+    self.user_id = user_id
+
+    self.template_name_input = ui.InputText(
+      label="Nom du modèle à utiliser",
+      placeholder="Ex: mon_template",
+      required=True,
+      max_length=50
+    )
+
+    self.title_input = ui.InputText(
+      label="Titre du raid (Capitalisé automatiquement)",
+      placeholder="Ex: Dragon Millénaire",
+      required=True,
+      max_length=100
+    )
+    self.raid_time_input = ui.InputText(
+      label="Date et heure (YYYY-MM-DD HH:MM, format ISO)",
+      value=datetime.now().isoformat(),
+      required=True,
+      max_length=30
+    )
+
+    self.add_item(self.template_name_input)
+    self.add_item(self.title_input)
+    self.add_item(self.raid_time_input)
+
+  async def callback(self, interaction: Interaction):
+    template_name = self.template_name_input.value.strip()
+    title = self.title_input.value.strip()
+    raid_time_str = self.raid_time_input.value.strip()
+
+    try:
+      raid_time = datetime.fromisoformat(raid_time_str)
+    except ValueError:
+      await interaction.response.send_message(f":x: **La date n'est pas au format ISO 8601**", ephemeral=True)
+      return
+    if raid_time < datetime.now():
+      await interaction.response.send_message(":x: **La date est dans le passé**", ephemeral=True)
+      return
+    template = await db.get_template(template_name, self.user_id)
+    if not template:
+      await interaction.response.send_message(f":x: **Aucun modèle trouvé nommé `{template_name}`**", ephemeral=True)
+      return
+    roles = await db.get_template_roles(template_name=template_name, owner_id=self.user_id)
+    if not roles:
+      await interaction.response.send_message(f":x: **Le modèle `{template_name}` n’a aucun rôle défini, il en faut au moins un**", ephemeral=True)
+      return
+
+    msg = await interaction.channel.send(":construction: *Création d'un raid...*")
+    raid_id = await db.add_raid(
+      leader_id=self.user_id,
+      template_name=template_name,
+      title=title,
+      raid_time=raid_time,
+      message_id=msg.id,
+      channel_id=msg.channel.id
+    )
+
+    embed = await RaidEmbed.create(bot=self.bot, raid_id=raid_id)
+    view = await RaidView.create(bot=self.bot, raid_id=raid_id)
+
+    await msg.edit(content="", embed=embed, view=view)
+    await interaction.response.send_message(f":white_check_mark: **Raid `{title}` lancé avec succès !**", ephemeral=True)
+
+class RoleModal(ui.Modal):
+  def __init__(self, template_name: str, owner_id: int):
+    super().__init__(title=f"Ajouter un rôle au modèle `{template_name}`")
+    self.template_name = template_name
+    self.owner_id = owner_id
+
+    self.role_name_input = ui.InputText(
+      label="Nom du rôle",
+      placeholder="Ex: Tank, Heal, DPS, etc...",
+      required=True,
+      max_length=20
+    )
+
+    self.emoji_input = ui.InputText(
+      label="Emoji (icone du rôle)",
+      placeholder="Ex: 🛡️, ⚔️ ou <a:custom:123456>",
+      required=True,
+      max_length=50
+    )
+
+    self.slots_input = ui.InputText(
+      label="Nombre de places",
+      placeholder="Ex: 5",
+      required=True,
+      max_length=5
+    )
+
+    self.add_item(self.role_name_input)
+    self.add_item(self.emoji_input)
+    self.add_item(self.slots_input)
+
+  async def callback(self, interaction: Interaction):
+    role_name = self.role_name_input.value.strip()
+    role_icon = self.emoji_input.value.strip()
+    try:
+      max_slots = int(self.slots_input.value.strip())
+    except ValueError:
+      await interaction.response.send_message(":x: **Le nombre de places doit être un entier**", ephemeral=True)
+      return
+    if max_slots <= 0:
+      await interaction.response.send_message(":x: **Le rôle doit avoir au moins une place**", ephemeral=True)
+      return
+    if not (is_unicode_emoji(role_icon) or is_custom_discord_emoji(role_icon)):
+      await interaction.response.send_message(":x: **L'icône n'est pas un emoji valide**", ephemeral=True)
+      return
+
+    await db.add_template_role(
+      template_name=self.template_name,
+      role_name=role_name,
+      role_icon=role_icon,
+      max_slots=max_slots,
+      owner_id=self.owner_id
+    )
+    await interaction.response.send_message( f":white_check_mark: **Rôle `{role_name}` ajouté au modèle `{self.template_name}`.**", ephemeral=True )
+
+class TemplateModal(ui.Modal):
+  def __init__(self, template_name:str, owner_id:int):
+    super().__init__(title=f"Modèle `{template_name}`")
+    self.template_name = template_name
+    self.owner_id = owner_id
+
+    self.description_input = ui.InputText(
+      label="Description",
+      style=InputTextStyle.long,
+      placeholder="Entre ta description ici, le markown marche",
+      required=False,
+      max_length=1000
+    )
+    self.url_input = ui.InputText(
+      label="(Optionel) Lien du titre",
+      style=InputTextStyle.short,
+      placeholder="Ex: https://example.com/",
+      required=False,
+      max_length=500
+    )
+    self.image_input = ui.InputText(
+      label="(Optionel) Lien de l'image",
+      style=InputTextStyle.short,
+      placeholder="Un lien vers une image en ligne",
+      required=False,
+      max_length=500
+    )
+    self.add_item(self.description_input)
+    self.add_item(self.image_input)
+    self.add_item(self.url_input)
+
+  async def callback(self, interaction: Interaction):
+    description = self.description_input.value.strip()
+    url = self.url_input.value.strip()
+    image = self.image_input.value.strip()
+
+    await db.create_template(template_name=self.template_name, url=url, description=description, image=image, owner_id=self.owner_id)
+    await interaction.response.send_message(f":white_check_mark: **Modèle `{self.template_name}` créé avec succès**", ephemeral=True)
 
 class RaidEmbed(Embed):
   def __init__(self, bot:Bot, raid:tuple, template:tuple, roles:tuple, signups:tuple):
@@ -117,7 +279,7 @@ class RaidEmbed(Embed):
         absents.append(f"`{signup_rank}` {user_name}")
 
     value = "\n".join(absents) or "—"
-    self.add_field(name=f":no_entry_sign: {len(absents)} Absents", value=value, inline=False)
+    self.add_field(name=f":no_entry_sign: {len(absents)} Absent" + "" if len(absents)==0 else "s", value=value, inline=False)
 
     self.insert_field_at(index=4, name=f":busts_in_silhouette: {total_signed}/{max_raid_slots} participants", value="", inline=False)
 
@@ -169,7 +331,6 @@ class AbsenceButton(ui.Button):
       emoji="🚫",
       style=ButtonStyle.grey
     )
-# TODO make absent button not working when not signed up
   async def callback(self, interaction: Interaction):
     user_id = interaction.user.id
     raid_id, leader_id, template_name, title, raid_time_str, message_id, channel_id = self.raid
@@ -237,7 +398,6 @@ class Raid(commands.Cog):
   )
 
 
-  # TODO switch to modals
   # @commands.cooldown(1, 30, commands.BucketType.user)
   @template.command(
     name="creer",
@@ -247,18 +407,14 @@ class Raid(commands.Cog):
   async def create(
     self,
     ctx: ApplicationContext,
-    template_name:Option(name="nom", input_type=str, description="Le nom du modèle, utilise quelque chose de simple"),
-    url:Option(name="lien", input_type=str|None, default=None, required=False, description="(Optionel) Un hyperlien dans le titre de l'embed"),
-    description:Option(name="description", input_type=str|None,  default=None, required=False,description="(Optionel) Les infos/directives pour ton raid (Le markdown marche)"),
-    image:Option(name="image", input_type=str|None, default=None, required=False, description="(Optionel) Lien vers une image insérée en bas de l'embed"),
+    template_name:Option(name="nom", input_type=str, max_length=50, description="Le nom du modèle, utilise quelque chose de simple"),
   ):
     user_id = ctx.user.id
     template = await db.get_template(template_name=template_name, owner_id=user_id)
     if template:
       await ctx.respond(f":warning:  **Tu possèdes déjà un modèle nommé `{template_name}`, supprime le ou change de nom**", ephemeral=True)
       return
-    await db.create_template(template_name=template_name, url=url, description=description, image=image, owner_id=user_id)
-    await ctx.respond(f":white_check_mark: **Modèle `{template_name}` créé avec succès**", ephemeral=True)
+    await ctx.send_modal(TemplateModal(template_name=template_name, owner_id=user_id))
 
 
   @template.command(
@@ -294,24 +450,13 @@ class Raid(commands.Cog):
     self,
     ctx: ApplicationContext,
     template_name:Option(name="modele", input_type=str, description="Nom du modèle auquel ajouter le rôle"),
-    role_name:Option(name="nom", input_type=str, description="Nom du rôle"),
-    role_icon:Option(name="icone", input_type=str, description="L'icone du rôle (un emoji discord)"),
-    max_slots:Option(name="places", input_type=int, description="Le nombre de places pour ce rôle"),
   ):
-    max_slots = int(max_slots)
-    if max_slots <= 0:
-      await ctx.respond(f":x: **Le rôle doit avoir au moins une place**", ephemeral=True)
-      return
-    if not ( is_custom_discord_emoji(role_icon) or is_unicode_emoji(role_icon) ):
-      await ctx.respond(f":x: **L'icone du rôle n'est pas un emoji**", ephemeral=True)
-      return
     user_id = ctx.user.id
     template = await db.get_template(template_name=template_name, owner_id=user_id)
-    if template:
-      await db.add_template_role(template_name=template_name, role_name=role_name, role_icon=role_icon, max_slots=max_slots, owner_id=user_id)
-      await ctx.respond(f":white_check_mark: **Le rôle `{role_name}` a été ajouté au modèle `{template_name}`**", ephemeral=True)
-    else:
-      await ctx.respond(f":x: **Tu ne possèdes pas de modèle nommé `{template_name}`**", ephemeral=True)
+    if not template:
+      await ctx.respond(f":x: **Modèle `{template_name}` introuvable.**", ephemeral=True)
+      return
+    await ctx.send_modal(RoleModal(template_name=template_name, owner_id=user_id))
 
 
   @role.command(
@@ -349,33 +494,9 @@ class Raid(commands.Cog):
   async def start(
     self,
     ctx: ApplicationContext,
-    template_name:Option(name="modele", input_type=str, description="Nom du modèle à utiliser"), title:Option(name="titre", input_type=str, description="Titre du template (convertit en capitales)"),
-    user_raid_time:Option(name="horaire", input_type=str, description="Date et horaire de début du raid, format ISO 8601: YYYY-mm-dd HH:MM, regardes sur internet")
   ):
-    await ctx.defer()
     user_id = ctx.user.id
-    try:
-      raid_time = datetime.strptime(user_raid_time, "%Y-%m-%d %H:%M")
-    except ValueError:
-      await ctx.respond(f":x: **La date n'est pas au format ISO 8601**", ephemeral=True)
-      return
-    if raid_time < datetime.now(): # TODO maybe make all utc and ask user to precise time zone ?
-      await ctx.respond(":x: **T'es dans le passé là...**", ephemeral=True)
-      return
-    template = await db.get_template(template_name, user_id)
-    if not template:
-      await ctx.respond(f":x: **Aucun modèle trouvé nommé `{template_name}`**", ephemeral=True)
-      return
-    roles = await db.get_template_roles(template_name=template_name, owner_id=user_id)
-    if not roles:
-      await ctx.respond(f":x: **Aucun n'est associé au modele `{template_name}`, ajoutes en au moins un**", ephemeral=True)
-      return
-    msg = await ctx.channel.send(":construction: *making raid...*")
-    raid_id = await db.add_raid(leader_id=user_id, template_name=template_name, title=title, raid_time=raid_time, message_id=msg.id, channel_id=msg.channel.id)
-    embed = await RaidEmbed.create(bot=self.bot, raid_id=raid_id)
-    view = await RaidView.create(bot=self.bot, raid_id=raid_id)
-    await msg.edit(content="", embed=embed, view=view)
-
+    await ctx.send_modal(RaidModal(self.bot, user_id))
 
 def setup(bot: Bot):
   logger.info("[~~] Loading Raid...")
