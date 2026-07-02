@@ -4,4 +4,7 @@ __pycache__
 .direnv
 discord.log
 db/*
+!db/.gitkeep
 logs/*
+!logs/.gitkeep
+.ruff_cache

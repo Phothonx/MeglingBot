@@ -1,27 +1,40 @@
 import logging
 from logging.handlers import RotatingFileHandler
+from pathlib import Path
 
-def setupLogger(name:str="megling"):
-  # Logger
-  logger = logging.getLogger(name)
-  logger.setLevel(logging.INFO)
-  # logger = logging.getLogger(__name__) to access
+LOG_DIR = Path("logs")
+LOG_FILE = LOG_DIR / "bot.log"
 
-  if not logger.handlers:
-    # Console
+_FORMAT = "%(asctime)s | %(levelname)-7s | %(name)s | %(message)s"
+_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
+
+
+def setup_logging(level: int = logging.INFO) -> None:
+    """Configure logging for the whole bot.
+
+    Records go to the console and to a rotating file (``logs/bot.log``). Call
+    this once at startup; modules then get their own logger via
+    ``logging.getLogger(__name__)`` and inherit this configuration.
+    """
+    LOG_DIR.mkdir(exist_ok=True)
+
+    formatter = logging.Formatter(_FORMAT, datefmt=_DATE_FORMAT)
+
     console_handler = logging.StreamHandler()
-    console_handler.setLevel(logging.INFO)
-
-    # File
-    file_handler = RotatingFileHandler( "logs/bot.log", maxBytes=1_000_000, backupCount=5, encoding='utf-8' )
-    file_handler.setLevel(logging.INFO)
-
-    # Formatter
-    formatter = logging.Formatter('%(asctime)s | %(levelname)s | %(name)s | %(message)s')
-    file_handler.setFormatter(formatter)
     console_handler.setFormatter(formatter)
 
-    logger.addHandler(file_handler)
-    logger.addHandler(console_handler)
+    file_handler = RotatingFileHandler(
+        LOG_FILE, maxBytes=1_000_000, backupCount=5, encoding="utf-8"
+    )
+    file_handler.setFormatter(formatter)
 
-  return logger
+    root = logging.getLogger()
+    root.setLevel(level)
+    # Start from a clean slate so calling this twice doesn't duplicate output.
+    for handler in root.handlers[:]:
+        root.removeHandler(handler)
+    root.addHandler(console_handler)
+    root.addHandler(file_handler)
+
+    # Pycord is chatty at INFO (gateway, heartbeats); keep only its warnings.
+    logging.getLogger("discord").setLevel(logging.WARNING)

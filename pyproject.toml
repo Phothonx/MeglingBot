@@ -1,0 +1,24 @@
+# Tooling / project metadata. Runtime dependencies are provided by the Nix
+# devshell (see flake.nix); this file is not used for packaging.
+[project]
+name = "meglingbot"
+version = "0.1.0"
+description = "A Pycord Discord bot"
+requires-python = ">=3.12"
+dependencies = [
+    "py-cord==2.8.0",
+    "aiosqlite",
+    "python-dotenv",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+indent-width = 4
+
+[tool.ruff.lint]
+# E/W: pycodestyle, F: pyflakes, I: isort, UP: pyupgrade, B: bugbear, SIM: simplify.
+select = ["E", "W", "F", "I", "UP", "B", "SIM"]
+
+[tool.ruff.format]
+quote-style = "double"
