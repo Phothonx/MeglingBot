@@ -61,6 +61,7 @@
               self.packages.${pkgs.stdenv.hostPlatform.system}.pycord
               aiosqlite
               python-dotenv
+              emoji # :shortcode: -> unicode conversion
             ]))
         ];
       };

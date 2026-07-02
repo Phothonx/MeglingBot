@@ -57,7 +57,8 @@ CREATE TABLE IF NOT EXISTS Raids (
     image TEXT,
     raidTime TEXT NOT NULL,
     messageID INTEGER,
-    channelID INTEGER
+    channelID INTEGER,
+    pingMessageID INTEGER
 );
 CREATE TABLE IF NOT EXISTS RaidRoles (
     raidID INTEGER,
@@ -106,6 +107,11 @@ class RaidDB:
                 await db.execute("DROP TABLE Raids")
                 await db.execute("DROP TABLE IF EXISTS Signups")
             await db.executescript(_SCHEMA)
+            # Columns added after the redesign (CREATE IF NOT EXISTS won't add them).
+            cursor = await db.execute("PRAGMA table_info(Raids)")
+            columns = [row[1] for row in await cursor.fetchall()]
+            if "pingMessageID" not in columns:
+                await db.execute("ALTER TABLE Raids ADD COLUMN pingMessageID INTEGER")
             await db.commit()
         logger.debug("raid.db schema ready")
 
@@ -170,7 +176,7 @@ class RaidDB:
                 " WHERE templateName = ? AND ownerID = ?",
                 (template_name, owner_id),
             )
-            return await cursor.fetchall()
+            return list(await cursor.fetchall())
 
     async def add_template_role(
         self, template_name: str, owner_id: int, role_name: str, role_icon: str, max_slots: int
@@ -224,7 +230,7 @@ class RaidDB:
                     channel_id,
                 ),
             )
-            raid_id = cursor.lastrowid
+            raid_id = cursor.lastrowid or 0  # lastrowid is always set after INSERT
             await db.executemany(
                 "INSERT INTO RaidRoles (raidID, roleName, roleIcon, maxSlots) VALUES (?,?,?,?)",
                 [(raid_id, r["roleName"], r["roleIcon"], r["maxSlots"]) for r in roles],
@@ -248,13 +254,28 @@ class RaidDB:
             cursor = await db.execute("SELECT * FROM Raids WHERE messageID = ?", (message_id,))
             return await cursor.fetchone()
 
+    async def get_raid_by_ping_message(self, message_id: int) -> aiosqlite.Row | None:
+        """Resolve a raid from its start-ping message (used by the Start button)."""
+        async with self._connect() as db:
+            db.row_factory = aiosqlite.Row
+            cursor = await db.execute("SELECT * FROM Raids WHERE pingMessageID = ?", (message_id,))
+            return await cursor.fetchone()
+
+    async def set_ping_message(self, raid_id: int, message_id: int | None) -> None:
+        """Remember (or forget, with None) the start-ping message of a raid."""
+        async with self._connect() as db:
+            await db.execute(
+                "UPDATE Raids SET pingMessageID = ? WHERE raidID = ?", (message_id, raid_id)
+            )
+            await db.commit()
+
     async def get_raid_roles(self, raid_id: int) -> list[aiosqlite.Row]:
         async with self._connect() as db:
             db.row_factory = aiosqlite.Row
             cursor = await db.execute(
                 "SELECT roleName, roleIcon, maxSlots FROM RaidRoles WHERE raidID = ?", (raid_id,)
             )
-            return await cursor.fetchall()
+            return list(await cursor.fetchall())
 
     async def update_raid(
         self, raid_id: int, *, title: str | None = None, raid_time: datetime | None = None
@@ -289,7 +310,8 @@ class RaidDB:
                     "SELECT COALESCE(MAX(signupRank), 0) + 1 FROM Signups WHERE raidID = ?",
                     (raid_id,),
                 )
-                rank = (await cursor.fetchone())[0]
+                row = await cursor.fetchone()
+                rank = row[0] if row else 1
                 await db.execute(
                     "INSERT INTO Signups (userID, raidID, roleName, signupRank)"
                     " VALUES (?, ?, ?, ?)",
@@ -316,7 +338,7 @@ class RaidDB:
                 " WHERE raidID = ? ORDER BY signupRank",
                 (raid_id,),
             )
-            return await cursor.fetchall()
+            return list(await cursor.fetchall())
 
     async def count_role_signups(self, raid_id: int, role_name: str) -> int:
         async with self._connect() as db:
@@ -324,18 +346,19 @@ class RaidDB:
                 "SELECT COUNT(*) FROM Signups WHERE raidID = ? AND roleName = ?",
                 (raid_id, role_name),
             )
-            return (await cursor.fetchone())[0]
+            row = await cursor.fetchone()
+            return row[0] if row else 0
 
     # -- End of life: archive & history ---------------------------------------------
 
-    async def expired_raids(self) -> list[aiosqlite.Row]:
-        """Raids whose start time has passed (candidates for the recap)."""
+    async def due_raids(self) -> list[aiosqlite.Row]:
+        """Raids whose start time has passed."""
         async with self._connect() as db:
             db.row_factory = aiosqlite.Row
             cursor = await db.execute(
                 "SELECT * FROM Raids WHERE raidTime < ?", (datetime.now().isoformat(sep=" "),)
             )
-            return await cursor.fetchall()
+            return list(await cursor.fetchall())
 
     async def archive_raid(self, raid_id: int) -> None:
         """Move a finished raid into RaidLog and drop it from the live tables."""
@@ -384,4 +407,4 @@ class RaidDB:
                 "SELECT * FROM RaidLog WHERE guildID = ? ORDER BY raidTime DESC LIMIT ?",
                 (guild_id, limit),
             )
-            return await cursor.fetchall()
+            return list(await cursor.fetchall())

@@ -4,10 +4,15 @@ Flow:
     /raid template create <name>  modal for infos, then a builder to add roles
     /raid template edit|delete|list
     /raid start template:<autocomplete> title:<text> when:<time>
-        posts the signup message: role select + absent/withdraw buttons and a
+        posts the signup message: role select + absent button and a
         leader-only manage panel (change time/title, ping, kick, cancel)
-    when the raid time passes, the message is frozen into a recap embed and
-    the raid is archived; /raid history lists a guild's past raids.
+
+Lifecycle: when the start time arrives, signups are disabled and the
+participants + leader get pinged with a ⚔️ Start button. The leader can still
+postpone (signups reopen, the ping resets) — or press Start, which freezes
+the message into a recap, archives the raid and removes all interactions.
+Raids left pending for 24h are archived automatically. /raid history lists
+a guild's past raids.
 
 The signup view is *persistent*: components carry fixed custom_ids and the
 raid is resolved from the message id, so buttons keep working after restarts.
@@ -18,7 +23,6 @@ raid-leader roles in Server Settings > Integrations).
 import json
 import logging
 import re
-import unicodedata
 from datetime import datetime, timedelta
 
 import discord
@@ -33,7 +37,6 @@ from discord import (
     Interaction,
     InteractionContextType,
     Option,
-    PartialEmoji,
     Permissions,
     SelectOption,
     SlashCommandGroup,
@@ -42,25 +45,13 @@ from discord import (
 from discord.ext import commands, tasks
 
 from megling.db.raid import ABSENT, RaidDB
+from megling.utils import parse_emoji, valid_url
 
 logger = logging.getLogger(__name__)
 
 MAX_ROLES = 20  # keeps us clear of Discord's 25-option/25-field limits
 
-# -- Small parsers ---------------------------------------------------------------
-
-CUSTOM_EMOJI_PATTERN = re.compile(r"<a?:\w+:\d+>")
 RELATIVE_TIME_PATTERN = re.compile(r"\+(?:(\d+)h)?(?:(\d+)m)?")
-
-
-def parse_emoji(text: str) -> PartialEmoji | None:
-    """Accept a custom discord emoji (<:name:id>) or a unicode emoji."""
-    text = text.strip()
-    if CUSTOM_EMOJI_PATTERN.fullmatch(text):
-        return PartialEmoji.from_str(text)
-    if text and all(unicodedata.category(char) in {"So", "Sk", "Cf", "Mn"} for char in text):
-        return PartialEmoji(name=text)
-    return None
 
 
 def parse_raid_time(text: str) -> datetime | None:
@@ -93,8 +84,14 @@ def parse_raid_time(text: str) -> datetime | None:
 # -- Embeds -----------------------------------------------------------------------
 
 
-def build_raid_embed(raid, roles, signups, *, final: bool = False) -> Embed:
-    """The signup message embed; with final=True, the frozen end-of-raid recap."""
+def raid_is_due(raid) -> bool:
+    """Has the raid's start time passed?"""
+    return datetime.fromisoformat(raid["raidTime"]) <= datetime.now()
+
+
+def build_raid_embed(raid, roles, signups, *, final: bool = False, pending: bool = False) -> Embed:
+    """The signup message embed. `pending` = start time reached, waiting for the
+    leader to press Start; `final` = the frozen end-of-raid recap."""
     timestamp = int(datetime.fromisoformat(raid["raidTime"]).timestamp())
     header = f"Led by <@{raid['leaderID']}>"
     if raid["description"]:
@@ -103,10 +100,10 @@ def build_raid_embed(raid, roles, signups, *, final: bool = False) -> Embed:
     embed = Embed(
         title=f"__**{raid['title'].upper()}**__",
         description=header,
-        url=raid["url"] or None,
+        url=raid["url"] if valid_url(raid["url"]) else None,
         colour=Colour.dark_grey() if final else Colour.blue(),
     )
-    if raid["image"]:
+    if valid_url(raid["image"]):
         embed.set_image(url=raid["image"])
 
     embed.add_field(name=f"<t:{timestamp}:D>", value="")
@@ -116,7 +113,9 @@ def build_raid_embed(raid, roles, signups, *, final: bool = False) -> Embed:
     total, capacity = 0, 0
     for role in roles:
         members = [
-            f"<@{signup['userID']}>" for signup in signups if signup["roleName"] == role["roleName"]
+            f"`{signup['signupRank']}` <@{signup['userID']}>"
+            for signup in signups
+            if signup["roleName"] == role["roleName"]
         ]
         total += len(members)
         capacity += role["maxSlots"]
@@ -125,7 +124,7 @@ def build_raid_embed(raid, roles, signups, *, final: bool = False) -> Embed:
             value="\n".join(members) or "—",
         )
 
-    absents = [f"<@{s['userID']}>" for s in signups if s["roleName"] == ABSENT]
+    absents = [f"`{s['signupRank']}` <@{s['userID']}>" for s in signups if s["roleName"] == ABSENT]
     embed.insert_field_at(
         3, name=f":busts_in_silhouette: {total}/{capacity} participants", value="", inline=False
     )
@@ -134,7 +133,13 @@ def build_raid_embed(raid, roles, signups, *, final: bool = False) -> Embed:
         value="\n".join(absents) or "—",
         inline=False,
     )
-    embed.set_footer(text="Raid finished" if final else "Sign up with the menu below")
+    if final:
+        footer = "Raid finished"
+    elif pending:
+        footer = "Signups closed — waiting for the leader to start the raid"
+    else:
+        footer = "Sign up with the menu below"
+    embed.set_footer(text=footer)
     return embed
 
 
@@ -143,10 +148,10 @@ def build_template_embed(template, roles) -> Embed:
     embed = Embed(
         title=template["templateName"],
         description=template["description"] or "*No description*",
-        url=template["url"] or None,
+        url=template["url"] if valid_url(template["url"]) else None,
         colour=Colour.blurple(),
     )
-    if template["image"]:
+    if valid_url(template["image"]):
         embed.set_image(url=template["image"])
     for role in roles:
         embed.add_field(
@@ -158,21 +163,60 @@ def build_template_embed(template, roles) -> Embed:
     return embed
 
 
+async def render_raid(db: RaidDB, raid_id: int) -> tuple[Embed, "RaidSignupView"] | None:
+    """Current embed + view of a raid; signups are disabled once the start time passed."""
+    raid = await db.get_raid(raid_id)
+    if raid is None:
+        return None
+    roles = await db.get_raid_roles(raid_id)
+    signups = await db.get_signups(raid_id)
+    due = raid_is_due(raid)
+    embed = build_raid_embed(raid, roles, signups, pending=due)
+    view = make_signup_view(db, roles, disabled=due)
+    return embed, view
+
+
 async def refresh_raid_message(bot: Bot, db: RaidDB, raid_id: int) -> None:
     """Re-render the signup message after any change to the raid or its signups."""
+    raid = await db.get_raid(raid_id)
+    rendered = await render_raid(db, raid_id)
+    if raid is None or rendered is None:
+        return
+    try:
+        channel = bot.get_channel(raid["channelID"]) or await bot.fetch_channel(raid["channelID"])
+        message = await channel.fetch_message(raid["messageID"])
+        await message.edit(embed=rendered[0], view=rendered[1])
+    except discord.HTTPException:
+        logger.exception("Could not refresh the message of raid %s", raid_id)
+
+
+async def finalize_raid(bot: Bot, db: RaidDB, raid_id: int, *, edit_ping: bool = True) -> None:
+    """Freeze the signup message into the recap, drop the ping's button, archive."""
     raid = await db.get_raid(raid_id)
     if raid is None:
         return
     roles = await db.get_raid_roles(raid_id)
     signups = await db.get_signups(raid_id)
+    recap = build_raid_embed(raid, roles, signups, final=True)
+
+    channel = bot.get_channel(raid["channelID"])
     try:
-        channel = bot.get_channel(raid["channelID"]) or await bot.fetch_channel(raid["channelID"])
+        channel = channel or await bot.fetch_channel(raid["channelID"])
         message = await channel.fetch_message(raid["messageID"])
         await message.edit(
-            embed=build_raid_embed(raid, roles, signups), view=make_signup_view(db, roles)
+            content=":crossed_swords:  **This raid has started**", embed=recap, view=None
         )
     except discord.HTTPException:
-        logger.exception("Could not refresh the message of raid %s", raid_id)
+        logger.warning("Could not post the recap of raid %s", raid_id)
+
+    if edit_ping and raid["pingMessageID"] and channel:
+        try:
+            ping = await channel.fetch_message(raid["pingMessageID"])
+            await ping.edit(view=None)
+        except discord.HTTPException:
+            pass  # ping message was deleted, nothing to disable
+
+    await db.archive_raid(raid_id)
 
 
 # -- Signup view (persistent) --------------------------------------------------------
@@ -206,6 +250,11 @@ class RaidSignupView(ui.View):
         raid = await self._get_raid(interaction)
         if raid is None:
             return
+        if raid_is_due(raid):
+            await interaction.response.send_message(
+                ":no_entry:  **Signups are closed — the raid is about to start**", ephemeral=True
+            )
+            return
         role_name = select.values[0]
         roles = {r["roleName"]: r for r in await self.db.get_raid_roles(raid["raidID"])}
         role = roles.get(role_name)
@@ -218,13 +267,7 @@ class RaidSignupView(ui.View):
         taken = await self.db.count_role_signups(raid["raidID"], role_name)
         signups = await self.db.get_signups(raid["raidID"])
         current = next((s["roleName"] for s in signups if s["userID"] == interaction.user.id), None)
-        if current == role_name:
-            await interaction.response.send_message(
-                f":white_check_mark:  **You are already signed up as `{role_name}`**",
-                ephemeral=True,
-            )
-            return
-        if taken >= role["maxSlots"]:
+        if current != role_name and taken >= role["maxSlots"]:
             await interaction.response.send_message(
                 f":no_entry:  **`{role_name}` is full ({taken}/{role['maxSlots']})**",
                 ephemeral=True,
@@ -232,37 +275,23 @@ class RaidSignupView(ui.View):
             return
 
         await self.db.upsert_signup(raid["raidID"], interaction.user.id, role_name)
-        await interaction.response.send_message(
-            f":white_check_mark:  **Signed up as `{role_name}`**", ephemeral=True
-        )
-        await refresh_raid_message(interaction.client, self.db, raid["raidID"])
+        rendered = await render_raid(self.db, raid["raidID"])
+        # Updating the raid message *is* the interaction response: no extra message.
+        await interaction.response.edit_message(embed=rendered[0], view=rendered[1])
 
     @ui.button(label="Absent", emoji="🚫", style=ButtonStyle.grey, custom_id="raid:absent")
     async def absent(self, button: ui.Button, interaction: Interaction):
         raid = await self._get_raid(interaction)
         if raid is None:
             return
-        await self.db.upsert_signup(raid["raidID"], interaction.user.id, ABSENT)
-        await interaction.response.send_message(
-            ":no_entry_sign:  **Marked as absent**", ephemeral=True
-        )
-        await refresh_raid_message(interaction.client, self.db, raid["raidID"])
-
-    @ui.button(label="Withdraw", emoji="🚪", style=ButtonStyle.grey, custom_id="raid:withdraw")
-    async def withdraw(self, button: ui.Button, interaction: Interaction):
-        raid = await self._get_raid(interaction)
-        if raid is None:
+        if raid_is_due(raid):
+            await interaction.response.send_message(
+                ":no_entry:  **Signups are closed — the raid is about to start**", ephemeral=True
+            )
             return
-        removed = await self.db.remove_signup(raid["raidID"], interaction.user.id)
-        if removed:
-            await interaction.response.send_message(
-                ":wave:  **You withdrew from the raid**", ephemeral=True
-            )
-            await refresh_raid_message(interaction.client, self.db, raid["raidID"])
-        else:
-            await interaction.response.send_message(
-                ":interrobang:  **You were not signed up**", ephemeral=True
-            )
+        await self.db.upsert_signup(raid["raidID"], interaction.user.id, ABSENT)
+        rendered = await render_raid(self.db, raid["raidID"])
+        await interaction.response.edit_message(embed=rendered[0], view=rendered[1])
 
     @ui.button(label="Manage", emoji="⚙️", style=ButtonStyle.blurple, custom_id="raid:manage")
     async def manage(self, button: ui.Button, interaction: Interaction):
@@ -295,11 +324,42 @@ def signup_options(roles) -> list[SelectOption]:
     ]
 
 
-def make_signup_view(db: RaidDB, roles) -> RaidSignupView:
-    """A signup view whose select carries this raid's actual role options."""
+def make_signup_view(db: RaidDB, roles, *, disabled: bool = False) -> RaidSignupView:
+    """A signup view whose select carries this raid's actual role options.
+    `disabled` greys out signing up (start time reached); Manage stays active."""
     view = RaidSignupView(db)
-    view.get_item("raid:signup").options = signup_options(roles)
+    select = view.get_item("raid:signup")
+    select.options = signup_options(roles)
+    select.disabled = disabled
+    view.get_item("raid:absent").disabled = disabled
     return view
+
+
+class StartRaidView(ui.View):
+    """The ⚔️ button on the start-ping message; persistent like the signup view."""
+
+    def __init__(self, db: RaidDB):
+        super().__init__(timeout=None)
+        self.db = db
+
+    @ui.button(label="Start the raid", emoji="⚔️", style=ButtonStyle.green, custom_id="raid:begin")
+    async def begin(self, button: ui.Button, interaction: Interaction):
+        raid = await self.db.get_raid_by_ping_message(interaction.message.id)
+        if raid is None:
+            # postponed or cancelled: drop the stale button
+            await interaction.response.edit_message(view=None)
+            return
+        is_leader = interaction.user.id == raid["leaderID"]
+        if not (is_leader or interaction.user.guild_permissions.manage_guild):
+            await interaction.response.send_message(
+                ":interrobang:  **Only the raid leader can start the raid**", ephemeral=True
+            )
+            return
+        await interaction.response.edit_message(
+            content=f":crossed_swords:  **Raid `{raid['title']}` has started — good luck!**",
+            view=None,
+        )
+        await finalize_raid(interaction.client, self.db, raid["raidID"], edit_ping=False)
 
 
 # -- Leader management panel (ephemeral) ------------------------------------------------
@@ -332,9 +392,26 @@ class EditRaidModal(ui.Modal):
                 ephemeral=True,
             )
             return
+        if raid_time < datetime.now():
+            await interaction.response.send_message(
+                ":x:  **That time is in the past**", ephemeral=True
+            )
+            return
         await self.db.update_raid(
             self.raid["raidID"], title=self.title_input.value.strip(), raid_time=raid_time
         )
+
+        # Postponed after the start ping went out: retract it so signups reopen
+        # and a fresh ping fires at the new time.
+        if self.raid["pingMessageID"]:
+            try:
+                channel = interaction.client.get_channel(self.raid["channelID"])
+                ping = await channel.fetch_message(self.raid["pingMessageID"])
+                await ping.delete()
+            except (discord.HTTPException, AttributeError):
+                pass
+            await self.db.set_ping_message(self.raid["raidID"], None)
+
         await interaction.response.send_message(
             ":white_check_mark:  **Raid updated**", ephemeral=True
         )
@@ -415,14 +492,20 @@ class RaidManageView(ui.View):
                 ":interrobang:  **Raid is gone**", ephemeral=True
             )
             return
+        channel = interaction.client.get_channel(raid["channelID"])
         try:
-            channel = interaction.client.get_channel(raid["channelID"])
             message = await channel.fetch_message(raid["messageID"])
             await message.edit(
                 content=f":x:  **Raid `{raid['title']}` was cancelled**", embed=None, view=None
             )
         except (discord.HTTPException, AttributeError):
             logger.exception("Could not edit the message of cancelled raid %s", self.raid_id)
+        if raid["pingMessageID"] and channel:
+            try:
+                ping = await channel.fetch_message(raid["pingMessageID"])
+                await ping.delete()
+            except discord.HTTPException:
+                pass
         await self.db.delete_raid(self.raid_id)
         await interaction.response.send_message(":x:  **Raid cancelled**", ephemeral=True)
 
@@ -462,12 +545,23 @@ class TemplateInfoModal(ui.Modal):
         self.add_item(self.image_input)
 
     async def callback(self, interaction: Interaction):
+        url = (self.url_input.value or "").strip()
+        image = (self.image_input.value or "").strip()
+        for label, link in (("title link", url), ("image link", image)):
+            if link and not valid_url(link):
+                await interaction.response.send_message(
+                    f":x:  **The {label} is not a valid URL** — it must start with"
+                    " `http://` or `https://`",
+                    ephemeral=True,
+                )
+                return
+
         await self.db.create_template(
             self.template_name,
             self.owner_id,
             description=self.description_input.value.strip(),
-            url=self.url_input.value.strip(),
-            image=self.image_input.value.strip(),
+            url=url,
+            image=image,
         )
         template = await self.db.get_template(self.template_name, self.owner_id)
         roles = await self.db.get_template_roles(self.template_name, self.owner_id)
@@ -488,7 +582,7 @@ class AddRoleModal(ui.Modal):
         self.template_name = template_name
         self.owner_id = owner_id
         self.name_input = ui.InputText(label="Role name (Tank, Healer…)", max_length=20)
-        self.emoji_input = ui.InputText(label="Emoji (🛡️ or <:custom:123>)", max_length=50)
+        self.emoji_input = ui.InputText(label="Emoji (🛡️, :shield: or <:custom:123>)", max_length=50)
         self.slots_input = ui.InputText(label="Slots", max_length=3, placeholder="5")
         self.add_item(self.name_input)
         self.add_item(self.emoji_input)
@@ -496,7 +590,6 @@ class AddRoleModal(ui.Modal):
 
     async def callback(self, interaction: Interaction):
         role_name = self.name_input.value.strip()
-        icon = self.emoji_input.value.strip()
         try:
             slots = int(self.slots_input.value.strip())
         except ValueError:
@@ -506,11 +599,15 @@ class AddRoleModal(ui.Modal):
                 ":x:  **Slots must be a positive number**", ephemeral=True
             )
             return
-        if parse_emoji(icon) is None:
+        parsed = parse_emoji(self.emoji_input.value)
+        if parsed is None:
             await interaction.response.send_message(
-                ":x:  **That does not look like a valid emoji**", ephemeral=True
+                ":x:  **That does not look like a valid emoji** — paste an emoji,"
+                " a `:shortcode:` or a custom `<:name:id>`",
+                ephemeral=True,
             )
             return
+        icon = str(parsed)  # normalized: :red_square: is stored as 🟥
 
         roles = await self.db.get_template_roles(self.template_name, self.owner_id)
         if len(roles) >= MAX_ROLES and role_name not in [r["roleName"] for r in roles]:
@@ -604,33 +701,55 @@ class Raid(commands.Cog):
     def __init__(self, bot: Bot):
         self.bot = bot
         self.db = RaidDB()
-        bot.add_view(RaidSignupView(self.db))  # revive signup views after restarts
-        self.finish_expired.start()
+        # revive the signup and start-ping views after restarts
+        bot.add_view(RaidSignupView(self.db))
+        bot.add_view(StartRaidView(self.db))
+        self.lifecycle_tick.start()
 
     def cog_unload(self):
-        self.finish_expired.cancel()
+        self.lifecycle_tick.cancel()
 
-    # -- End-of-raid recap -------------------------------------------------------
+    # -- Lifecycle: open -> pending (ping + Start button) -> started/archived ------
 
     @tasks.loop(minutes=5)
-    async def finish_expired(self):
-        for raid in await self.db.expired_raids():
-            roles = await self.db.get_raid_roles(raid["raidID"])
-            signups = await self.db.get_signups(raid["raidID"])
-            recap = build_raid_embed(raid, roles, signups, final=True)
-            try:
-                channel = self.bot.get_channel(raid["channelID"]) or await self.bot.fetch_channel(
-                    raid["channelID"]
-                )
-                message = await channel.fetch_message(raid["messageID"])
-                await message.edit(
-                    content=":saluting_face:  **This raid is over**", embed=recap, view=None
-                )
-            except discord.HTTPException:
-                logger.warning("Could not post the recap of raid %s", raid["raidID"])
-            await self.db.archive_raid(raid["raidID"])
+    async def lifecycle_tick(self):
+        for raid in await self.db.due_raids():
+            try:  # one broken raid must not stop the loop (task loops die on errors)
+                if raid["pingMessageID"] is None:
+                    await self._announce_start(raid)
+                elif datetime.fromisoformat(raid["raidTime"]) < datetime.now() - timedelta(
+                    hours=24
+                ):
+                    logger.info("Raid %s was never started — auto-archiving", raid["raidID"])
+                    await finalize_raid(self.bot, self.db, raid["raidID"])
+            except Exception:
+                logger.exception("Lifecycle handling failed for raid %s", raid["raidID"])
 
-    @finish_expired.before_loop
+    async def _announce_start(self, raid) -> None:
+        """Start time reached: close signups and ping everyone with a Start button."""
+        raid_id = raid["raidID"]
+        await refresh_raid_message(self.bot, self.db, raid_id)  # renders disabled
+        signups = await self.db.get_signups(raid_id)
+        mentions = [f"<@{s['userID']}>" for s in signups if s["roleName"] != ABSENT]
+        leader = f"<@{raid['leaderID']}>"
+        if leader in mentions:
+            mentions.remove(leader)
+        try:
+            channel = self.bot.get_channel(raid["channelID"]) or await self.bot.fetch_channel(
+                raid["channelID"]
+            )
+            ping = await channel.send(
+                f"📣 {' '.join(mentions) or 'Raid time!'} — **{raid['title']}** is due to start!"
+                f" {leader}, press the button when everyone is ready.",
+                view=StartRaidView(self.db),
+            )
+        except discord.HTTPException:
+            logger.exception("Could not announce the start of raid %s", raid_id)
+            return
+        await self.db.set_ping_message(raid_id, ping.id)
+        logger.info("Raid %s is pending start", raid_id)
+
+    @lifecycle_tick.before_loop
     async def prepare(self):
         await self.db.init()
         await self.bot.wait_until_ready()
@@ -737,6 +856,9 @@ class Raid(commands.Cog):
             await ctx.respond(":x:  **That time is in the past**", ephemeral=True)
             return
 
+        # The raid message is the only output: acknowledge the command silently,
+        # post the raid as a plain channel message, then drop the "thinking…" stub.
+        await ctx.defer()
         message = await ctx.channel.send(":construction:  *Setting up the raid…*")
         raid_id = await self.db.create_raid(
             guild_id=ctx.guild.id,
@@ -755,11 +877,7 @@ class Raid(commands.Cog):
             embed=build_raid_embed(raid, raid_roles, []),
             view=make_signup_view(self.db, raid_roles),
         )
-        timestamp = int(raid_time.timestamp())
-        await ctx.respond(
-            f":crossed_swords:  **Raid `{title}` launched — starts <t:{timestamp}:R>**",
-            ephemeral=True,
-        )
+        await ctx.delete()
 
     @raid.command(name="history", description="Recent raids of this server")
     async def history(

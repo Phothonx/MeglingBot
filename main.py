@@ -16,6 +16,21 @@ logger = logging.getLogger("megling.main")
 
 bot = discord.Bot(intents=discord.Intents.all())
 
+_extensions_loaded = False
+
+
+@bot.event
+async def on_connect():
+    """Load the cogs on first connect: views and task loops need the running
+    event loop, so this can't happen before bot.run(). Overriding on_connect
+    replaces Pycord's built-in auto-sync, hence the explicit sync_commands."""
+    global _extensions_loaded
+    if not _extensions_loaded:
+        _extensions_loaded = True
+        load_extensions(bot)
+        await bot.sync_commands()
+        logger.info("Slash commands synced")
+
 
 @bot.event
 async def on_ready():
@@ -67,6 +82,4 @@ if __name__ == "__main__":
     token = getenv("DISCORD_TOKEN")
     if not token:
         raise ValueError("Missing DISCORD_TOKEN in .env file.")
-    # Slash commands are synced automatically on connect (auto_sync_commands=True).
-    load_extensions(bot)
     bot.run(token)

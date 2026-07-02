@@ -1,11 +1,11 @@
-"""Administration and utility commands.
+"""Server staff commands — usable by admins/moderators of any guild.
 
-    /ping             everyone: latency check
-    /admin prune      staff (Manage Messages): bulk-delete recent messages
-    /admin reload     bot owner: hot-reload extensions after a code change
+    /ping           everyone: latency check
+    /admin prune    staff (Manage Messages): bulk-delete recent messages
 
-The /admin group is only shown to administrators (default_member_permissions);
-each command additionally enforces its own runtime check.
+Authority comes from Discord guild permissions, so every server that invites
+the bot manages access itself (Server Settings > Integrations). Commands that
+belong to the bot's owner live in the owner cog instead.
 """
 
 from discord import (
@@ -19,8 +19,6 @@ from discord import (
 )
 from discord.ext import commands
 
-from megling import extloader
-
 
 class Admin(commands.Cog):
     def __init__(self, bot: Bot):
@@ -32,8 +30,8 @@ class Admin(commands.Cog):
 
     admin = SlashCommandGroup(
         "admin",
-        description="Bot administration",
-        default_member_permissions=Permissions(administrator=True),
+        description="Server administration",
+        default_member_permissions=Permissions(manage_messages=True),
         contexts={InteractionContextType.guild},
     )
 
@@ -48,27 +46,6 @@ class Admin(commands.Cog):
         deleted = await ctx.channel.purge(limit=number)
         await ctx.followup.send(
             f":wastebasket:  **Deleted {len(deleted)} message(s)**", ephemeral=True
-        )
-
-    @admin.command(name="reload", description="Reload bot extensions (owner only)")
-    @commands.is_owner()
-    async def reload(
-        self,
-        ctx: ApplicationContext,
-        extension: Option(
-            str,
-            "Extension to reload (all of them if omitted)",
-            choices=extloader.extensions,
-            default=None,
-        ),
-    ):
-        await ctx.defer(ephemeral=True)
-        extloader.load_extensions(self.bot, extension)
-        await self.bot.sync_commands()
-        await ctx.followup.send(
-            f":arrows_clockwise:  **Reloaded `{extension}`**"
-            if extension
-            else ":arrows_clockwise:  **Reloaded all extensions**"
         )
 
 

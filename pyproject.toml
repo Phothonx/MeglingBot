@@ -9,6 +9,7 @@ dependencies = [
     "py-cord==2.8.0",
     "aiosqlite",
     "python-dotenv",
+    "emoji",
 ]
 
 [tool.ruff]
