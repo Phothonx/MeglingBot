@@ -144,7 +144,7 @@ class MenuBuilderView(ui.View):
             colour=Colour.dark_grey(),
         )
         embed.add_field(
-            name=f"Roles ({len(self.roles)})",
+            name=f"Roles ({len(self.roles)}/25)",
             value="\n".join(role.mention for role in self.roles) or "*Pick roles below*",
         )
         if self.skipped:
@@ -153,19 +153,34 @@ class MenuBuilderView(ui.View):
                 value="\n".join(role.mention for role in self.skipped),
                 inline=False,
             )
-        embed.set_footer(text="Single choice" if self.single else "Multiple choices")
+        mode = "Single choice" if self.single else "Multiple choices"
+        embed.set_footer(
+            text=f"{mode} — type in the picker to search; pick again to add more roles"
+        )
         return embed
 
     @ui.select(
         select_type=ComponentType.role_select,
-        placeholder="Pick the roles for this menu…",
+        placeholder="Add roles to the menu…",
         min_values=1,
         max_values=25,
     )
     async def pick_roles(self, select: ui.Select, interaction: Interaction):
+        # Selections accumulate: the picker only displays a couple dozen roles
+        # at once, so bigger menus are built by searching and picking in batches.
         me = interaction.guild.me
-        self.roles = [role for role in select.values if assignable(role, me)]
-        self.skipped = [role for role in select.values if not assignable(role, me)]
+        for role in select.values:
+            if not assignable(role, me):
+                if role not in self.skipped:
+                    self.skipped.append(role)
+            elif role not in self.roles and len(self.roles) < 25:
+                self.roles.append(role)  # published select caps at 25 options
+        await interaction.response.edit_message(embed=self.preview(), view=self)
+
+    @ui.button(label="Remove all roles", emoji="♻️", style=ButtonStyle.grey)
+    async def reset_roles(self, button: ui.Button, interaction: Interaction):
+        self.roles.clear()
+        self.skipped.clear()
         await interaction.response.edit_message(embed=self.preview(), view=self)
 
     @ui.button(label="Publish", emoji="📤", style=ButtonStyle.green)
@@ -176,22 +191,27 @@ class MenuBuilderView(ui.View):
             )
             return
         embed, view = build_menu_message(self.menu_title, self.description, self.roles, self.single)
-        await interaction.channel.send(embed=embed, view=view)
+        try:
+            await interaction.channel.send(embed=embed, view=view)
+        except discord.HTTPException:
+            await interaction.response.send_message(
+                ":x:  **I could not post in this channel**", ephemeral=True
+            )
+            return
         logger.info(
             "Role menu %r published in guild %s with %d role(s)",
             self.menu_title,
             interaction.guild.id,
             len(self.roles),
         )
-        await interaction.response.edit_message(
-            content=":white_check_mark:  **Menu published!**", embed=None, view=None
-        )
+        # The menu is posted; make the ephemeral builder disappear.
+        await interaction.response.defer()
+        await interaction.delete_original_response()
 
     @ui.button(label="Cancel", emoji="🗑️", style=ButtonStyle.grey)
     async def cancel(self, button: ui.Button, interaction: Interaction):
-        await interaction.response.edit_message(
-            content=":wastebasket:  **Menu discarded**", embed=None, view=None
-        )
+        await interaction.response.defer()
+        await interaction.delete_original_response()
 
 
 # -- The cog ---------------------------------------------------------------------------

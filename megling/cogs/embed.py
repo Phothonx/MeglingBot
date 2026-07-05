@@ -102,13 +102,17 @@ class EmbedModal(ui.Modal):
         if self.footer_input.value:
             embed.set_footer(text=self.footer_input.value)
 
+        # Post the embed as a standalone message (no "used /embed" header),
+        # then drop the interaction response entirely.
+        await interaction.response.defer(ephemeral=True)
         try:
-            # The posted embed is the modal response itself: no confirmation needed.
-            await interaction.response.send_message(embed=embed)
+            await interaction.channel.send(embed=embed)
         except discord.HTTPException as error:
             await interaction.followup.send(
                 f":x:  **Discord rejected the embed:** {error.text}", ephemeral=True
             )
+            return
+        await interaction.delete_original_response()
 
 
 class EmbedCog(commands.Cog):
@@ -143,16 +147,21 @@ class EmbedCog(commands.Cog):
                 return
             raw = (await file.read()).decode("utf-8", errors="replace")
 
+        # Post as a standalone message (no "used /embed" header), then drop
+        # the interaction response entirely.
+        await ctx.defer(ephemeral=True)
         try:
             embeds = extract_embeds(json.loads(raw))
             if not embeds:
                 raise ValueError("no embeds found")
-            # The posted embeds are the command response itself.
-            await ctx.respond(embeds=embeds)
+            await ctx.channel.send(embeds=embeds)
         except (ValueError, KeyError, TypeError) as error:
             await ctx.respond(f":x:  **Invalid embed JSON:** {error}", ephemeral=True)
+            return
         except discord.HTTPException as error:
             await ctx.respond(f":x:  **Discord rejected the embed:** {error.text}", ephemeral=True)
+            return
+        await ctx.delete()
 
 
 def setup(bot: Bot):

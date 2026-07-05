@@ -84,6 +84,10 @@ CREATE TABLE IF NOT EXISTS RaidLog (
     raidTime TEXT NOT NULL,
     roster TEXT
 );
+CREATE TABLE IF NOT EXISTS GuildSettings (
+    guildID INTEGER PRIMARY KEY,
+    leaderRoleID INTEGER
+);
 """
 
 
@@ -114,6 +118,26 @@ class RaidDB:
                 await db.execute("ALTER TABLE Raids ADD COLUMN pingMessageID INTEGER")
             await db.commit()
         logger.debug("raid.db schema ready")
+
+    # -- Per-guild settings --------------------------------------------------------
+
+    async def set_leader_role(self, guild_id: int, role_id: int | None) -> None:
+        """Set (or clear, with None) the role allowed to organize raids."""
+        async with self._connect() as db:
+            await db.execute(
+                "INSERT OR REPLACE INTO GuildSettings (guildID, leaderRoleID) VALUES (?, ?)",
+                (guild_id, role_id),
+            )
+            await db.commit()
+        logger.info("Leader role of guild %s set to %s", guild_id, role_id)
+
+    async def get_leader_role(self, guild_id: int) -> int | None:
+        async with self._connect() as db:
+            cursor = await db.execute(
+                "SELECT leaderRoleID FROM GuildSettings WHERE guildID = ?", (guild_id,)
+            )
+            row = await cursor.fetchone()
+            return row[0] if row else None
 
     # -- Templates ---------------------------------------------------------------
 

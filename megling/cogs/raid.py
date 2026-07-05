@@ -16,8 +16,9 @@ a guild's past raids.
 
 The signup view is *persistent*: components carry fixed custom_ids and the
 raid is resolved from the message id, so buttons keep working after restarts.
-Commands are hidden from regular members by default (admins can grant them to
-raid-leader roles in Server Settings > Integrations).
+Organizing (starting raids, managing templates) is restricted to the guild's
+raid-leader role, set by staff with /raid config; staff always may. Signing
+up and /raid history are open to everyone.
 """
 
 import json
@@ -37,7 +38,7 @@ from discord import (
     Interaction,
     InteractionContextType,
     Option,
-    Permissions,
+    Role,
     SelectOption,
     SlashCommandGroup,
     ui,
@@ -52,6 +53,31 @@ logger = logging.getLogger(__name__)
 MAX_ROLES = 20  # keeps us clear of Discord's 25-option/25-field limits
 
 RELATIVE_TIME_PATTERN = re.compile(r"\+(?:(\d+)h)?(?:(\d+)m)?")
+
+
+class NotRaidLeader(commands.CheckFailure):
+    """Invoker lacks the guild's configured raid-leader role."""
+
+    def __init__(self, role_id: int | None):
+        super().__init__()
+        self.role_id = role_id
+
+
+def is_raid_leader():
+    """Allow the guild's raid-leader role (see /raid config) and server staff.
+
+    While no role is configured, only staff (Manage Server) can organize raids.
+    """
+
+    async def predicate(ctx: ApplicationContext) -> bool:
+        if ctx.user.guild_permissions.manage_guild:
+            return True
+        role_id = await ctx.command.cog.db.get_leader_role(ctx.guild.id)
+        if role_id and any(role.id == role_id for role in ctx.user.roles):
+            return True
+        raise NotRaidLeader(role_id)
+
+    return commands.check(predicate)
 
 
 def parse_raid_time(text: str) -> datetime | None:
@@ -756,15 +782,46 @@ class Raid(commands.Cog):
 
     # -- Commands ------------------------------------------------------------------
 
+    # Visible to everyone; organizing is authorized at runtime by is_raid_leader().
     raid = SlashCommandGroup(
         "raid",
         description="Raid planner",
-        default_member_permissions=Permissions.none(),  # admins grant access via Integrations
         contexts={InteractionContextType.guild},
     )
     template = raid.create_subgroup("template", description="Manage your raid templates")
 
+    @raid.command(name="config", description="Choose which role can organize raids (staff only)")
+    @commands.has_guild_permissions(manage_guild=True)
+    async def config(
+        self,
+        ctx: ApplicationContext,
+        role: Option(
+            Role, "Role allowed to create raids and templates", required=False, default=None
+        ),
+        clear: Option(bool, "Reset: only staff can organize raids", required=False, default=False),
+    ):
+        if clear:
+            await self.db.set_leader_role(ctx.guild.id, None)
+            await ctx.respond(
+                ":gear:  **Cleared — only staff can organize raids now**", ephemeral=True
+            )
+            return
+        if role is not None:
+            await self.db.set_leader_role(ctx.guild.id, role.id)
+            await ctx.respond(
+                f":gear:  **Members with {role.mention} can now organize raids**", ephemeral=True
+            )
+            return
+        current = await self.db.get_leader_role(ctx.guild.id)
+        await ctx.respond(
+            f":gear:  **Current raid leader role: <@&{current}>**"
+            if current
+            else ":gear:  **No raid leader role set — only staff can organize raids**",
+            ephemeral=True,
+        )
+
     @template.command(name="create", description="Create a raid template")
+    @is_raid_leader()
     async def template_create(
         self,
         ctx: ApplicationContext,
@@ -780,6 +837,7 @@ class Raid(commands.Cog):
         await ctx.send_modal(TemplateInfoModal(self.db, name, ctx.user.id))
 
     @template.command(name="edit", description="Edit a template (infos and roles)")
+    @is_raid_leader()
     async def template_edit(
         self,
         ctx: ApplicationContext,
@@ -797,6 +855,7 @@ class Raid(commands.Cog):
         )
 
     @template.command(name="delete", description="Delete one of your templates")
+    @is_raid_leader()
     async def template_delete(
         self,
         ctx: ApplicationContext,
@@ -808,6 +867,7 @@ class Raid(commands.Cog):
             await ctx.respond(f":x:  **No template named `{name}`**", ephemeral=True)
 
     @template.command(name="list", description="List your templates")
+    @is_raid_leader()
     async def template_list(self, ctx: ApplicationContext):
         names = await self.db.get_template_names(ctx.user.id)
         if not names:
@@ -827,6 +887,7 @@ class Raid(commands.Cog):
         await ctx.respond(embed=embed, ephemeral=True)
 
     @raid.command(name="start", description="Launch a raid from one of your templates")
+    @is_raid_leader()
     async def start(
         self,
         ctx: ApplicationContext,
@@ -902,6 +963,18 @@ class Raid(commands.Cog):
             title=f"Last {len(logs)} raid(s)", description="\n".join(lines), colour=Colour.blue()
         )
         await ctx.respond(embed=embed, ephemeral=True)
+
+    async def cog_command_error(self, ctx: ApplicationContext, error: Exception):
+        # Specific message for the leader-role gate; everything else falls
+        # through to the global handler in main.py.
+        if isinstance(error, NotRaidLeader):
+            message = (
+                f":no_entry:  **You need the <@&{error.role_id}> role to organize raids**"
+                if error.role_id
+                else ":no_entry:  **Only staff can organize raids here** — an admin can"
+                " allow a role with `/raid config`"
+            )
+            await ctx.respond(message, ephemeral=True)
 
 
 def setup(bot: Bot):

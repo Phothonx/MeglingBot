@@ -8,7 +8,7 @@ from discord import Bot
 
 logger = logging.getLogger(__name__)
 
-extensions = ["voice", "admin", "owner", "embed", "rolemenu", "raid"]
+extensions = ["voice", "admin", "owner", "embed", "rolemenu", "raid", "balance"]
 
 
 def _reload_shared_modules() -> None:
