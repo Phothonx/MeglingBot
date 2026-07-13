@@ -40,11 +40,13 @@
           sha256 = "sha256-V6fv76gOf274kPv8BU1oZ4LDR8nk2G+nyR965ShbNT8=";
         };
         build-system = with py.pkgs; [setuptools setuptools-scm];
-        # py-cord 2.8.0 caps setuptools at <=80.9.0, but nixpkgs ships 80.10.1;
-        # drop the upper bound so the build backend accepts it.
+        # py-cord 2.8.0 puts upper bounds on its build tools (setuptools
+        # <=80.9.0, setuptools-scm <=9.2.2) that nixpkgs has moved past; drop
+        # the caps so the build backend accepts the newer versions.
         postPatch = ''
           substituteInPlace pyproject.toml \
-            --replace-fail "setuptools>=77.0.3,<=80.9.0" "setuptools>=77.0.3"
+            --replace-fail "setuptools>=77.0.3,<=80.9.0" "setuptools>=77.0.3" \
+            --replace-fail "setuptools-scm>=9.2,<=9.2.2" "setuptools-scm>=9.2"
         '';
         propagatedBuildInputs = with py.pkgs; [aiohttp yarl];
       };
